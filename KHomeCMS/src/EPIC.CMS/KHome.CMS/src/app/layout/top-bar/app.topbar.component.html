@@ -42,7 +42,7 @@
                 <li #profile class="topbar-item profile-item" [ngClass]="{'active-topmenuitem': appMain.activeTopbarItem === profile}">
                     <a href="#" (click)="appMain.onTopbarItemClick($event,profile)">
                     <span class="profile-image-wrapper">
-                        <img style="border-radius: 50%;" [src]="avatar" alt="mirage-layout" />
+                        <img style="border-radius: 50%;" src="assets/layout/images/k1.png"  alt="mirage-layout" />
                     </span>
                     <span class="profile-info-wrapper">
                         <h3>{{ userInfo?.userName }}</h3>
@@ -52,7 +52,7 @@
                     <ul class="profile-item-submenu fadeInDown">
                         <div class="b-new-div-account-display">
                              <div class="b-avt-detail">
-                                 <img class="b-avt-detail" [src]="avatar">
+                                 <img class="b-avt-detail" src="assets/layout/images/k1.png">
                              </div>
                              <div class="b-name-detail">
                                  <p class="b-display-name">{{ userInfo?.displayName }}</p>
