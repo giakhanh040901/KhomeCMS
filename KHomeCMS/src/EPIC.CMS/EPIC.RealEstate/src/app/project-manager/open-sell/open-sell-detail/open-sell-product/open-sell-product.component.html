@@ -1,0 +1,182 @@
+<div class="col-12">
+	<div class="p-0">
+		<div class="flex justify-content-between mb-3">
+			<h5 class="title-info">Danh sách sản phẩm</h5>
+			<div>
+				<p-button *ngIf="isGranted([PermissionRealStateConst.RealStateMoBan_DSSP_Xoa])"
+					[disabled]="selectedItems?.length == 0" styleClass="p-button custom-button p-button-danger mr-2"
+					label="Xóa SP" icon="pi pi-times" (click)="delete()">
+				</p-button>
+				<!--  -->
+				<p-button *ngIf="isGranted([PermissionRealStateConst.RealStateMoBan_DSSP_Them])"
+					styleClass="p-button custom-button" label="Thêm sản phẩm" icon="pi pi-plus"
+					(click)="create($event)">
+				</p-button>
+			</div>
+		</div>
+		<div class="flex flex-row flex-wrap b-filter-wrapper">
+			<div class="b-wr-20 wrapper-filter">
+				<input-search [(keyword)]="keyword" (_onChange)="setPage()">
+				</input-search>
+			</div>
+			<span class="p-float-label b-custom ml-2">
+				<p-dropdown [style]="{ width: '16rem' }" [showClear]="true" placeholder="Tất cả" appendTo="body"
+					[options]="firstDensitys" optionLabel="name" optionValue="id"
+					[(ngModel)]="fieldFilters.firstDensity" (onChange)="changeLevel1($event.value)">
+				</p-dropdown>
+				<label class="font-normal">Mật độ xây dựng cấp 1</label>
+			</span>
+			<span class="p-float-label b-custom b-ml-2">
+				<p-dropdown [style]="{ width: '16rem' }" [showClear]="true" placeholder="Tất cả" appendTo="body"
+					[options]="secondDensitys" optionLabel="name" optionValue="id"
+					[(ngModel)]="fieldFilters.secondDensity" (onChange)="changeLevel2($event.value)">
+				</p-dropdown>
+				<label class="font-normal">Mật độ xây dựng cấp 2</label>
+			</span>
+			<span class="p-float-label b-custom b-ml-2">
+				<p-dropdown [style]="{ width: '12rem' }" [showClear]="true" placeholder="Tất cả" appendTo="body"
+					[options]="ProductConst.redBookTypes" optionLabel="name" optionValue="code"
+					[(ngModel)]="fieldFilters.redBookType" (onChange)="changeFilter()">
+				</p-dropdown>
+				<label class="font-normal">Loại sổ</label>
+			</span>
+			<span class="p-float-label b-custom b-ml-2">
+				<p-dropdown 
+					id="statusFilter" name="statusFilter" [style]="{ width: '12rem' }" [showClear]="true"
+					placeholder="Tất cả" [options]="statuses" optionLabel="name" optionValue="code"
+					[(ngModel)]="fieldFilters.status" (onChange)="changeFilter()">
+				</p-dropdown>
+				<label class="font-normal" for="statusFilter">Trạng thái</label>
+			</span>
+		</div>
+		<div class="mt-4">
+			<project-list-detail [lastestProduct]="lastestProduct" [dataSource]="rows" [apiSetPage]="apiSetPage"
+				[functionMapDataSetPage]="functionMapDataSetPage" [listCard]="listCard" [service]="openSellService"
+				[(dataView)]="dataView" [listAction]="listAction" (_onClickCard)="handleClickCard($event)"
+				[listSortField]="listSortField">
+				<ng-container *ngIf="dataView['grid']" dataViewGrid>
+					<div class="flex align-items-center ml-2">
+						<button type="button" class="p-button p-button-icon-only p-highlight"
+							(click)="handleSort($event, 'order')" style="border-radius: 4px">
+							<i [ngClass]="classIconSort"></i>
+						</button>
+						<p-dropdown class="ml-2" [style]="{ width: '10rem' }" [options]="listSortField"
+							optionLabel="name" optionValue="code" [(ngModel)]="selectedSort.field"
+							(onChange)="handleSort($event, 'field')">
+						</p-dropdown>
+					</div>
+				</ng-container>
+				<ng-container dataTable>
+					<p-table [value]="rows" [columns]="selectedColumns" [loading]="isLoading" dataKey="id"
+						[(selection)]="selectedItems" [rowHover]="true" [showCurrentPageReport]="true"
+						[paginator]="false" responsiveLayout="scroll" [resizableColumns]="true" [scrollable]="true"
+						(onPageChange)="setPage($event)" [scrollHeight]="screenHeight * 0.4 + 'px'"
+						styleClass="custom-table" sortMode="multiple" (onSort)="onSort($event)" [customSort]="true">
+						<ng-template pTemplate="header" let-columns>
+							<tr>
+								<th class="b-col-actions b-border-frozen-left" pFrozenColumn alignFrozen="left">
+									<p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+								</th>
+								<th pSortableColumn="Id" style="max-width: 7rem; min-width: 7rem" pFrozenColumn
+									alignFrozen="left">
+									#ID <p-sortIcon field="Id"></p-sortIcon>
+								</th>
+								<ng-container *ngFor="let col of columns">
+									<th *ngIf="col.fieldSort" pSortableColumn="{{col.fieldSort}}"
+										[ngStyle]="{'max-width': !col?.isResize ? col?.width : '', 'min-width': col?.width}"
+										[ngClass]="col.class">
+										{{ col.header }} <p-sortIcon *ngIf="col.fieldSort"
+											field="{{col.fieldSort}}"></p-sortIcon>
+									</th>
+									<th *ngIf="!col.fieldSort"
+										[ngStyle]="{'max-width': !col?.isResize ? col?.width : '', 'min-width': col?.width}"
+										[ngClass]="col.class">
+										{{ col.header }} <p-sortIcon *ngIf="col.fieldSort"
+											field="{{col.fieldSort}}"></p-sortIcon>
+									</th>
+								</ng-container>
+								<th class="b-col-status b-border-frozen-right" pFrozenColumn alignFrozen="right"
+									[frozen]="true">
+									Trạng thái
+								</th>
+								<th class="b-col-actions b-table-actions" pFrozenColumn alignFrozen="right"
+									[frozen]="true">
+									<i class="pi pi-cog" (click)="setColumn(headerColumns, selectedColumns)"></i>
+								</th>
+							</tr>
+						</ng-template>
+						<ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+							<tr>
+								<td class="b-col-actions b-border-frozen-left" pFrozenColumn alignFrozen="left">
+									<p-tableCheckbox [value]="row"></p-tableCheckbox>
+								</td>
+								<td style="max-width: 7rem; min-width: 7rem" pFrozenColumn alignFrozen="left">
+									{{ row.id }}
+								</td>
+								<td *ngFor="let col of columns" [ngStyle]="{'max-width': !col?.isResize ? col?.width : '', 'min-width': col?.width}" [ngClass]="col.class">
+									<div *ngIf="col.field !== 'isShowPrice' && col.field !== 'isShowApp' && col.field !== '_productItemLock' && col.field !== '_distributionLock' && col.field !== '_isLockOpenCell'" [ngClass]="col.cutText" [title]="row[col.field]">
+										{{ row[col.field] }}
+									</div>
+
+									<div *ngIf="col.field === 'isShowPrice'">
+										<p-checkbox [(ngModel)]="row.dataDisplay.isShowPrice" [binary]="true"
+											inputId="binary" [readonly]="true"></p-checkbox>
+									</div>
+
+									<div *ngIf="col.field === 'isShowApp'">
+										<p-checkbox [(ngModel)]="row.dataDisplay.isShowApp" [binary]="true"
+											inputId="binary" [readonly]="true"></p-checkbox>
+									</div>
+
+									<div *ngIf="col.field === '_productItemLock'">
+										<p-checkbox [(ngModel)]="row._productItemLock" [binary]="true" inputId="binary"
+											[readonly]="true"></p-checkbox>
+									</div>
+									<div *ngIf="col.field === '_distributionLock'">
+										<p-checkbox [(ngModel)]="row._distributionLock" [binary]="true" inputId="binary"
+											[readonly]="true"></p-checkbox>
+									</div>
+									<div *ngIf="col.field === '_isLockOpenCell'">
+										<p-checkbox [(ngModel)]="row._isLockOpenCell" [binary]="true" inputId="binary"
+											[readonly]="true"></p-checkbox>
+									</div>
+								</td>
+								<td class="b-col-status b-border-frozen-right" pFrozenColumn alignFrozen="right"
+									[frozen]="true">
+									<p-tag *ngIf="!row._isLockDeactive" styleClass="p-tag-{{ProductConst.getStatus(row?.productItemStatus, 'severity')}}" 
+										severity="{{ProductConst.getStatus(row?.productItemStatus, 'severity')}}" value="{{ ProductConst.getStatus(row?.productItemStatus) }}">
+									</p-tag>
+									<p-tag *ngIf="row._isLockDeactive" styleClass="p-tag-secondary" severity="secondary" value="Khóa căn">
+									</p-tag>
+								</td>
+								<td class="b-col-actions b-table-actions" pFrozenColumn alignFrozen="right"
+									[frozen]="true">
+									<div class="flex">
+										<i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+										<p-menu #menu [popup]="true" class="button-actions"
+											[model]="listAction[rowIndex]" appendTo="body">
+										</p-menu>
+									</div>
+								</td>
+							</tr>
+						</ng-template>
+					</p-table>
+				</ng-container>
+				<ng-container paginatorGrid>
+					<p-paginator class="pin-paginator" [rows]="page.pageSize" [totalRecords]="page.totalItems"
+						[rowsPerPageOptions]="page.perPageOptions"
+						currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng" showCurrentPageReport="true"
+						(onPageChange)="setPage($event)">
+					</p-paginator>
+				</ng-container>
+				<ng-container paginatorList>
+					<p-paginator class="pin-paginator" [rows]="page.pageSize" [totalRecords]="page.totalItems"
+						[rowsPerPageOptions]="page.perPageOptions"
+						currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng" showCurrentPageReport="true"
+						(onPageChange)="setPage($event)">
+					</p-paginator>
+				</ng-container>
+			</project-list-detail>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,18 @@
+<div class="grid p-fluid">
+    <div class="col-12 md:col-12">
+        <div class="field mb-0">
+            <label> Nhập tên đơn vị </label>
+            <input pInputText [(ngModel)]="structureItem.name" placeholder="Nhập tên đơn vị"/>         
+        </div>
+    </div>
+    <div class="col-12 md:col-12">
+        <div class="field mb-0">
+            <label> Nhập mã đơn vị </label>
+            <input pInputText [(ngModel)]="structureItem.code" placeholder="Nhập mã đơn vị"/>         
+        </div>
+    </div>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+    <button pButton pRipple label="Hủy bỏ" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" (click)="save()"></button>
+</div>

@@ -1,0 +1,165 @@
+<div class="col-12" *ngIf="!isLoading">
+    <div class="p-0">
+        <div class="flex justify-content-between mb-3">
+            <h5 class="title-info">Thông tin chung </h5>
+            <div >
+                <p-button 
+                    *ngIf="isGranted([PermissionRealStateConst.RealStateMoBan_ThongTinChung_CapNhat])"
+                    icon="pi pi-check-circle"
+                    styleClass="p-button-sm p-button custom-button" label="{{ isEdit ? 'Lưu lại' : 'Chỉnh sửa' }}"
+                    icon="pi {{ isEdit ? 'pi-save' : 'pi-pencil' }}" 
+                    (click)="changeEdit()">
+                </p-button>
+    
+            </div>
+        </div>
+        <div class="grid detail">
+            <div class="col-12">
+                <div class="card pt-0 pb-0 mb-0">
+                    <ng-container>
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="col-12 md:col-2">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Mã dự án
+                                    </label>
+                                    <input [disabled]="true" type="text" name="name" pInputText 
+                                        [(ngModel)]="openSellInfo.project.code" class="b-disabled">
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-4">
+                                <div class="field mb-0">
+                                    <label htmlFor="name"> Dự án mở bán </label>
+                                    <p-dropdown  [disabled]="true" class="b-disabled" 
+                                        appendTo="body" 
+                                        [options]="projects" optionLabel="name" optionValue="id" 
+                                        [(ngModel)]="openSellInfo.projectId" (onChange)="changeProject(openSellInfo.projectId)">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-2">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Số lượng căn giữ chỗ
+                                    </label>
+                                    <input [disabled]="true" type="text" name="name" pInputText 
+                                     [(ngModel)]="openSellInfo.quantityHold" class="b-disabled" >
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-2">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Số lượng căn mở bán
+                                    </label>
+                                    <input [disabled]="true" type="text" name="name" pInputText  
+                                        [(ngModel)]="openSellInfo.quantity"  class="b-disabled">
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-2">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Số lượng căn đã cọc
+                                    </label>
+                                    <input [disabled]="true" type="text" name="name" pInputText 
+                                    [(ngModel)]="openSellInfo.quantityDeposit" class="b-disabled">
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-4">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Chủ đầu tư
+                                    </label>
+                                    <input 
+                                        [disabled]="true" type="text" name="name" pInputText 
+                                        [value]="openSellInfo.project?.owner?.businessCustomer?.name" class="b-disabled"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-2" >
+                                <div class="field mb-0">
+                                    <label for="startDate"> Ngày mở bán </label>
+                                    <e-calendar
+                                        [inputId]="'startDate'"
+                                        [(value)]="openSellInfo.startDate"
+                                        [disabled]="!isEdit"
+                                        >
+                                    </e-calendar>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-2" >
+                                <div class="field mb-0">
+                                    <label for="endDate"> Ngày kết thúc </label>
+                                    <e-calendar
+                                        [inputId]="'startDate'"
+                                        [(value)]="openSellInfo.endDate"
+                                        [disabled]="!isEdit"
+                                        >
+                                    </e-calendar>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-4">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Thời gian giữ căn thanh toán cọc 
+                                    </label>
+                                    <p-inputNumber (onInput)="changeValue($event.value)" [(ngModel)]="openSellInfo.keepTime" suffix=" phút" 
+                                    class="b-disabled" [disabled]="!isEdit"></p-inputNumber>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 md:col-4">
+                                <div class="field mb-0">
+                                    <label htmlFor="name">Tài khoản ngân hàng 
+                                    </label>
+                                    <p-dropdown   [disabled]="!isEdit"
+                                        class="b-disabled"  appendTo="body" 
+                                        [options]="OpenSellConst.bankTypes" optionLabel="name" optionValue="code" 
+                                        [(ngModel)]="openSellInfo.fromType" (onChange)="changeBankTypes($event.value)">
+                                </p-dropdown >
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-4">
+                                <div class="field mb-0">
+                                    <label htmlFor="name">Danh sách tài khoản
+                                    </label>
+                                    <p-multiSelect [disabled]="!isEdit" [group]="true"
+                                         class="b-disabled"  appendTo="body"
+                                        [options]="listBankNew" optionLabel="labelName" optionValue="bankAccountId" 
+                                        [(ngModel)]="openSellBanks" > 
+                                        <ng-template let-group pTemplate="group">
+                                            <div class="flex align-items-center">
+                                                <span>{{ group.label }}</span>
+                                            </div>
+                                        </ng-template>
+                                    </p-multiSelect >
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-4">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Hotline liên hệ 
+                                    </label>
+                                    <input [disabled]="!isEdit" type="text" name="name" pInputText 
+                                        [(ngModel)]="openSellInfo.hotline" class="b-disabled" placeholder="Nhập hotline liên hệ">
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-content-between mb-3 mt-3">
+            <h5 class="title-info">Cài đặt khác </h5>
+        </div>
+        <div>
+            <e-input-switch
+              [(ngModelValue)]="openSellInfo.isRegisterSale "
+              [label]="'Bật chức năng đăng ký làm CTV bán hàng'"
+              [classLabel]="'ml-4'"
+              [isDisabled]="!isEdit"
+            ></e-input-switch>
+          </div>
+    </div>
+</div>

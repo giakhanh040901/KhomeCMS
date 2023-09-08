@@ -1,0 +1,79 @@
+<div class="col-12" style="padding-bottom: 70px">
+    <div class="card p-0">
+        <p-table
+            [value]="dataSource" [(selection)]="selectedData" [loading]="isLoading" [rowHover]="true"
+            [showCurrentPageReport]="true" [paginator]="false" [scrollable]="true" responsiveLayout="scroll"
+            dataKey="utilityId" [scrollHeight]="'600px'" [resizableColumns]="false" styleClass="custom-table">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="b-wr-20 wrapper-filter">
+                            <input-search
+                                [placeholder]="'Nhập mã tiện ích hoặc tên tiện ích'"
+                                [(keyword)]="filter.keyword"
+                                (_onChange)="setPage()">
+                            </input-search>
+                        </div>
+                        <span class="p-float-label b-custom b-ml-2">
+                            <p-dropdown [style]="{ width: '16rem' }" [showClear]="false" [options]="statuses"
+                                optionLabel="name" optionValue="code" [(ngModel)]="filter.selected"
+                                (onChange)="setPage()">
+                            </p-dropdown>
+                            <label class="font-normal">Trạng thái</label>
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th style="max-width: 5rem; min-width: 5rem" class="text-center inline-block">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th style="max-width: 5rem; min-width: 5rem; justify-content: center" pFrozenColumn
+                        alignFrozen="left" class="align-items-start">
+                        ID
+                    </th>
+                    <th class="align-items-start">Tên tiện ích</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="groupheader" let-row>
+                <tr pRowGroupHeader>
+                    <td colspan="5">
+                        <span class="font-bold ml-2">{{row?.uilityType}}</span>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+                <tr>
+                    <td style="max-width: 5rem; min-width: 5rem" class="justify-content-center">
+                        <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                    </td>
+                    <td style="max-width: 5rem; min-width: 5rem" pFrozenColumn alignFrozen="left" [frozen]="true">
+                        {{row?.utilityId }}
+                    </td>
+                    <td>{{ row?.name }}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7">Không có dữ liệu.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="7">Đang tải dữ liệu ...</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+    <button 
+        pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject"
+        (click)="close($event)">
+    </button>
+    <button 
+        pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve"
+        (click)="save($event)">
+    </button>
+</div>

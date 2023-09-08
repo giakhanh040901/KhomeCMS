@@ -1,0 +1,80 @@
+<div class="grid p-fluid">
+    <ng-container>
+        <div class="field mb-0 col-6">
+            <label class="title-info">Chọn lý do gia hạn <span class="required-field"> * </span></label>
+            <p-dropdown
+              [autoDisplayFirst]="false"
+              [options]="OrderConst.reasonOptions"
+              optionLabel="name"
+              optionValue="code"
+              [(ngModel)]="orderExtendedTime.reason"
+              placeholder="Chọn lý do gia hạn"
+            >
+            </p-dropdown>
+        </div>
+          <div class="field mb-0 col-12">
+            <label class="title-info">Nhập nội dung gia hạn <span class="required-field"> * </span></label>
+            <input
+              pInputText
+              [(ngModel)]="orderExtendedTime.summary"
+              class="custom-input"
+              type="text"
+              placeholder="Nhập nội dung gia hạn"
+            />
+          </div>
+          <div class="col-12 md:col-6">
+            <div class="field mb-0 upload-file-form">
+                <label htmlFor=""> 
+                    Thời gian giữ chỗ còn lại
+                </label>
+                <ngx-countdown [time]="orderExtendedTime.coutdownTime" [render]="render" format="HH:mm:ss:SSS" [millisecond]="true">
+                    <ng-template #render let-data>
+                      <div style="display: flex; margin: 0.5rem 0 0 0.5rem;">
+                        <span style="color: #D95140">{{ data.fragments[0] }}</span>:
+                        <span style="color: #58A55C">{{ data.fragments[1] }}</span>:
+                        <span style="color: #F2BE42">{{ data.fragments[2] }}</span>
+                      </div>
+                    
+                    </ng-template>
+                  </ngx-countdown>
+            </div>
+        </div>
+        <div class="col-12 md:col-6">
+            <div class="field mb-0 upload-file-form">
+                <label htmlFor=""> 
+                    Gia hạn thời gian giữ chỗ <span class="required-field"> * </span>
+                </label>
+                <p-inputNumber [(ngModel)]="orderExtendedTime.extendedKeepTime" suffix=" phút" placeholder="Nhập số phút"></p-inputNumber>
+            </div>
+        </div>
+      
+          <div class="field mb-0 col-6">
+            <label class="title-info">Người tạo yêu cầu</label>
+            <input
+              pInputText
+              [(ngModel)]="orderExtendedTime.createUser"
+              class="custom-input b-disabled"
+              type="text"
+              [disabled]="true"
+            />
+          </div>
+          <div class="field mb-0 col-6">
+            <label class="title-info">Ngày tạo yêu cầu</label>
+            <input
+              pInputText
+              [(ngModel)]="orderExtendedTime.createDate"
+              class="custom-input b-disabled"
+              type="text"
+              [disabled]="true"
+            />
+          </div>
+       
+
+    </ng-container>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+    <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="ref.close()"></button>
+    <button id="submit-button" pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="submitted " (click)="save()"></button>
+</div>
+
+         

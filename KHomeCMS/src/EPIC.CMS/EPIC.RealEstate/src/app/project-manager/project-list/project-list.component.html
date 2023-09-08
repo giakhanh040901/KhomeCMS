@@ -1,0 +1,103 @@
+<app-loading-page *ngIf="isLoadingPage"></app-loading-page>
+
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12">
+        <div class="card b-list">
+            <div class="p-fluid p-formgrid grid b-header">
+                <div class="col-12 md:col-7 b-title mb-3">
+                    <h4 style="display: inline" class=""> Bảng hàng dự án </h4>
+                </div>
+            </div>
+            <p-table [value]="rows" [columns]="selectedColumns" [loading]="isLoading" 
+                [rowHover]="true" [showCurrentPageReport]="true" [paginator]="false" 
+                responsiveLayout="scroll" dataKey="code" [scrollable]="true"
+                [resizableColumns]="true" columnResizeMode="expand" [tableStyle]="{'min-width': minWidthTable, 'width': '100%'}"
+                (onPageChange)="setPage($event)" [scrollHeight]="screenHeight * 0.60 + 'px'" 
+                styleClass="p-datatable-gridlines" sortMode="multiple" (onSort)="onSort($event)" [customSort]="true">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <div class="b-wr-20 wrapper-filter">
+                                <input-search
+                                    [(keyword)]="filter.keyword"
+                                    (_onChange)="setPage($event)">
+                                </input-search>
+                            </div>
+                            <span class="p-float-label b-custom b-ml-2">
+                                <p-dropdown id="statusFilter" name="statusFilter" [style]="{ width: '12rem' }"
+                                    [showClear]="true" placeholder="Tất cả" [options]="statusFilters" optionLabel="name"
+                                    optionValue="code" [(ngModel)]="filter.status"
+                                    (onChange)="changeFilter($event.value)">
+                                </p-dropdown>
+                                <label class="font-normal" for="statusFilter">Trạng thái</label>
+                            </span>
+                            
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th pSortableColumn="Id" style="max-width: 5rem; min-width: 5rem; justify-content: center" pFrozenColumn alignFrozen="left">ID<p-sortIcon field="Id"></p-sortIcon></th>
+                        <ng-container *ngFor="let col of columns">
+                            <th pResizableColumn *ngIf="col.fieldSort" pSortableColumn="{{col.fieldSort}}"  [ngStyle]="{'max-width': !col?.isResize ? col?.width : '', 'min-width': col?.width}" [ngClass]="col.class">
+                                {{ col.header }} <p-sortIcon *ngIf="col.fieldSort" field="{{col.fieldSort}}"></p-sortIcon>
+                            </th>
+                            <th pResizableColumn *ngIf="!col.fieldSort" [ngStyle]="{'max-width': !col?.isResize ? col?.width : '', 'min-width': col?.width}" [ngClass]="col.class">
+                                {{ col.header }} <p-sortIcon *ngIf="col.fieldSort" field="{{col.fieldSort}}"></p-sortIcon>
+                            </th>
+                        </ng-container>
+                        <th class="b-col-status b-border-frozen-right" pFrozenColumn alignFrozen="right" [frozen]="true">
+                            Trạng thái
+                        </th>
+                        <th class="b-col-actions b-table-actions" pFrozenColumn alignFrozen="right" [frozen]="true">
+                            <i class="pi pi-cog" (click)="setColumn(headerColumns, selectedColumns)"></i>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+                    <tr>
+                        <td class="b-col-id" pFrozenColumn alignFrozen="left" [frozen]="true">
+                            {{ row.id }}
+                        </td>
+                        <td *ngFor="let col of columns" [ngStyle]="{'max-width': !col?.isResize ? col?.width : '', 'min-width': col?.width}" [ngClass]="col.class">
+                            <div [ngClass]="col.cutText" [title]="row[col.field]">
+                                {{ row[col.field] }}
+                            </div>
+                        </td>
+                        <td class="b-col-status b-border-frozen-right" pFrozenColumn alignFrozen="right" [frozen]="true">
+                            <p-tag 
+                                styleClass="p-tag-{{ getStatusSeverity(row?.status || -1) }}"
+                                severity="{{ getStatusSeverity(row?.status || -1) }}"
+                                value="{{ getStatusName(row.status || -1) }}">
+                            </p-tag>
+                        </td>
+                        <td class="b-col-actions b-table-actions" pFrozenColumn alignFrozen="right" [frozen]="true">
+                            <div class="flex">
+                                <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+                                <p-menu 
+                                    #menu [popup]="true" class="button-actions" [model]="listAction[rowIndex]"
+                                    appendTo="body">
+                                </p-menu>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7">Đang tải dữ liệu ...</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator 
+                [rows]="page.pageSize" [totalRecords]="page.totalItems"
+                [rowsPerPageOptions]="page.perPageOptions" currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng"
+                showCurrentPageReport="true" (onPageChange)="setPage($event)">
+            </p-paginator>
+        </div>
+    </div>
+</div>

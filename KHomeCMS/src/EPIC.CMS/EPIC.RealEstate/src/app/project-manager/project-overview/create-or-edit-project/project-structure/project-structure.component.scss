@@ -1,0 +1,60 @@
+
+
+:host ::ng-deep .p-tabview-panel {
+    border: 0px !important;
+}
+
+.custom-tabview .p-tabview-panels .p-element .p-tabview-panel {
+    border: 0px solid gray !important;
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+::ng-deep .b-org-chart {
+    overflow: auto;
+    .p-organizationchart-table {
+        margin-bottom: 20px;
+        tbody {
+            tr {
+                td {
+                    padding: 0 0.5rem !important;
+                    .p-organizationchart-node-content {
+                        padding: 1rem !important;
+                        border: 2px solid #abb1b8;
+                        border-radius: 5px;
+                        &.p-highlight {
+                            border-radius: 10px;
+                        }
+                        //
+                        .nodeParent {
+                            border-radius: 10px;
+                            min-width: 20rem;
+                        }
+                        //
+                        .child {
+                            border-radius: 10px;
+                            width: 14rem;
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+}
+
+.node-container {
+
+}
+
+.node-div {
+
+}
+
+.company {
+    width: 500px;
+}

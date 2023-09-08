@@ -1,0 +1,56 @@
+<div class="flex b-w-100">
+    <ng-container *ngIf="type === 'otherUtiliti'">
+        <div class="field mb-0 col">
+            <label class="title-info b-w-100"> Tên tiện ích </label>
+            <input 
+                pInputText [(ngModel)]="utilitiName" class="custom-input b-w-100" type="text"
+                placeholder="Nhập tên tiện ích" (input)="onInput($event)" 
+            />
+        </div>
+        <div class="field mb-0 col">
+            <label class="title-info b-w-100"> Loại tiện ích </label>
+            <p-dropdown 
+                [options]="utilitiTypes" optionLabel="name" optionValue="code" [(ngModel)]="utilitiType" appendTo="body"
+                (onChange)="onChange($event, 'utilitiType')" [styleClass]="'b-w-100'" placeholder="Chọn loại tiện ích">
+            </p-dropdown>
+        </div>
+        <div class="field mb-0 col">
+            <label class="title-info b-w-100">Nhóm tiện ích</label>
+            <p-dropdown 
+                [options]="utilitiGroups" optionLabel="name" optionValue="code" [(ngModel)]="utilitiGroup" appendTo="body"
+                (onChange)="onChange($event, 'utilitiGroup')" [styleClass]="'b-w-100'" placeholder="Chọn nhóm tiện ích">
+            </p-dropdown>
+        </div>
+        <div class="field mb-0 col">
+            <label class="title-info b-w-100"> Icon tiện ích</label>
+            <input 
+                pInputText class="custom-input b-w-100 b-disabled" type="text" [(ngModel)]="iconName"
+                placeholder="Icon tiện ích" disabled 
+            />
+        </div>
+    </ng-container>
+    <ng-container *ngIf="type === 'moreInfor'">
+        <div class="field mb-0 col-3">
+            <label class="title-info"> {{ labelInfor }} </label>
+            <input pInputText [value]="label" class="custom-input" type="text" placeholder="Nhập tiêu đề" />
+        </div>
+        <div class="field mb-0 col-3">
+            <label class="title-info"> Nội dung thông tin </label>
+            <input pInputText [value]="content" class="custom-input" type="text" placeholder="Nhập nội dung" />
+        </div>
+        <div class="field mb-0 col-3">
+            <label class="title-info"> Icon </label>
+            <input pInputText [value]="iconName" class="custom-input" type="text" placeholder="Link icon" />
+        </div>
+    </ng-container>
+    <div class="field mb-0 col flex align-items-end">
+        <p-image src="{{path}}" alt="Image" [width]="30" [height]="30" [imageStyle]="imageStyle"></p-image>
+        <!--  -->
+        <p-button styleClass="p-button custom-button mr-3" label="Chọn Icon" (click)="clickPickIcon($event)"></p-button>
+        <!--  -->
+        <p-button 
+            *ngIf="showBtnRemove" styleClass="p-button p-button-danger" label="Xóa"
+            (click)="clickRemoveInfor($event)">
+        </p-button>
+    </div>
+</div>

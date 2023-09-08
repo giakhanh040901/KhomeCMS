@@ -1,0 +1,313 @@
+<div class="col-12">
+    <div class="grid p-fluid ">
+        <!-- Thông số sản phẩm -->
+        <p-confirmDialog [style]="{width: '400px'}" [baseZIndex]="10000"></p-confirmDialog>
+        <ng-container>
+            <div class="col-6 flex align-content-center flex-wrap"> 
+                <h6 class="mb-0"> Thông số sản phẩm </h6>
+            </div>
+            <div class="col-6 text-right" > 
+                <p-button 
+                    *ngIf="productData.id && this.isGranted([this.PermissionRealStateConst.RealStateMenuProjectListDetail_ThongTinChung_CapNhat])"
+                    (click)="save()" styleClass="p-button custom-button" 
+                    [label]="!isEdit ? 'Chỉnh sửa' : 'Lưu lại'" 
+                    [icon]="isEdit ? 'pi pi-save' : 'pi pi-pencil'">
+                </p-button>
+            </div>
+            <div class="field mb-0 col-4">
+                <label class="title-info">
+                    Cấp <span class="required-field"> * </span>
+                </label>
+                <p-dropdown (onChange)="changeBuildingDensityType()"
+                    [autoDisplayFirst]="false" appendTo="body" placeholder="Chọn cấp" class="b-disabled" [disabled]="!this.isEdit && this.productData.id != null"
+                    [options]="buildingDensitys" optionLabel="nameDisplay" optionValue="id" 
+                    [(ngModel)]="productData.buildingDensityId">
+                </p-dropdown>
+            </div>
+            <div class="field mb-0 col-4">
+                <label class="title-info">
+                    Phân loại sản phẩm <span class="required-field"> * </span>
+                </label>
+                <p-dropdown (onChange)="changeClassifyType()"
+                    [autoDisplayFirst]="true" appendTo="body" [disabled]="!this.isEdit && this.productData.id != null" class="b-disabled"
+                    [options]="classifyTypes" optionLabel="name" optionValue="code" 
+                    [(ngModel)]="productData.classifyType">
+                </p-dropdown>
+            </div>
+            <div class="field mb-0 col-4">
+                <label class="title-info">
+                    Loại sổ đỏ <span class="required-field"> * </span>
+                </label>
+                <p-dropdown 
+                    [autoDisplayFirst]="false" appendTo="body" placeholder="Chọn loại sổ đỏ" [disabled]="!this.isEdit && this.productData.id != null" class="b-disabled"
+                    [options]="ProductConst.redBookTypes" optionLabel="name" optionValue="code" 
+                    [(ngModel)]="productData.redBookType">
+                </p-dropdown>
+            </div>
+        </ng-container>
+        <!-- Thông tin chi tiết -->
+        <ng-container>
+            <div class="col-12">
+                <h6 class="mb-0"> Thông tin chi tiết </h6>
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info"> Mã căn / Mã SP <span class="required-field"> * </span> </label>
+                <input  
+                    [(ngModel)]="productData.code" placeholder="Nhập mã căn/ mã SP" [disabled]="!this.isEdit && this.productData.id != null"
+                    pInputText class="custom-input" type="text" class="b-disabled"
+                />
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info"> Nhập số căn / tên <span class="required-field"> * </span> </label>
+                <input  
+                    [(ngModel)]="productData.name" placeholder="Nhập số căn/ tên" [disabled]="!this.isEdit && this.productData.id != null"
+                    pInputText class="custom-input" type="text" class="b-disabled"
+                />
+            </div>
+
+            <div class="field mb-0 col-2">
+                <label class="title-info">
+                    Số lượng phòng
+                </label>
+                <p-dropdown 
+                    [autoDisplayFirst]="false" appendTo="body" placeholder="Chọn số lượng phòng" [disabled]="!this.isEdit && this.productData.id != null" class="b-disabled"
+                    [options]="ProductConst.roomTypes" optionLabel="name" optionValue="code" 
+                    [(ngModel)]="productData.roomType">
+                </p-dropdown>
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">
+                    Hướng cửa
+                </label>
+                <p-dropdown 
+                    [autoDisplayFirst]="false" appendTo="body" placeholder="Chọn hướng cửa" [disabled]="!this.isEdit && this.productData.id != null" class="b-disabled"
+                    [options]="ProductConst.doorDirections" optionLabel="name" optionValue="code" 
+                    [(ngModel)]="productData.doorDirection">
+                </p-dropdown>
+            </div>
+            <!--  -->
+            <div class="field mb-0 col-{{ productData.productType == ProductConst.GRAFT_TYPE ? 4 : 2 }}">
+                <label class="title-info">
+                    Loại bàn giao
+                </label>
+                <p-dropdown 
+                    [autoDisplayFirst]="false" appendTo="body" placeholder="Chọn loại bàn giao" [disabled]="!this.isEdit && this.productData.id != null" class="b-disabled"
+                    [options]="ProductConst.handingTypes" optionLabel="name" optionValue="code" 
+                    [(ngModel)]="productData.handingType">
+                </p-dropdown>
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">
+                    Hướng ban công
+                </label>
+                <p-dropdown 
+                    [autoDisplayFirst]="false" appendTo="body" placeholder="Chọn hướng ban công" [disabled]="!this.isEdit && this.productData.id != null" class="b-disabled"
+                    [options]="ProductConst.doorDirections" optionLabel="name" optionValue="code" 
+                    [(ngModel)]="productData.balconyDirection">
+                </p-dropdown>
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">
+                    Vị trí SP / Căn 
+                </label>
+                <p-dropdown 
+                    [autoDisplayFirst]="false" appendTo="body" placeholder="Chọn vị trí SP/ căn" [disabled]="!this.isEdit && this.productData.id != null" class="b-disabled"
+                    [options]="ProductConst.locations" optionLabel="name" optionValue="code" 
+                    [(ngModel)]="productData.productLocation">
+                </p-dropdown>
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">
+                    Loại hình Căn / SP 
+                </label>
+                <p-dropdown 
+                    [autoDisplayFirst]="true" appendTo="body" [disabled]="!this.isEdit && this.productData.id != null" class="b-disabled"
+                    [options]="ProductConst.types" optionLabel="name" optionValue="code" 
+                    [(ngModel)]="productData.productType">
+                </p-dropdown>
+            </div>
+            <!-- Loại hình căn ghép thì mới hiện 2 trường dũ liệu này để nhập -->
+            <ng-container *ngIf="productData.productType == ProductConst.GRAFT_TYPE">
+                <div class="field mb-0 col-2">
+                    <label class="title-info"> Nhập căn ghép </label>
+                    <input  
+                        [(ngModel)]="productData.compoundRoom" placeholder="Nhập căn ghép" [disabled]="!this.isEdit && this.productData.id != null"
+                        pInputText class="custom-input" type="text" class="b-disabled"
+                    />
+                </div>
+                <div class="field mb-0 col-2">
+                    <label class="title-info"> Tầng ghép </label>
+                    <input  
+                        [(ngModel)]="productData.compoundFloor" placeholder="Nhập tầng ghép" [disabled]="!this.isEdit && this.productData.id != null"
+                        pInputText class="custom-input" type="text" class="b-disabled"
+                    />
+                </div>
+            </ng-container>
+
+            <!--  -->
+            <div class="field mb-0 col-2" *ngIf="ProductConst.classifyTypeGroupFirst.includes(productData.classifyType)">
+                <label class="title-info"> Tầng số </label>
+                <input  
+                    [(ngModel)]="productData.noFloor" placeholder="Nhập tầng số" [disabled]="!this.isEdit && this.productData.id != null"
+                    pInputText class="custom-input" type="text" class="b-disabled"
+                />
+            </div>
+            <!--  -->
+            <div class="field mb-0 col-2" *ngIf="ProductConst.classifyTypeGroupSecond.includes(productData.classifyType)">
+                <label class="title-info"> Số tầng </label>
+                <input  
+                    [(ngModel)]="productData.numberFloor" placeholder="Nhập số tầng" [disabled]="!this.isEdit && this.productData.id != null"
+                    pInputText class="custom-input" type="text" class="b-disabled"
+                />
+            </div>
+            <!--  -->
+            <div class="field mb-0 col-{{ productData.productType == ProductConst.GRAFT_TYPE ? 10 : 4 }}">
+                <label class="title-info"> Hướng view </label>
+                <input  
+                    [(ngModel)]="productData.viewDescription" class="b-disabled"
+                    [disabled]="!this.isEdit && this.productData.id != null"
+                    pInputText type="text" placeholder="Nhập hướng view"
+                />
+            </div>
+            <!--  -->
+            <div class="col-12 md:col-2">
+                <div class="field mb-0">
+                    <label for="handoverTime">Thời gian bàn giao</label>
+                    <e-calendar
+                        [dateFormat]="'mm-yy'" appendTo="body"
+                        [inputId]="'handoverTime'" [view]="'month'"
+                        [(value)]="productData.handoverTime" [showButtonBar]="false"
+                        [disabled]="!this.isEdit && this.productData.id != null"
+                        >
+                    </e-calendar>
+                </div>
+            </div>
+            <!-- Hiển thị vs phân loại sản phẩm là: Căn hộ (Thông thường | Studio | Shophouse | Penthouse | Duplex | Sky Villa) -->
+            <ng-container *ngIf="ProductConst.classifyTypeGroupFirst.includes(productData.classifyType)">
+                <div class="field mb-0 col-2">
+                    <label class="title-info" [title]="'Diện tích thông thủy'"> DT thông thủy (m2) </label>
+                    <input 
+                        [(ngModel)]="productData.carpetArea" [disabled]="!this.isEdit && this.productData.id != null" placeholder="Nhập DT thông thủy"
+                        pInputText id="carpetArea" type="number" [pKeyFilter]="blockText" class="b-disabled"
+                    />
+                </div>
+                <div class="field mb-0 col-2">
+                    <label class="title-info" [title]="'Diện tích tim tường'"> DT tim tường (m2) </label>
+                    <input 
+                        [(ngModel)]="productData.builtUpArea" [disabled]="!this.isEdit && this.productData.id != null" placeholder="Nhập DT tim tường"
+                        pInputText id="builtUpArea" type="number" [pKeyFilter]="blockText" class="b-disabled"
+                    />
+                </div>
+                <!-- <div class="field mb-0 col-2">
+                    <label class="title-info" [title]="'Diện tích sàn xây dựng'"> DT sàn XD (m2) </label>
+                    <input 
+                        [(ngModel)]="productData.floorBuildingArea" [disabled]="!this.isEdit && this.productData.id != null" placeholder="Nhập dữ liệu"
+                        pInputText id="carpetArea" type="number" [pKeyFilter]="blockText" class="b-disabled"
+                    />
+                </div> -->
+            </ng-container>
+            <!-- Hiển thị vs phân loại sản phẩm là: Nhà ở nông thôn | Biệt thự nhà ở | Liền kề | Chung cư thấp tầng | Căn Shophouse | Biệt thự nghỉ dưỡng | Villa -->
+            <ng-container *ngIf="ProductConst.classifyTypeGroupSecond.includes(productData.classifyType)">
+                <div class="field mb-0 col-2">
+                    <label class="title-info" [title]="'Diện tích mặt đất'"> DT mặt đất (m2) </label>
+                    <input 
+                        [(ngModel)]="productData.landArea" [disabled]="!this.isEdit && this.productData.id != null" placeholder="Nhập DT mặt đất"
+                        pInputText id="landArea" type="number" [pKeyFilter]="blockText" class="b-disabled"
+                    />
+                </div>
+                <div class="field mb-0 col-2">
+                    <label class="title-info" [title]="'Diện tích xây dựng'"> DT xây dựng (m2) </label>
+                    <input 
+                        [(ngModel)]="productData.constructionArea" [disabled]="!this.isEdit && this.productData.id != null" placeholder="Nhập DT xây dựng"
+                        pInputText id="constructionArea" type="number" [pKeyFilter]="blockText" class="b-disabled"
+                    />
+                </div>
+               
+            </ng-container>
+            <!--  -->
+            <div class="field mb-0 col-2">
+                <label class="title-info" [title]="'Diện tích sàn xây dựng'"> DT sàn XD (m2) </label>
+                <input 
+                    [(ngModel)]="productData.floorBuildingArea" [disabled]="(!this.isEdit && this.productData.id != null) || buildingDensityDisable" placeholder="Nhập dữ liệu"
+                    pInputText id="floorBuildingArea" type="number" [pKeyFilter]="blockText" class="b-disabled"
+                />
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info" [title]="'Diện tích tính giá'"> DT tính giá (m2) </label>
+                <input 
+                    pInputText id="priceArea" type="number" [pKeyFilter]="blockText" placeholder="Nhập DT tính giá"
+                    [(ngModel)]="productData.priceArea" [disabled]="!this.isEdit && this.productData.id != null"
+                    (keyup)="calculatePrice($event, 'priceArea')" class="b-disabled"
+                />
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info"> Đơn giá bán (VND) </label>
+                <p-inputNumber 
+                    [(ngModel)]="productData.unitPrice" placeholder="Nhập đơn giá bán" class="b-disabled"
+                    (onInput)="calculatePrice($event, 'unitPrice')" locale="de-DE"
+                    [disabled]="!this.isEdit && this.productData.id != null">
+                </p-inputNumber>
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info"> Giá bán (VND) </label>
+                <p-inputNumber 
+                    [(ngModel)]="productData.price" placeholder="Nhập giá bán" class="b-disabled"
+                    [disabled]="false" locale="de-DE">
+                </p-inputNumber>
+            </div>
+        </ng-container>
+        <!-- Thông tin khác -->
+        <ng-container>
+            <div class="col-12 mt-3">
+                <h6 class="mb-0"> Thông tin khác </h6>
+            </div>
+            <div *ngFor="let infor of productData.productItemExtends; let i = index">
+                <div class="flex b-w-100">
+                    <div class="field mb-0 col-3">
+                        <label class="title-info"> Tiêu đề thông tin {{i+1}} <span class="required-field"> * </span></label>
+                        <input 
+                            pInputText [(ngModel)]="infor.title" class="custom-input b-disabled" type="text"
+                            placeholder="Nhập tiêu đề" [disabled]="!this.isEdit && this.productData.id != null"
+                        />
+                    </div>
+                    <div class="field mb-0 col-3">
+                        <label class="title-info"> Nội dung thông tin <span class="required-field"> * </span></label>
+                        <input 
+                            pInputText [(ngModel)]="infor.description" class="custom-input b-disabled" type="text"
+                            placeholder="Nhập nội dung" [disabled]="!this.isEdit && this.productData.id != null"
+                        />
+                    </div>
+                    <div class="field mb-0 col-3">
+                        <label class="title-info"> Icon <span class="required-field"> * </span></label>
+                        <input 
+                            pInputText [(ngModel)]="infor.iconName" class="custom-input b-disabled" type="text"
+                            placeholder="Link Icon" [disabled]="true"
+                        />
+                    </div>
+                    <div class="field col flex align-items-end" style="margin-top: 1.75rem;">
+                        <p-image src="{{infor?.path ?? defaultIcon}}" 
+                            alt="Image" [width]="30" [height]="30" 
+                            [imageStyle]="imageStyle">
+                        </p-image>
+                        <p-button 
+                            styleClass="p-button custom-button mr-3" label="Chọn Icon" (click)="changeIcon(infor)" [disabled]="!this.isEdit && this.productData.id != null">
+                        </p-button>
+                        <p-button 
+                            styleClass="p-button p-button-danger" label="Xoá" (click)="deleteIcon(i)" [disabled]="!this.isEdit && this.productData.id != null">
+                        </p-button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-1" style="padding: 0.5rem; width: 100%;">
+                <p-button 
+                    styleClass="p-button custom-button" label="Thêm thông tin" (click)="insertIcon()" [disabled]="!this.isEdit && this.productData.id != null">
+                </p-button>
+            </div>
+        </ng-container>
+    </div>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer" *ngIf="!productData.id">
+    <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="submitted" (click)="save()"></button>
+</div>

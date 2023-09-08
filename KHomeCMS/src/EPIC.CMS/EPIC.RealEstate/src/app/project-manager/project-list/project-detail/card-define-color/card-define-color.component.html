@@ -1,0 +1,9 @@
+<div class="card p-0">
+  <div class="container" [style.background]="backgroundColor">
+    <div class="content">
+      <div class="number" [style.color]="colorNumber">{{quantity}}</div>
+      <div class="title" *ngIf="!isBottomPositionTitle"><span>{{title}}</span></div>
+    </div>
+  </div>
+  <div class="title text-center mt-2" *ngIf="isBottomPositionTitle"><span>{{title}}</span></div>
+</div>

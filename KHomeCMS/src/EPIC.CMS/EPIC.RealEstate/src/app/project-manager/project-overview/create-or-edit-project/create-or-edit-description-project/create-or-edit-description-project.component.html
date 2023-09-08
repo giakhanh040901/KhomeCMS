@@ -1,0 +1,90 @@
+<div class="col-12">
+  <div class="flex justify-content-between flex-wrap card-container purple-container mb-4">
+    <h5 class="title-info mb-0 ml-0">Mô tả dự án</h5>
+    <div *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_MoTa_CapNhat])">
+      <p-button
+        *ngIf="!isEdit"
+        styleClass="p-button-sm custom-button"
+        label="Chỉnh sửa"
+        icon="pi pi-pencil"
+        (click)="isEdit = true"
+      >
+      </p-button>
+      <p-button
+        *ngIf="isEdit"
+        styleClass="p-button-sm custom-button"
+        label="Lưu lại"
+        icon="pi pi-save"
+        (click)="save($event)"
+      >
+      </p-button>
+    </div>
+  </div>
+  <div class="p-fluid p-formgrid grid">
+    <div class="b-w-100 col-12">
+      <p-selectButton
+        optionValue="value"
+        optionLabel="name"
+        class="mb-2 mt-2"
+        [options]="htmlMarkdownOptions"
+        [(ngModel)]="descriptionProject.contentType"
+        [disabled]="!isEdit"
+      ></p-selectButton>
+    </div>
+    <div class="flex b-w-100">
+      <div
+        class="field {{
+          descriptionProject.contentType === MARKDOWN_OPTIONS.MARKDOWN
+            ? 'col-6'
+            : 'col-12'
+        }}"
+      >
+        <label>Nhập thông tin</label>
+        <div
+          *ngIf="descriptionProject.contentType === MARKDOWN_OPTIONS.MARKDOWN"
+        >
+          <textarea
+            #myTextArea
+            (click)="getCaretPos(myTextArea)"
+            (keyup)="getCaretPos(myTextArea)"
+            pInputTextarea
+            [rows]="23"
+            [(ngModel)]="descriptionProject.content"
+            placeholder="Nhập nội dung mô tả"
+            class="custom-input"
+            [disabled]="!isEdit"
+          ></textarea>
+          <div style="width: 150px" class="mt-2">
+            <p-button
+              [disabled]="!isEdit" 
+              (click)="insertImage()"
+              class="p-button-outlined p-button-info"
+              label="Chèn ảnh"
+              icon="pi pi-image"
+              iconPos="left"
+            >
+            </p-button>
+          </div>
+        </div>
+
+        <div *ngIf="descriptionProject.contentType === MARKDOWN_OPTIONS.HTML">
+          <angular-editor
+            [(ngModel)]="descriptionProject.content"
+            class="custom-input"
+            [placeholder]="'Nhập nội dung'"
+            [config]="{ height: '30rem', sanitize: false, editable: isEdit }"
+            [disabled]="!isEdit"
+          >
+          </angular-editor>
+        </div>
+      </div>
+      <div
+        *ngIf="descriptionProject.contentType === MARKDOWN_OPTIONS.MARKDOWN"
+        class="field col-6"
+      >
+        <label>Hiển thị</label>
+        <markdown class="border-box" style="height: 30rem;" [data]="displayContent"> </markdown>
+      </div>
+    </div>
+  </div>
+</div>

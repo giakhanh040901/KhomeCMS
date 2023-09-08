@@ -1,0 +1,29 @@
+<div class="card b-page-detail {{ isLoading ? 'b-loading' : '' }}" *ngIf="!isLoading">
+    <div class="p-fluid p-formgrid grid b-header">
+        <div class="card col-12 md:col-12 b-actions">
+            <div class="flex justify-content-between flex-wrap card-container purple-container">
+                <h5 class="title-info mb-0 ml-0"> Chi tiết sản phẩm </h5>
+                <div>
+                    <p-button styleClass="p-button-sm custom-button   border-600 b-button-back"
+                        [routerLink]="'/project-manager/open-sell/detail/' + cryptEncode(productData?.openSellId)" label="Quay lại"
+                        icon="pi pi-chevron-left" class="b-0  ">
+                    </p-button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-tabView styleClass="custom-tabview" [(activeIndex)]="activeIndex" (onChange)="changeTab($event)">
+        <p-tabPanel [header]="'productInfo'">
+            <ng-template pTemplate="header">
+                <span> Thông tin chung </span>
+            </ng-template>
+            <app-product-item-view-info *ngIf="tabViewActive['productInfo']" [productData]="productData"></app-product-item-view-info>
+        </p-tabPanel>
+        <p-tabPanel [header]="'lichSu'">
+            <ng-template pTemplate="header">
+                <span> Lịch sử </span>
+            </ng-template>
+            <app-open-sell-history *ngIf="tabViewActive['lichSu']" [productData]="productData"></app-open-sell-history>
+        </p-tabPanel>
+    </p-tabView>
+</div>

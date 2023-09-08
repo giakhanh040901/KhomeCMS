@@ -1,0 +1,41 @@
+<div class="flex b-w-100">
+    <div class="field col-3">
+      <label class="title-info">Tên file</label>
+      <input
+        pInputText
+        type="text"
+        placeholder="Nhập tên file"
+        [(ngModel)]="name"
+        (input)="onInput($event)"
+      />
+    </div>
+    <div class="field col-6">
+      <label class="title-info">Tệp tin</label>
+      <input
+        pInputText
+        type="text"
+        placeholder="Link tệp tin"
+        [(ngModel)]="file"
+        disabled
+      />
+    </div>
+    <div class="field col-3">
+      <p-fileUpload
+        mode="basic"
+        accept=".pdf,.doc,.docx"
+        (onSelect)="upload($event)"
+        [showUploadButton]="false"
+        [showCancelButton]="false"
+        chooseLabel="Chọn"
+        invalidFileSizeMessageDetail="Kích thước file tối đa 100MB"
+        maxFileSize="100000000"
+      >
+      </p-fileUpload>
+      <p-button
+        styleClass="p-button custom-button"
+        label="Xóa"
+        (click)="remove($event)"
+      ></p-button>
+    </div>
+  </div>
+  

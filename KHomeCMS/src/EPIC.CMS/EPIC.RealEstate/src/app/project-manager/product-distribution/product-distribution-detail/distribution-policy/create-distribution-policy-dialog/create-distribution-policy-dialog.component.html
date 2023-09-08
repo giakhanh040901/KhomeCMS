@@ -1,0 +1,133 @@
+<div class="col-12" style="padding-bottom: 70px">
+  <div class="card p-0">
+    <h5 class="title-info mb-2">Thông tin chính sách</h5>
+  </div>
+  <div class="p-fluid p-formgrid grid">
+    <div class="flex b-w-100">
+      <div class="field col-4" *ngIf="isView">
+        <label class="title-info">Mã chính sách</label>
+        <input
+          pInputText
+          [(ngModel)]="distributionPolicy.code"
+          class="custom-input"
+          type="text"
+          [disabled]="true"
+        />
+      </div>
+      <div class="field col-4" *ngIf="!isView">
+        <label class="title-info">Chọn chính sách bán hàng</label>
+        <p-dropdown
+          [options]="listPolicy" [autoDisplayFirst]="false"
+          optionLabel="name"
+          optionValue="code"
+          [(ngModel)]="distributionPolicy.policy"
+          (onChange)="onChangePolicy($event)"
+          placeholder="Chọn chính sách"
+        >
+        </p-dropdown>
+      </div>
+      <div class="field col-8">
+        <label class="title-info"
+          >Tên chính sách<span class="required-field"> * </span></label
+        >
+        <input
+          pInputText
+          [(ngModel)]="distributionPolicy.name"
+          class="custom-input b-disabled"
+          type="text"
+          [disabled]="true"
+        />
+      </div>
+    </div>
+    <div class="flex b-w-100">
+      <div class="field col-3">
+        <label class="title-info">Loại hình đặt cọc</label>
+        <p-dropdown
+          [autoDisplayFirst]="false" class="b-disabled"
+          [options]="listDepositType"
+          optionLabel="name" optionValue="code"
+          [(ngModel)]="distributionPolicy.depositType"
+          [disabled]="true"
+        >
+        </p-dropdown>
+      </div>
+      <div class="col-12 md:col-3">
+        <div class="field mb-0">
+            <label htmlFor="depositValue">Giá trị đặt cọc ({{ distributionPolicy.depositType == PolicyTemplateConst.GIA_CO_DINH ? 'VND' : '%' }})<span class="required-field"> * </span></label>
+            <input *ngIf="distributionPolicy.depositType != PolicyTemplateConst.GIA_CO_DINH " 
+            pInputText id="depositValue" type="number" [pKeyFilter]="blockText"
+            [(ngModel)]="distributionPolicy.deposit" [disabled]="true" class="custom-input b-disabled"/>
+            <p-inputNumber *ngIf="distributionPolicy.depositType == PolicyTemplateConst.GIA_CO_DINH " id="depositValue" [(ngModel)]="distributionPolicy.deposit" locale="de-DE" [disabled]="true" class="custom-input b-disabled"></p-inputNumber>
+
+        </div>
+      </div>
+      <div class="field col-3">
+        <label class="title-info">Loại hình lock căn</label>
+        <p-dropdown
+          [autoDisplayFirst]="false" class="b-disabled"
+          [options]="listLockType"
+          optionLabel="name"
+          optionValue="code"
+          [(ngModel)]="distributionPolicy.lockType"
+          [disabled]="true"
+        >
+        </p-dropdown>
+      </div>
+      <div class="col-12 md:col-3">
+        <div class="field mb-0">
+            <label htmlFor="lockValue">Giá trị lock căn ({{ distributionPolicy.lockType == PolicyTemplateConst.GIA_CO_DINH ? 'VND' : '%' }}) <span class="required-field"> * </span></label>
+            <input *ngIf="distributionPolicy.lockType != PolicyTemplateConst.GIA_CO_DINH "
+            pInputText id="lockValue" type="number" [pKeyFilter]="blockText"
+            [(ngModel)]="distributionPolicy.lock" [disabled]="true" class="custom-input b-disabled"/>
+            <p-inputNumber *ngIf="distributionPolicy.lockType == PolicyTemplateConst.GIA_CO_DINH "  [disabled]="true" class="custom-input b-disabled" id="lockValue" [(ngModel)]="distributionPolicy.lock" locale="de-DE"></p-inputNumber>
+
+        </div>
+      </div>
+      <!-- <div class="field col-3">
+        <label class="title-info"
+          >Giá trị lock căn<span class="required-field"> * </span></label
+        >
+        <input
+          pInputText
+          [(ngModel)]="distributionPolicy.lock"
+          class="custom-input b-disabled"
+          type="number"
+          [disabled]="true"
+        />
+      </div> -->
+    </div>
+    <div class="flex b-w-100">
+      <div class="field col-12">
+        <label class="title-info">Mô tả chính sách</label>
+        <input
+          pInputText
+          [(ngModel)]="distributionPolicy.description"
+          class="custom-input b-disabled"
+          type="text"
+          [disabled]="true"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="p-dialog-footer e-custom-dialog-footer"
+  *ngIf="!isView"
+>
+  <button
+    pButton
+    pRipple
+    label="Hủy"
+    icon="pi pi-times"
+    class="p-button-text p-confirm-dialog-reject"
+    (click)="close($event)"
+  ></button>
+  <button
+    pButton
+    pRipple
+    label="Lưu"
+    icon="pi pi-check"
+    class="p-button-text p-confirm-dialog-approve"
+    (click)="save($event)"
+  ></button>
+</div>

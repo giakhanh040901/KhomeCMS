@@ -1,0 +1,95 @@
+<div *ngIf="haveData">
+  <div class="header flex">
+    <div class="header-list-card col">
+      <card-define-color
+        *ngFor="let card of listCard"
+        class="mr-4"
+        [backgroundColor]="card.backgroundColor"
+        [colorNumber]="card.numberColor"
+        [title]="card.title"
+        [quantity]="card.quantity"
+      ></card-define-color>
+    </div>
+    <div class="col">
+      <project-list-detail-card-info
+        *ngIf="lastestProduct"
+        [avatar]="lastestProduct.avatar"
+        [fullName]="lastestProduct.fullName"
+        [productCode]="lastestProduct.productCode"
+        [colorProductCode]="lastestProduct.colorProductCode"
+        [tradingProviderName]="lastestProduct.tradingProviderName"
+        [time]="lastestProduct.time"
+      ></project-list-detail-card-info>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content-header my-2">
+      <div class="flex align-items-center">
+        <div class="p-dataview-layout-options p-selectbutton p-buttonset">
+          <button
+            type="button"
+            class="p-button p-button-icon-only {{
+              dataView['grid'] ? 'p-highlight' : ''
+            }}"
+            (click)="changeView($event, 'grid')"
+          >
+            <i class="pi pi-th-large"></i>
+          </button>
+          <button
+            type="button"
+            class="p-button p-button-icon-only {{
+              dataView['list'] ? 'p-highlight' : ''
+            }}"
+            (click)="changeView($event, 'list')"
+          >
+            <i class="pi pi-bars"></i>
+          </button>
+        </div>
+        <div class="ml-2">
+          <span>{{ labelDataView }}</span>
+        </div>
+        <ng-content select="[dataViewGrid]"></ng-content>
+        <div class="ml-2">
+          <button type="button" class="p-button" (click)="onClickZoom($event)">
+            <p-image
+              class="mr-2"
+              src="assets/layout/images/card-product/full-screen.svg"
+              alt="Image"
+              [imageStyle]="{ width: '12px' }"
+            ></p-image>
+            Sự kiện
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="content-main">
+      <ng-container *ngIf="dataView['grid']">
+        <p-dataView
+          #dv
+          [value]="dataSource"
+          [paginator]="false"
+          layout="grid"
+          styleClass="b-data-view"
+          [style]="{ height: '100%' }"
+        >
+          <ng-template let-product pTemplate="gridItem" let-rowIndex="rowIndex">
+            <project-list-detail-card
+              [dataSource]="product"
+              [dataSourceIndex]="rowIndex"
+              [listAction]="listAction"
+              (_onClickCard)="onClickCard($event)"
+            ></project-list-detail-card>
+          </ng-template>
+        </p-dataView>
+        <ng-content select="[paginatorGrid]"></ng-content>
+      </ng-container>
+      <ng-container *ngIf="dataView['list']">
+        <ng-content select="[dataTable]"></ng-content>
+        <ng-content select="[paginatorList]"></ng-content>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<div *ngIf="!haveData" class="b-no-data">
+  <h6>Không có dữ liệu</h6>
+</div>

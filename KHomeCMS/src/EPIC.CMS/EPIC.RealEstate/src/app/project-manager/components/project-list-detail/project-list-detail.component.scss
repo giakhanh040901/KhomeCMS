@@ -1,0 +1,39 @@
+div.b-no-data {
+  margin-top: 10px;
+  border-radius: 5px;
+  background: #f7f9ff;
+  padding: 25px;
+  h6 {
+    color: #525b73;
+    text-align: center;
+    margin-bottom: 0px;
+  }
+}
+
+div.header-list-card {
+  display: flex;
+  // border-bottom: 1px solid #e5e5e5;
+  card-define-color {
+    display: inline-block;
+  }
+}
+
+::ng-deep {
+  .b-data-view {
+    // height: 100% !important;
+    position: unset !important;
+  }
+  .content-header {
+    .p-dataview-layout-options {
+      .p-button.p-button-icon-only {
+        box-shadow: none;
+        color: #76809b;
+        background: white;
+        &.p-highlight {
+          background: #4c47df;
+          color: white;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,110 @@
+`<app-loading-page *ngIf="isLoading"></app-loading-page>
+<div class="grid p-fluid mb-8 p-3">
+    <ng-container>
+        <ng-container>
+            <div class="grid b-w-100 mb-3">
+                <div class="col-12 md:col-3">
+                    <div class="p-field-checkbox">
+                        <p-checkbox [(ngModel)]="chinhSachUuDaiCDT" binary="true" inputId="binary"></p-checkbox>
+                        <label class="ml-2"> <b> Chính sách ưu đãi CĐT </b> </label>
+                    </div>
+                </div>
+                <div class="col-12 md:col-2">
+                    <div class="p-field-checkbox">
+                        <p-checkbox [(ngModel)]="tienIch" binary="true" inputId="binary"></p-checkbox>
+                        <label class="ml-2"> <b> Tiện ích </b></label>
+                    </div>
+                </div>
+                <div class="col-12 md:col-2">
+                    <div class="p-field-checkbox">
+                        <p-checkbox [(ngModel)]="vatLieu" binary="true" inputId="binary"></p-checkbox>
+                        <label class="ml-2"> <b> Vật liệu </b> </label>
+                    </div>
+                </div>
+                
+                <div class="col-12 md:col-2">
+                    <div class="p-field-checkbox">
+                        <p-checkbox [(ngModel)]="hinhAnh" binary="true" inputId="binary"></p-checkbox>
+                        <label class="ml-2"> <b> Hình ảnh </b></label>
+                    </div>
+                </div> 
+                <div class="col-12 md:col-3">
+                    <div class="p-field-checkbox">
+                        <p-checkbox [(ngModel)]="soDoThietKe" binary="true" inputId="binary"></p-checkbox>
+                        <label class="ml-2"> <b> Sơ đồ thiết kế </b> </label>
+                    </div>
+                </div>             
+                <!-- <div class="col-12 md:col-4">
+                </div> -->
+            </div>
+            <hr>
+        </ng-container>
+        <ng-container>
+            <ng-container *ngFor="let item of departmentClones; let i = index">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="col-12 md:col-4">
+                        <div class="field mb-0">
+                            <label htmlFor="key">Nhập số căn/tên <span class="required-field"> * </span></label>
+                            <input 
+                                type="text" id="name" name="name" pInputText 
+                                [(ngModel)]="item.name" maxlength="256" required
+                                placeholder="Chọn"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-4" *ngIf="ProductConst.classifyTypeGroupFirst.includes(productItem.classifyType)">
+                        <div class="field mb-0">
+                            <label htmlFor="value">Tầng số <span class="required-field"> * </span></label>
+                            <input 
+                                class="custom-input-disabled"
+                                type="text" id="name" name="name" pInputText 
+                                [(ngModel)]="item.noFloor" maxlength="256" 
+                                placeholder="Nhập tầng số"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-4" *ngIf="ProductConst.classifyTypeGroupSecond.includes(productItem.classifyType)">
+                        <div class="field mb-0">
+                            <label htmlFor="value">Số tầng<span class="required-field"> * </span></label>
+                            <input 
+                                class="custom-input-disabled"
+                                type="text" id="name" name="name" pInputText 
+                                [(ngModel)]="item.numberFloor" maxlength="256" 
+                                placeholder="Nhập số tầng"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-4">
+                        <div class="field mb-0">
+                            <label htmlFor="value">Mã căn/mã sản phẩm<span class="required-field"> * </span></label>
+                            <input 
+                                class="custom-input-disabled"
+                                type="text" id="name" name="name" pInputText 
+                                [(ngModel)]="item.code" maxlength="256" 
+                                placeholder="Nhập mã căn/ mã sản phẩm"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <!--  -->
+            <div class="col-12 md:col-3">
+                <button style="width: auto;"                     
+                    pButton pRipple label="Thêm căn" icon="pi pi-plus"
+                    class="p-button-success mr-2" (click)="addvalue()">
+                </button>
+            </div>
+        </ng-container>
+    </ng-container>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+    <button
+        pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close($event)"
+    ></button>
+    <button
+        pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" (click)="save()"
+    ></button>
+</div>

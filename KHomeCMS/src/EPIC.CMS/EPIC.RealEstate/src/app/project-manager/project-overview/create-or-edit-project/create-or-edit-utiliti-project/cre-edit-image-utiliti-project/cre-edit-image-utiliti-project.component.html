@@ -1,0 +1,68 @@
+<app-loading-page *ngIf="isLoadingPage"></app-loading-page>
+<div class="col-12" style="padding-bottom: 70px">
+  <div class="card p-0">
+    <div class="flex b-w-100">
+      <div class="field col-3">
+        <label class="title-info b-w-100"> Loại tiện ích </label>
+        <p-dropdown
+          [options]="utilitiTypes"
+          optionLabel="name"
+          optionValue="code"
+          [(ngModel)]="dataSource.type"
+          [styleClass]="'b-w-100'"
+          placeholder="Chọn loại tiện ích"
+        >
+        </p-dropdown>
+      </div>
+      <div class="field col-3">
+        <label class="title-info b-w-100"> Tên hình ảnh </label>
+        <input
+          pInputText
+          [(ngModel)]="dataSource.name"
+          class="custom-input b-w-100"
+          type="text"
+          placeholder="Nhập tên hình ảnh"
+        />
+      </div>
+      <div class="field col-4">
+        <label class="title-info b-w-100"> Đường dẫn </label>
+        <input
+          pInputText
+          class="custom-input b-w-100"
+          type="text"
+          placeholder="Đường dẫn"
+          [(ngModel)]="dataSource.url"
+          disabled
+        />
+      </div>
+      <div class="field col-2 flex align-items-end">
+        <p-button
+          (click)="insertImage()"
+          class="p-button-outlined p-button-info"
+          label="Chèn ảnh"
+          icon="pi pi-image"
+          iconPos="left"
+        >
+        </p-button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+  <button
+    pButton
+    pRipple
+    label="Hủy"
+    icon="pi pi-times"
+    class="p-button-text p-confirm-dialog-reject"
+    (click)="close($event)"
+  ></button>
+  <button
+    pButton
+    pRipple
+    label="Lưu"
+    icon="pi pi-check"
+    class="p-button-text p-confirm-dialog-approve"
+    (click)="save($event)"
+  ></button>
+</div>

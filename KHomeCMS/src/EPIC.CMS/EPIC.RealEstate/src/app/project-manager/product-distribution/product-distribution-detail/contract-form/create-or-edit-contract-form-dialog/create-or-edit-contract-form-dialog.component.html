@@ -1,0 +1,67 @@
+<app-loading-page *ngIf="isLoadingPage"></app-loading-page>
+<div class="col-12" style="padding-bottom: 70px">
+	<div class="card p-0">
+		<h5 class="title-info mb-2">Mẫu hợp đồng</h5>
+	</div>
+	<div class="p-fluid p-formgrid grid">
+		<div class="flex b-w-100">
+			<div class="field col-6">
+				<label class="title-info"> Kiểu hợp đồng <span class="required-field"> * </span></label>
+				<p-dropdown 
+					[autoDisplayFirst]="false" [options]="listContractModel" optionLabel="name" appendTo="body"
+					optionValue="code" [(ngModel)]="contractForm.contractModel" (onChange)="onChange($event)">
+				</p-dropdown>
+			</div>
+			<div class="field col-6">
+				<label class="title-info"> Loại hợp đồng <span class="required-field"> * </span></label>
+				<p-dropdown 
+					[autoDisplayFirst]="false" [options]="listContractType" optionLabel="name" appendTo="body"
+					optionValue="code" [(ngModel)]="contractForm.contractType" (onChange)="onChange($event)">
+				</p-dropdown>
+			</div>
+		</div>
+		<div class="flex b-w-100">
+			<div class="field col-6">
+				<label class="title-info"> Chọn hợp đồng <span class="required-field"> * </span></label>
+				<p-dropdown 
+					[autoDisplayFirst]="false" [options]="listContract" optionLabel="name" optionValue="code" appendTo="body"
+					[(ngModel)]="contractForm.contract">
+				</p-dropdown>
+			</div>
+			<div class="field col-6">
+				<label class="title-info">Loại chính sách <span class="required-field"> * </span></label>
+				<p-dropdown 
+					[autoDisplayFirst]="false" [options]="listPolicy" optionLabel="name" optionValue="code" appendTo="body"
+					[(ngModel)]="contractForm.policy">
+				</p-dropdown>
+			</div>
+		</div>
+		<div class="flex b-w-100">
+			<div class="field col-6">
+				<label class="title-info">Chọn cấu trúc mã <span class="required-field"> * </span></label>
+				<p-dropdown [autoDisplayFirst]="false" [options]="listStructure" optionLabel="name" optionValue="code" appendTo="body"
+					[(ngModel)]="contractForm.structure">
+				</p-dropdown>
+			</div>
+			<div class="field col-6">
+				<label class="title-info">Ngày hiệu lực <span class="required-field"> * </span></label>
+				<e-calendar
+					[placeholder]="'Chọn ngày'"
+					[inputId]="'startDate'"
+					[(value)]="contractForm.startDate"
+					>
+				</e-calendar>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+	<button 
+		pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject"
+		(click)="close($event)">
+	</button>
+	<button 
+		pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve"
+		(click)="save($event)">
+	</button>
+</div>

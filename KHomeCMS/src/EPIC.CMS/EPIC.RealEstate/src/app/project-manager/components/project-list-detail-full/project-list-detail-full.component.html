@@ -1,0 +1,77 @@
+<div class="container">
+  <div class="header flex w-full">
+    <div class="col header-left p-3">
+      <div class="header-left-top">
+        <card-define-color
+          *ngFor="let card of listCard"
+          class="mr-4"
+          [backgroundColor]="card.backgroundColorFull"
+          [colorNumber]="card.numberColorFull"
+          [title]="card.title"
+          [quantity]="card.quantity"
+          [isBottomPositionTitle]="true"
+        ></card-define-color>
+      </div>
+      <div class="header-left-bottom">
+        <div class="flex align-items-center">
+          <button
+            type="button"
+            class="p-button p-button-icon-only p-highlight"
+            (click)="handleSort($event, 'order')"
+            style="border-radius: 4px"
+          >
+            <i [ngClass]="classIconSort"></i>
+          </button>
+          <p-dropdown
+            class="ml-2"
+            [options]="listSortField"
+            optionLabel="name"
+            optionValue="code"
+            [(ngModel)]="selectedSort.field"
+            (onChange)="handleSort($event, 'field')"
+          >
+          </p-dropdown>
+        </div>
+        <button type="button" class="p-button" (click)="handleClick($event)">
+          <p-image
+            class="mr-2"
+            src="assets/layout/images/card-product/minimize-screen.svg"
+            alt="Image"
+            [imageStyle]="{ width: '12px' }"
+          ></p-image>
+          Bảng hàng
+        </button>
+      </div>
+    </div>
+    <div class="col header-right p-3">
+      <project-list-detail-card-info
+        *ngIf="lastestProduct"
+        [isFull]="true"
+        [avatar]="lastestProduct.avatar"
+        [fullName]="lastestProduct.fullName"
+        [productCode]="lastestProduct.productCode"
+        [colorProductCode]="lastestProduct.colorProductCode"
+        [tradingProviderName]="lastestProduct.tradingProviderName"
+        [time]="lastestProduct.time"
+      ></project-list-detail-card-info>
+    </div>
+  </div>
+  <div class="content mt-4">
+    <p-dataView
+      #dv
+      [value]="dataSource"
+      [paginator]="false"
+      layout="grid"
+      styleClass="b-data-view"
+      [style]="{ height: '100%' }"
+    >
+      <ng-template let-product pTemplate="gridItem" let-rowIndex="rowIndex">
+        <project-list-detail-card
+          class="mr-1 mb-1"
+          [isCardFull]="true"
+          [dataSource]="product"
+        ></project-list-detail-card>
+      </ng-template>
+    </p-dataView>
+  </div>
+</div>

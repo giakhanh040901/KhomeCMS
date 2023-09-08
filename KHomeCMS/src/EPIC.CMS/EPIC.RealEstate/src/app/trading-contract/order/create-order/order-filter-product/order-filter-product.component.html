@@ -1,0 +1,205 @@
+<app-loading-page *ngIf="isLoading"></app-loading-page>
+<p-card>
+    <ng-template pTemplate="content">
+    <ng-container>
+        <div class="{{ isLoadingPage ? 'b-loading' : '' }}">
+            <h5 class="title-info mb-2">Thông tin sản phẩm bất động sản</h5>
+            <hr class="mt-0" style="border-width: 2px 0 0">
+            <div class="p-fluid p-formgrid grid">
+                <div class="pb-0 field col-12 md:col-6">
+                    <label class="title-info"> Dự án bất động sản <span class="required-field"> * </span> </label>
+                    <p-dropdown  
+                        [options]="orderInfo.openSells" optionLabel="labelName" optionValue="id"
+                        [autoDisplayFirst]="false" 
+                        [(ngModel)]="orderInfo.projectId">
+                    </p-dropdown>
+                </div>
+                <div class="pb-0 field col-12 md:col-4">
+                    <label class="title-info">Tìm kiếm sản phẩm</label>
+                    <input-search
+                        [placeholder]="'Nhập căn hộ'"
+                        [(keyword)]="orderInfo.keyword"
+                        (_onChange)="getProduct()">
+                    </input-search>
+                </div>
+                <div class="pb-0 field col-12 md:col-2 button-delete">
+                    <label htmlFor=""> </label>
+                    <button  pButton pRipple label="Tìm kiếm"
+                        class="p-button-outlined" (click)="getProduct()">
+                    </button>
+                </div>
+
+            </div>
+            <div class="pt-0">
+                <p-table #issuerTable [value]="orderInfo.listOfProducts" [loading]="isLoading" [rowHover]="true"
+                    [paginator]="false" responsiveLayout="scroll" dataKey="code" [scrollable]="true"
+                    scrollHeight="150px" styleClass="custom-table order">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="min-width: 10rem;"> Mã căn </th>
+                            <th style="min-width: 15rem;"> Mật độ xây dựng </th>
+                            <th style="min-width: 10rem;"> Diện tích (m2)</th>
+                            <th style="min-width: 16rem;"> Chính sách phân phối </th>
+                            <th style="min-width: 10rem;"> Giá bán (VND) </th>
+                            <th style="min-width: 10rem;"> Giá cọc (VND) </th>
+                            <th style="min-width: 15rem;"> Giá lock căn (VND) </th>
+                            <th style="min-width: 8rem; max-width: 8rem;" pFrozenColumn alignFrozen="right"> </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row let-expanded="expanded">
+                        <tr>
+                            <td style="min-width: 10rem;"> {{ row?.productItem?.code }} </td>
+                            <td style="min-width: 15rem;"> {{ row?.buildingDensityName }} </td>
+                            <td style="min-width: 10rem;"> {{ row?.productItem?.priceArea }} </td>
+                            <td style="min-width: 16rem;"> {{ row?.distributionPolicy?.name }} </td>
+                            <td style="min-width: 10rem;"> {{ formatCurrency(row?.productItem?.price) }} </td>
+                            <td style="min-width: 10rem;"> {{ formatCurrency(row?.depositPrice) }} </td>
+                            <td style="min-width: 15rem;"> {{ formatCurrency(row?.lockPrice) }} </td>
+                            <td style="min-width: 8rem; max-width: 8rem; justify-content: end;" pFrozenColumn
+                                alignFrozen="right">
+                                <div class="flex">
+                                    <button 
+                                        *ngIf="!row.isChoose" pButton pRipple type="button" icon="pi pi-check"
+                                        class="p-button-rounded mr-2 mb-2" (click)="isChoose(row)">
+                                    </button>
+                                    <button 
+                                        *ngIf="row.isChoose" title="Hủy chọn" pButton pRipple type="button"
+                                        icon="pi pi-times" class="p-button-rounded p-button-danger"
+                                        (click)="clearData()">
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="7">Không có dữ liệu.</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="loadingbody">
+                        <tr>
+                            <td colspan="7"> Đang tải dữ liệu ... </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <!--  -->
+            <h5 class="title-info mb-2 mt-5">Thông tin đồng sở hữu</h5>
+            <hr class="mt-0" style="border-width: 2px 0 0">
+            <div class="p-fluid p-formgrid grid">
+                <div class="pb-0 field col-12 md:col-3">
+                    <label class="title-info">Hình thức thanh toán <span class="required-field"> * </span></label>
+                    <p-dropdown class="b-disabled" appendTo="body" optionLabel="name"
+                        emptyMessage="Không có dữ liệu" optionValue="code" [options]="OrderConst.paymentOptions"
+                        [autoDisplayFirst]="false" [(ngModel)]="jointOwnerInfo.paymentOptionType">
+                    </p-dropdown>
+                </div>
+                <div class="pb-0 field col-12 md:col-3">
+                    <label class="title-info">Loại hợp đồng <span class="required-field"> * </span></label>
+                    <p-dropdown class="b-disabled" appendTo="body" optionLabel="name"
+                        emptyMessage="Không có dữ liệu" optionValue="code" [options]="OrderConst.typeOfcontract"
+                        [autoDisplayFirst]="false" [(ngModel)]="jointOwnerInfo.typeOfcontract">
+                    </p-dropdown>
+                </div>
+                <div class="pb-0 field col-12 md:col-3">
+                    <label class="title-info">Tìm kiếm khách</label>
+                    <input-search
+                        [disabled]="jointOwnerInfo.typeOfcontract != OrderConst.DONG_SO_HUU"
+                        [placeholder]="'Nhập số giấy tờ'"
+                        [(keyword)]="searchCustomer"
+                        (_onChange)="getInfoCustomer()">
+                    </input-search>
+                </div>
+               
+                <div class="pb-0 field col-12 md:col-2 button-delete">
+                    <label htmlFor=""> </label>
+                    <button [disabled]="jointOwnerInfo.typeOfcontract != OrderConst.DONG_SO_HUU" pButton pRipple label="Tìm kiếm" class="p-button-outlined" (click)="getInfoCustomer()">
+                    </button>
+                </div>
+                <div class="pb-0 field col-12 md:col-1 button-delete">
+                    <label htmlFor=""> </label>
+                    <button pButton pRipple label="Thêm" 
+                            class="p-button-success" (click)="addjointOwner()">
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-fluid p-formgrid grid" *ngIf="jointOwners.length">
+                <ng-container *ngFor="let jointOwner of jointOwners; let i= index">
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Tên khách hàng ( <i class="pi pi-trash b-icon-trash"
+                                (click)="removeElement(i)" title="Xóa nguời đồng sở hữu"></i> )</label>
+                        <input pInputText type="text" [(ngModel)]="jointOwner.fullname" [disabled]="true" class="b-disabled"/>
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Số giấy tờ</label>
+                        <input pInputText type="text" [(ngModel)]="jointOwner.idNo" [disabled]="true" class="b-disabled"/>
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Ngày sinh</label>
+                        <e-calendar
+                            [inputId]="'dateOfBirth'"
+                            [(value)]="jointOwner.dateOfBirth"
+                            [disabled]="true" 
+                        >
+                        </e-calendar>
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Nguyên quán</label>
+                        <input pInputText type="text" [(ngModel)]="jointOwner.placeOfOrigin" [disabled]="true" class="b-disabled"/>
+                    </div>
+                    <div *ngIf="jointOwner.idType != InvestorConst.ID_TYPES.PASSPORT && jointOwner?.investorId == 0"class="col-12 md:col-6 flex justify-content-end">
+                        <div class="field image-left-custom">
+                            <h5>Mặt trước</h5>
+                            <p-image
+                                [src]="AppConsts.remoteServiceBaseUrl + '/' + jointOwner.idFrontImageUrl" 
+                                imageClass="b-w-100"
+                                [imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+                                [preview]="true">
+                            </p-image>
+                        </div>
+                    </div>
+            
+                    <div *ngIf="jointOwner.idType != InvestorConst.ID_TYPES.PASSPORT && jointOwner?.investorId == 0"class="col-12 md:col-6 flex justify-content-start">
+                        <div class="field">
+                            <h5>Mặt sau</h5>
+                            <!-- <app-investor-image [idInput]="'input-back'" [idImage]="'image-back'"
+                                [(image)]="jointOwner.backImage" [isDisable]="true">
+                            </app-investor-image> -->
+                            <p-image
+                                [src]="AppConsts.remoteServiceBaseUrl + '/' + jointOwner.idBackImageUrl" 
+                                imageClass="b-w-100"
+                                [imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+                                [preview]="true">
+                            </p-image>
+                        </div>
+                    </div>
+            
+                
+                    <div *ngIf="jointOwner.idType == InvestorConst.ID_TYPES.PASSPORT" class="flex flex-row justify-content-center" style="width: 100%">
+                        <!-- {{jointOwner.idFrontImageUrl}} -->
+                        <!-- <app-investor-image [idInput]="'input-passport'" [idImage]="'image-passport'"
+                            [(image)]="jointOwner.idFrontImageUrl" [isDisable]="true" >
+                        </app-investor-image> -->
+                        <p-image
+                            [src]="AppConsts.remoteServiceBaseUrl + '/' + jointOwner.idFrontImageUrl" 
+                            imageClass="b-w-100"
+                            [imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+                            [preview]="true">
+                        </p-image>
+                 
+                    </div>
+                </ng-container>
+            </div>
+
+        </div>
+    </ng-container>
+    </ng-template>
+    <div class="footer">
+        <div class="grid grid-nogutter justify-content-between">
+            <p-button label="Quay lại" (click)="prevPage()" icon="pi pi-angle-left"></p-button>
+            <p-button label="Tiếp theo" (click)="nextPage()" icon="pi pi-angle-right" iconPos="right"></p-button>
+        </div>
+    </div>
+</p-card>

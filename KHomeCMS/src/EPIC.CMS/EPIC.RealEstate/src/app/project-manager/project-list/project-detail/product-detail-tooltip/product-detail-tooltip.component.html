@@ -1,0 +1,33 @@
+<div class="tooltip" [style.left]="left + 'px'" [style.top]="top + 'px'">
+  <!-- <div class="view">Lượt xem: {{ data.view }}</div> -->
+  <div class="name">{{ data.name }}</div>
+  <div class="description">
+    <div class="description-item" *ngIf="showDescriptionItem.acreage">
+      <img [src]="srcDescriptionItem.acreage" />
+      {{ data.acreage }}
+    </div>
+    <div class="description-item" *ngIf="showDescriptionItem.rooms">
+      <img [src]="srcDescriptionItem.rooms" />
+      {{ data.rooms }}
+    </div>
+    <div class="description-item" *ngIf="showDescriptionItem.direction">
+      <img [src]="srcDescriptionItem.direction" />
+      {{ data.direction }}
+    </div>
+  </div>
+  <div class="price">{{ data.price }}</div>
+  <div class="distribution">
+    <div *ngFor="let item of data.listDistribution" class="distribution-item">
+      Phân phối: {{ item }}
+    </div>
+  </div>
+  <div class="status">
+    <div
+      class="status-card"
+      [style.background]="getStatus(data.status, 'backgroundColor')"
+      [style.color]="getStatus(data.status, 'numberColor')"
+    >
+      {{ getStatus(data.status, "title") }}
+    </div>
+  </div>
+</div>

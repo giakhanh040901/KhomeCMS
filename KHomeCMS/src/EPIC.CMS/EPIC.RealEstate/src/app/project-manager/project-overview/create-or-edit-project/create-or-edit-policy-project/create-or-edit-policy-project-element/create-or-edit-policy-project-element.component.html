@@ -1,0 +1,90 @@
+<app-loading-page *ngIf="isLoading"></app-loading-page>
+<div class="grid p-fluid">
+  <!-- Thông tin đầu tư -->
+  <ng-container>
+    <ng-container>
+      <div class="col-12 md:col-4">
+        <div class="field mb-0">
+          <label> Mã chính sách <span class="required-field"> * </span></label>
+          <input
+            pInputText
+            type="text"
+            placeholder="Nhập mã chính sách"
+            [(ngModel)]="policyProject.code"
+          />
+        </div>
+      </div>
+
+      <div class="col-12 md:col-8">
+        <div class="field mb-0">
+          <label> Tên chính sách <span class="required-field"> * </span></label>
+          <input
+            pInputText type="text"
+            placeholder="Nhập tên chính sách"
+            [(ngModel)]="policyProject.name"
+          />
+        </div>
+      </div>
+
+      <div class="col-12 md:col-4">
+        <div class="field mb-0">
+          <label> Loại chính sách <span class="required-field"> * </span></label>
+          <p-dropdown
+            optionLabel="name" optionValue="code" appendTo="body" [autoDisplayFirst]="false" [options]="ProjectPolicyConst.PolicyTypes"
+            [(ngModel)]="policyProject.policyType" placeholder="Chọn loại chính sách" [disabled]="true" class="b-disabled">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-4">
+        <div class="field mb-0">
+            <label htmlFor="source">Loại hình đặt cọc <span class="required-field"> * </span></label>
+            <p-dropdown optionLabel="name" optionValue="code" appendTo="body"
+                class="custom-input-disabled" [autoDisplayFirst]="false"
+                [options]="ProjectPolicyConst.sources"
+                [(ngModel)]="policyProject.source"
+                placeholder="Chọn loại hình đặt cọc">
+            </p-dropdown>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-4">
+        <div class="field mb-0">
+          <label> Giá quy đổi</label>
+          <p-inputNumber
+            mode="decimal" [(ngModel)]="policyProject.conversionValue" locale="de-DE" placeholder="Nhập giá nếu có">
+          </p-inputNumber>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-12">
+        <div class="field mb-0">
+          <label htmlFor="description"> Mô tả </label>
+          <textarea
+            pInputText
+            [(ngModel)]="policyProject.description"
+            placeholder="Nhập nội dung mô tả chính sách dự án"
+          ></textarea>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+  <button
+    pButton
+    pRipple
+    label="Hủy"
+    icon="pi pi-times"
+    class="p-button-text p-confirm-dialog-reject"
+    (click)="close($event)"
+  ></button>
+  <button
+    pButton
+    pRipple
+    label="Lưu"
+    icon="pi pi-check"
+    class="p-button-text p-confirm-dialog-approve"
+    (click)="save()"
+  ></button>
+</div>

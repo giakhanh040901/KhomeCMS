@@ -1,0 +1,471 @@
+<app-loading-page *ngIf="isLoadingPage || isRefresh"></app-loading-page>
+<div class="card b-page-detail {{ isLoadingPage ? 'b-loading' : '' }}" *ngIf="!isLoadingPage">
+    <div class="p-fluid p-formgrid grid b-header">
+        <div class="card col-12 md:col-12 b-actions">
+            <div class="flex justify-content-between flex-wrap card-container purple-container">
+                <h5 class="title-info mb-0 ml-0">Chi tiết</h5>
+                <div>
+                    <p-button 
+                        styleClass="p-button-sm custom-button   border-600 b-button-back"
+                        [routerLink]="routerBackLink" label="Quay lại"
+                        icon="pi pi-chevron-left" class="b-0  ">
+                    </p-button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-tabView styleClass="custom-tabview" [(activeIndex)]="activeIndex" (onChange)="changeTab($event)" *ngIf="!isLoadingPage">
+        <p-tabPanel >
+            <ng-template pTemplate="header" *ngIf="true || this.isGranted([this.PermissionRealStateConst.RealStateMenuSoLenh_ThongTinChung])">
+                <span> Thông tin chung </span>
+            </ng-template>
+            <ng-container *ngIf="activeIndex == 0">
+                <div class="col-12 md:col-12 b-actions">
+                    <div class="flex justify-content-between flex-wrap card-container purple-container header-left">
+                        <div>
+                            <h5 class="title-info mb-0">Thông tin khách hàng</h5>
+                        </div>
+                        <div>
+                            <p-button 
+                                *ngIf="isGranted([PermissionRealStateConst.RealStateMenuSoLenh_ThongTinChung_ChinhSua]) && (orderDetailTemp.status == OrderConst.KHOI_TAO || orderDetailTemp.status == OrderConst.CHO_THANH_TOAN)"
+                                styleClass="p-button-sm custom-button" label="{{ isEdit ? 'Lưu lại' : 'Chỉnh sửa' }}"
+                                icon="pi {{ isEdit ? 'pi-save' : 'pi-pencil' }}" (click)="changeEdit()">
+                            </p-button>
+                            <ng-container *ngIf="isGranted([PermissionRealStateConst.RealStateMenuSoLenh_ThongTinChung_DoiLoaiHD]) && (orderDetailTemp.status > OrderConst.CHO_THANH_TOAN && orderDetailTemp.status < OrderConst.PHONG_TOA)">
+                                <p-button
+                                    styleClass="p-button-sm custom-button ml-3"
+                                    label="{{ (fieldUpdates.typeOfcontract.isEdit) ? 'Lưu lại' : 'Đổi loại hợp đồng' }}" 
+                                    icon="pi {{ (fieldUpdates.typeOfcontract.isEdit) ? 'pi-save' : 'pi-pencil' }}" 
+                                    (click)="updateInfoContactCustomer()">
+                                </p-button> 
+                                <p-button
+                                *ngIf="isGranted([PermissionRealStateConst.RealStateMenuSoLenh_ThongTinChung_DoiHinhThucThanhToan])"
+                                    styleClass="p-button-sm custom-button ml-3"
+                                    label="{{ (fieldUpdates.paymentType.isEdit) ? 'Lưu lại' : 'Đổi hình thức thanh toán' }}" 
+                                    icon="pi {{ (fieldUpdates.paymentType.isEdit) ? 'pi-save' : 'pi-pencil' }}" 
+                                    (click)="updateField('paymentType')">
+                                </p-button> 
+                            </ng-container> 
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <!--  -->
+            <div class="grid detail">
+                <div class="col-12">
+                    <div class="card pt-0 pb-0 mb-0">
+                        <ng-container>
+                            <!-- <hr class="mt-0" style="border-width: 2px 0 0"> -->
+                            <div class="p-fluid p-formgrid grid">
+                                <div class="field col-12 md:col-3">
+                                    <label class="title-info">Tên khách hàng</label>
+                                    <input 
+                                        [disabled]="true" pInputText
+                                        [value]="(orderDetailTemp?.businessCustomer?.name ?? (orderDetailTemp?.investor?.investorIdentification?.fullname ?? orderDetailTemp?.investor?.name)) ?? null"
+                                        class="b-disabled" 
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-3" *ngIf="orderDetailTemp?.investor">
+                                    <label class="title-info {{ (isEdit) ? 'hightline-title' : '' }}">Thông tin giấy tờ</label>
+                                    <p-dropdown 
+                                        (onChange)="changeIdType($event.value)" [autoDisplayFirst]="false"
+                                        class="b-disabled {{ (isEdit) ? 'hightline-select' : '' }}"
+                                        [options]="orderDetailTemp?.investor?.listInvestorIdentification" optionLabel="idNoInfo" optionValue="id"
+                                        [disabled]="!(isEdit)"
+                                        [(ngModel)]="orderDetailTemp.investorIdenId">
+                                    </p-dropdown>
+                                </div>
+
+                                <div class="field col-12 md:col-3">
+                                    <label class="title-info">Số điện thoại</label>
+                                    <input 
+                                        [disabled]="true" pInputText
+                                        [value]="(orderDetailTemp?.businessCustomer?.phone ?? orderDetailTemp?.investor?.phone) ?? null"
+                                        class="b-disabled" 
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-3">
+                                    <label class="title-info">Email</label>
+                                    <input 
+                                        [disabled]="true" pInputText [title]="(orderDetailTemp?.businessCustomer?.email ?? orderDetailTemp?.investor?.email) ?? null"
+                                        [value]="(orderDetailTemp?.businessCustomer?.email ?? orderDetailTemp?.investor?.email) ?? null"
+                                        class="b-disabled" 
+                                    />
+                                </div>
+                              
+                                <div class="field mb-0 col-12 md:col-12"*ngIf="orderDetailTemp?.investor" > 
+                                    <label class="title-info {{ (isEdit) ? 'hightline-title' : '' }}">Địa chỉ liên hệ</label>
+                                    <p-dropdown 
+                                        class="b-disabled {{ (isEdit) ? 'hightline-select' : '' }}" emptyMessage="Không có dữ liệu"
+                                        [disabled]="!(isEdit)"
+                                        [options]="orderDetailTemp?.investor?.listContactAddress" optionLabel="contactAddress" optionValue="contactAddressId"
+                                        [autoDisplayFirst]="false"
+                                        [(ngModel)]="orderDetailTemp.contractAddressId">
+                                    </p-dropdown>
+                                </div>
+                                <!--  -->
+
+                                <div class="field mb-0 col-12 md:col-12" *ngIf="orderDetailTemp?.businessCustomer">
+                                    <label class="title-info">Địa chỉ liên hệ</label>
+                                    <textarea [disabled]="true" pInputText [value]="(orderDetailTemp?.businessCustomer?.address ?? orderDetailTemp?.investor?.investorIdentification?.placeOfResidence) ?? null" class="b-disabled" [rows]="2"></textarea>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <!--  -->
+                        <ng-container>
+                            <ng-container>
+                                <h5 id="productInfo" class="title-info mb-2 mt-2">Thông tin sản phẩm</h5>
+                                <!-- <div class="p-fluid p-formgrid grid" *ngIf="isEdit || fieldUpdates.productInfo.isEdit">
+                                    <div class="pb-0 field col-12 md:col-6">
+                                        <label class="title-info {{ (isEdit || fieldUpdates.productInfo.isEdit) ? 'hightline-title' : '' }}"> Dự án bất động sản <span class="required-field"> * </span> </label>
+                                        <p-dropdown  [options]="openSells" optionLabel="labelName" optionValue="id"
+                                            [autoDisplayFirst]="false" [(ngModel)]="productAdd.openSellId"
+                                            >
+                                        </p-dropdown>
+                                    </div>
+                                    <div class="pb-0 field col-12 md:col-4">
+                                        <label class="title-info {{ (isEdit || fieldUpdates.productInfo.isEdit) ? 'hightline-title' : '' }}">Tìm kiếm sản phẩm</label>
+                                        <input pInputText type="text" placeholder="Nhập căn hộ"
+                                             [(ngModel)]="productAdd.keyword" (input)="changeKeyword($event)"
+                                             />
+                                    </div>
+                                    <div class="pb-0 field col-12 md:col-2 button-delete">
+                                        <label htmlFor=""> </label>
+                                        <button  pButton pRipple label="Tìm kiếm"
+                                            class="p-button-outlined" (click)="getProduct()">
+                                        </button>
+                                    </div>
+                    
+                                </div> -->
+                                <!-- <div class="card pt-0" *ngIf="isEdit || fieldUpdates.productInfo.isEdit">
+                                    <p-table #issuerTable [value]="listOfProducts" [loading]="isLoading" [rowHover]="true"
+                                        [paginator]="false" responsiveLayout="scroll" dataKey="code" [scrollable]="true"
+                                        scrollHeight="150px" styleClass="mt-3 custom-table">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th style="min-width: 10rem;"> Mã căn </th>
+                                                <th style="min-width: 15rem;"> Mật độ xây dựng </th>
+                                                <th style="min-width: 10rem;"> Diện tích (m2)</th>
+                                                <th style="min-width: 15rem;"> Chính sách phân phối </th>
+                                                <th style="min-width: 10rem;"> Giá bán (VND) </th>
+                                                <th style="min-width: 10rem;"> Giá cọc (VND) </th>
+                                                <th style="min-width: 15rem;"> Giá lock căn (VND) </th>
+                                                <th style="min-width: 8rem; max-width: 8rem;" pFrozenColumn alignFrozen="right"> </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-row let-expanded="expanded">
+                                            <tr>
+                                                <td style="min-width: 10rem;"> {{ row?.productItem?.code }} </td>
+                                                <td style="min-width: 15rem;"> {{ row?.buildingDensityName }} </td>
+                                                <td style="min-width: 10rem;"> {{ row?.productItem?.carpetArea }} </td>
+                                                <td style="min-width: 15rem;"> {{ row?.sellingPolicy[0]?.name }} </td>
+                                                <td style="min-width: 10rem;"> {{ formatCurrency(row?.productItem?.price) }} </td>
+                                                <td style="min-width: 10rem;"> {{ formatCurrency(row?.depositPrice) }} </td>
+                                                <td style="min-width: 15rem;"> {{ formatCurrency(row?.lockPrice) }} </td>
+                                                <td style="min-width: 8rem; max-width: 8rem; justify-content: end;" pFrozenColumn
+                                                    alignFrozen="right">
+                                                    <div class="flex">
+                                                        <button *ngIf="!row.isChoose" pButton pRipple type="button" icon="pi pi-check"
+                                                            class="p-button-rounded mr-2 mb-2" (click)="isChoose(row)"></button>
+                                                        <button *ngIf="row.isChoose" title="Hủy chọn" pButton pRipple type="button"
+                                                            icon="pi pi-times" class="p-button-rounded p-button-danger"
+                                                            (click)="clearData()">
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                    
+                                        <ng-template pTemplate="emptymessage">
+                                            <tr>
+                                                <td colspan="7">Không có dữ liệu.</td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="loadingbody">
+                                            <tr>
+                                                <td colspan="7"> Đang tải dữ liệu ... </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div> -->
+                                <div class="p-fluid p-formgrid grid">
+                                    <div class="field col-12 md:col-6">
+                                        <label class="title-info"> Dự án <span class="required-field"> * </span> </label>
+                                        <p-dropdown
+                                            class="b-disabled" 
+                                            [options]="openSells" optionLabel="labelName" optionValue="id"
+                                            [autoDisplayFirst]="false"
+                                            [(ngModel)]="orderDetail.openSellId" 
+                                            [disabled]="true"
+                                            >
+                                        </p-dropdown>
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label class="title-info">Mã căn</label>
+                                        <input [disabled]="true" pInputText [value]="orderDetail?.productItem?.code ?? null"
+                                            class="b-disabled" />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label class="title-info">Mật độ xây dựng </label>
+                                        <input [disabled]="true" pInputText [value]="orderDetail?.buildingDensityName ?? null"
+                                            class="b-disabled" />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label class="title-info">Diện tích tính giá (m2)</label>
+                                        <input [disabled]="true" pInputText [value]="orderDetail?.productItem?.priceArea ?? null"
+                                            class="b-disabled" />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label class="title-info"> Giá bán (VND) </label>
+                                        <input [disabled]="true" pInputText [value]="formatCurrency(orderDetail?.productItem?.price)"
+                                            class="b-disabled" />
+                                    </div>
+                                  
+                                    <div class="pb-0 field col-12 md:col-3">
+                                        <label class="title-info"> Giá trị cọc (VND) </label> 
+                                        <input [disabled]="true" pInputText [value]="formatCurrency(orderDetail?.depositPrice ?? orderDetail?.productItemPrice?.depositPrice)"
+                                        class="b-disabled" />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label class="title-info"> Giá lock căn (VND) </label>
+                                        <input [disabled]="true" pInputText [value]="formatCurrency(orderDetail?.lockPrice ?? orderDetail?.productItemPrice?.lockPrice)"
+                                        class="b-disabled" />
+                                    </div>
+                                </div>
+                            </ng-container>
+                          
+                            <ng-container>
+                                <h5 class="title-info mb-2 mt-2">Thông tin hợp đồng</h5>
+                                <!-- <hr class="mt-0" style="border-width: 2px 0 0"> -->
+                                <div class="p-fluid p-formgrid grid" id="policyId">
+                                    <div class="field col-12 md:col-3">
+                                        <label class="title-info">ID hợp đồng</label>
+                                        <input pInputText value="{{ orderDetailTemp?.id }}" [disabled]="true"
+                                            class="b-disabled" />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label class="title-info">Mã hợp đồng cọc</label>
+                                        <input pInputText value="{{ orderDetailTemp?.contractCode}}" [disabled]="true"
+                                            class="b-disabled" />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label class="title-info">Chính sách phân phối</label>
+                                        <input pInputText value="{{orderDetail?.distributionPolicy?.name ?? orderDetail?.sellingPolicyTemp?.name }}" [disabled]="true"
+                                            class="b-disabled" />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label class="title-info">Mã chính sách</label>
+                                        <input pInputText value="{{orderDetail?.distributionPolicy?.code ?? orderDetail?.sellingPolicyTemp?.code }}" [disabled]="true"
+                                            class="b-disabled" />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label class="title-info">Thời gian giữ chỗ</label>
+                                        <input pInputText value="{{orderDetail?.keepTime / 60 }} phút" [disabled]="true"
+                                            class="b-disabled" />
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container>
+                                <h5 class="title-info mb-2 mt-2">
+                                    Thông tin đồng sở hữu
+                                </h5>
+                                <hr class="mt-0" style="border-width: 2px 0 0">
+                                <div class="p-fluid p-formgrid grid">
+                                    <div id="typeOfcontract" class="field col-12 md:col-3">
+                                        <label class="title-info {{ (isEdit || fieldUpdates.typeOfcontract.isEdit) ? 'hightline-title' : '' }}"> Loại hợp đồng</label>
+                                        <p-dropdown
+                                        class="b-disabled" 
+                                        [options]="OrderConst.typeOfcontract" optionLabel="name" optionValue="code"
+                                        [autoDisplayFirst]="false" (onChange)="changeTypeContract()"
+                                        [disabled]="!(isEdit || fieldUpdates.typeOfcontract.isEdit)"
+                                        [(ngModel)]="orderDetailTemp.typeOfcontract" 
+                                        >
+                                    </p-dropdown>
+                                    </div>
+                                    <div id="paymentType" class="field col-12 md:col-3">
+                                        <label class="title-info {{ (isEdit || fieldUpdates.paymentType.isEdit) ? 'hightline-title' : '' }}"> Hình thức thanh toán </label>
+                                        <p-dropdown
+                                            class="b-disabled"                                                                                                                                                                                                                                                                                                              
+                                            [options]="OrderConst.paymentOptions" optionLabel="name" optionValue="code"
+                                            [autoDisplayFirst]="false"
+                                            [disabled]="!(isEdit || fieldUpdates.paymentType.isEdit)"
+                                            [(ngModel)]="orderDetailTemp.paymentType" 
+                                            >
+                                        </p-dropdown>
+                                    </div>
+                                    <div class="pb-0 field col-12 md:col-3" *ngIf="isEdit || fieldUpdates.typeOfcontract.isEdit">
+                                        <label class="title-info {{ (isEdit) ? 'hightline-title' : '' }}">Tìm kiếm khách</label>
+                                        <input [disabled]="orderDetailTemp.typeOfcontract != OrderConst.DONG_SO_HUU && !(isEdit|| fieldUpdates.typeOfcontract.isEdit)" pInputText type="text" placeholder="Nhập số giấy tờ" [(ngModel)]="searchCustomer" />
+                                    </div>
+                                   
+                                    <div class="pb-0 field col-12 md:col-2 button-delete" *ngIf="isEdit || fieldUpdates.typeOfcontract.isEdit">
+                                        <label htmlFor=""> </label>
+                                        <button [disabled]="orderDetailTemp.typeOfcontract != OrderConst.DONG_SO_HUU && !(isEdit || fieldUpdates.typeOfcontract.isEdit)" pButton pRipple label="Tìm kiếm" class="p-button-outlined" (click)="getInfoCustomer()">
+                                        </button>
+                                    </div>
+                                    <div class="pb-0 field col-12 md:col-1 button-delete" *ngIf="isEdit || fieldUpdates.typeOfcontract.isEdit">
+                                        <label htmlFor=""> </label>
+                                        <button pButton pRipple label="Thêm" [disabled]="orderDetailTemp.typeOfcontract != OrderConst.DONG_SO_HUU && !(isEdit|| fieldUpdates.typeOfcontract.isEdit)"
+                                                class="p-button-success" (click)="addjointOwner()">
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="p-fluid p-formgrid grid" *ngIf="orderDetailTemp?.rstOrderCoOwner?.length">
+                                    <ng-container *ngFor="let jointOwner of orderDetailTemp?.rstOrderCoOwner; let i= index">
+                                        <div class="pb-0 field col-12 md:col-3">
+                                            <!-- ( <i class="pi pi-trash b-icon-trash"
+                                                    (click)="removeElement(i)" title="Xóa nguời đồng sở hữu"></i> ) -->
+                                            <label class="title-info">Tên khách hàng 
+                                                <span *ngIf="isEdit || fieldUpdates.typeOfcontract.isEdit">
+                                                    ( <i class="pi pi-trash b-icon-trash"
+                                                        (click)="removeElement(i,jointOwner)" title="Xóa nguời đồng sở hữu"></i> )
+                                                </span>
+                                            </label>
+                                            <input class="b-disabled"  [disabled]="!(isEdit || fieldUpdates.typeOfcontract.isEdit)" pInputText type="text" [(ngModel)]="jointOwner.fullname" />
+                                        </div>
+                                        <div class="pb-0 field col-12 md:col-3">
+                                            <label class="title-info">Số giấy tờ</label>
+                                            <input class="b-disabled"  [disabled]="!(isEdit || fieldUpdates.typeOfcontract.isEdit)" pInputText type="text" [(ngModel)]="jointOwner.idNo">
+                                        </div>
+                                        <div class="pb-0 field col-12 md:col-3">
+                                            <label class="title-info">Ngày sinh</label>
+                                            <e-calendar
+                                                [disabled]="!(isEdit || fieldUpdates.typeOfcontract.isEdit)"
+                                                [inputId]="'dateOfBirth'"
+                                                [(value)]="jointOwner.dateOfBirth"
+                                            >
+                                            </e-calendar>
+                                        </div>
+                                        <div class="pb-0 field col-12 md:col-3">
+                                            <label class="title-info" style="width: 100%;">Nguyên quán
+                                                <!-- action display image -->
+                                                <!-- <i *ngIf="!jointOwner?.investorIdenId && jointOwner.isShow" class="pi pi-angle-double-up r-icon"
+                                                (click)="showDetailAction(false,jointOwner)" title="Ẩn bớt thông tin" style="float: right;"></i>
+                                                <i *ngIf="!jointOwner?.investorIdenId && !jointOwner.isShow" class="pi pi-angle-double-down g-icon"
+                                                (click)="showDetailAction(true,jointOwner)" title="Hiện thêm thông tin" style="float: right;"></i> -->
+                                                <!-- action popup image -->
+                                                <i *ngIf="!jointOwner?.investorIdenId && !jointOwner.isShow" class="pi pi-eye g-icon"
+                                                (click)="showPopupAction(true,jointOwner)" title="Xem thêm thông tin" style="float: right;"></i>
+                                            </label>
+                                            <input class="b-disabled"  [disabled]="!(isEdit || fieldUpdates.typeOfcontract.isEdit)" pInputText type="text" [(ngModel)]="jointOwner.placeOfOrigin" />
+                                        </div>
+
+                                        <!-- cmt tạm display image -->
+                                        <!-- <div *ngIf="(jointOwner.idType != InvestorConst.ID_TYPES.PASSPORT && !jointOwner?.investorIdenId && jointOwner?.isShow) "class="col-12 md:col-6">
+                                            <div class="field image-left-custom">
+                                                <h5>Mặt trước</h5>
+                                                <p-image
+                                                    [src]="AppConsts.remoteServiceBaseUrl + '/' + jointOwner.idFrontImageUrl" 
+                                                    imageClass="b-w-100"
+                                                    [imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+                                                    [preview]="true">
+                                                </p-image>
+                                            </div>
+                                        </div>
+                                
+                                        <div *ngIf="jointOwner.idType != InvestorConst.ID_TYPES.PASSPORT && !jointOwner?.investorIdenId && jointOwner?.isShow"class="col-12 md:col-6 flex flex-row justify-content-center">
+                                            <div class="field">
+                                                <h5>Mặt sau</h5>
+                                                <p-image
+                                                    [src]="AppConsts.remoteServiceBaseUrl + '/' + jointOwner.idBackImageUrl" 
+                                                    imageClass="b-w-100"
+                                                    [imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+                                                    [preview]="true">
+                                                </p-image>
+                                            </div>
+                                        </div>
+                                
+                                    
+                                        <div *ngIf="jointOwner.idType == InvestorConst.ID_TYPES.PASSPORT && !jointOwner?.investorIdenId && jointOwner?.isShow" class="flex flex-row justify-content-center" style="width: 100%; padding-top: 20px;">
+                                            <p-image
+                                                [src]="AppConsts.remoteServiceBaseUrl + '/' + jointOwner.idFrontImageUrl" 
+                                                imageClass="b-w-100"
+                                                [imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+                                                [preview]="true">
+                                            </p-image>
+                                     
+                                        </div> -->
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                            <!-- MÃ GIỚI THIỆU  -->
+                            <ng-container>
+                                <h5 class="title-info mb-2 mt-2">Mã giới thiệu</h5>
+                                <!-- <hr class="mt-0" style="border-width: 2px 0 0"> -->
+                                <div class="p-fluid p-formgrid grid" id="saleReferralCode">
+                                    <div class="field col-12 mb-0 md:col-2">
+                                        <label class="title-info {{ (isEdit || fieldUpdates.saleReferralCode.isEdit) ? 'hightline-title' : '' }}">Mã giới thiệu</label>
+                                        <div class="p-inputgroup" (click)="searchSale()" style="cursor: pointer;">
+                                            <input
+                                                class="b-disabled {{ (fieldUpdates.saleReferralCode.isEdit) ? 'hightline-input' : '' }}"
+                                                [disabled]="!(isEdit ? isEdit : (fieldUpdates.saleReferralCode.isEdit))" 
+                                                readonly class="b-disabled" 
+                                                value="{{ orderDetailTemp?.saleReferralCode }}" type="text" 
+                                                pInputText placeholder="Click để tìm kiếm"
+                                            />   
+                                            <button [disabled]="!(isEdit ? isEdit : (fieldUpdates.saleReferralCode.isEdit))" class="title-info" type="button" pButton pRipple icon="pi pi-search" styleClass="p-button-warn"></button>      
+                                        </div>
+                                    </div>
+                                    <div class="field col-12 mb-0 md:col-4">
+                                        <label class="title-info">Tên người giới thiệu / Tên doanh nghiệp </label>
+                                        <input 
+                                            pInputText [disabled]="true" class="b-disabled"
+                                            value="{{ orderDetailTemp?.sale?.investor?.investorIdentification?.fullname ?? orderDetailTemp?.sale?.businessCustomer?.name }}" 
+                                            title="{{ orderDetailTemp?.sale?.saleName }}" 
+                                        />
+                                    </div> 
+                                    <div class="field col-12 mb-0 md:col-3">
+                                        <label class="title-info">Số điện thoại</label>
+                                        <input pInputText [disabled]="true" value="{{ orderDetailTemp?.sale?.investor?.phone ?? orderDetailTemp?.sale?.businessCustomer?.phone }}" class="b-disabled"/>
+                                    </div>
+                                    <div class="field col-12 mb-0 md:col-3">
+                                        <label class="title-info">Email</label>
+                                        <input pInputText [disabled]="true" value="{{ orderDetailTemp?.sale?.investor?.email ?? orderDetailTemp?.sale?.businessCustomer?.phone }}" class="b-disabled"/>
+                                    </div>
+                                    <div class="field col-12 mb-0 md:col-6">
+                                        <label class="title-info">Phòng GD quản lý </label>
+                                        <input pInputText [disabled]="true" value="{{ orderDetailTemp?.sale?.departmentName || orderDetailTemp?.departmentName }}" class="b-disabled"/>
+                                    </div>
+                                    <div class="field col-12 mb-0 md:col-6">
+                                        <label class="title-info">Phòng giao dịch quản lý hợp đồng</label>
+                                        <input pInputText [disabled]="true" value="{{ orderDetailTemp?.sale?.managerDepartmentName || orderDetailTemp?.managerDepartmentName }}" class="b-disabled"/>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel [header]="'thongTinThanhToan'" *ngIf="isGranted([PermissionRealStateConst.RealStateMenuSoLenh_ThongTinThanhToan])">
+            <ng-template pTemplate="header">
+                <span> Giao dịch đặt cọc </span>
+            </ng-template>
+            <app-order-payment [orderDetail]="orderDetail" *ngIf="tabViewActive.thongTinThanhToan"></app-order-payment>
+        </p-tabPanel>
+        <p-tabPanel [header]="'chinhSachUuDai'" *ngIf="isGranted([PermissionRealStateConst.RealStateMenuSoLenh_CSUuDai])">
+            <ng-template pTemplate="header">
+                <span> Thông tin ưu đãi </span>
+            </ng-template>
+            <app-order-selling-policy *ngIf="tabViewActive.chinhSachUuDai"></app-order-selling-policy>
+        </p-tabPanel>
+        <p-tabPanel [header]="'HSKHDangKy'" *ngIf="isGranted([PermissionRealStateConst.RealStateMenuSoLenh_HSKHDangKy])">
+            <ng-template pTemplate="header">
+                <span> HSKH đăng ký </span>
+            </ng-template>
+            <app-order-contract [orderDetail]="orderDetail" [isJustView]="isJustView" *ngIf="tabViewActive.HSKHDangKy"></app-order-contract>
+        </p-tabPanel>
+        <p-tabPanel [header]="'lichSu'" *ngIf="isGranted([PermissionRealStateConst.RealStateMenuSoLenh_LichSu])">
+            <ng-template pTemplate = "header">
+                <span> Lịch sử hợp đồng </span>
+            </ng-template>
+            <app-order-history-update *ngIf="tabViewActive.lichSu"></app-order-history-update>
+        </p-tabPanel>
+        <!-- <p-tabPanel [header]="'dongTien'"  headerStyleClass="padding: 0" >
+            <ng-template pTemplate = "header">
+                <span> Dòng tiền </span>
+            </ng-template>
+            <app-order-cash-flow [orderDetail]="orderDetail" [isJustView]="isJustView" *ngIf="tabViewActive.dongTien"></app-order-cash-flow>
+        </p-tabPanel> -->
+    </p-tabView>
+</div>

@@ -1,0 +1,81 @@
+<div class="card b-page-detail {{ isLoadingPage ? 'b-loading' : '' }}">
+    <div class="flex flex-row flex-wrap mb-2">
+        <span class="p-float-label b-custom flex mt-4">
+            <p-dropdown id="ownerFilter" name="ownerFilter" [style]="{ width: '16.5rem' }" [showClear]="true" placeholder="Tất cả" 
+                        [options]="ProjectMedia.productTypes" optionLabel="name" optionValue="code"
+                        [(ngModel)]="filters.position" (onChange)="setPage()">
+            </p-dropdown>
+            <label class="font-normal" for="ownerFilter"> Vị trí </label>
+        </span>
+        <span class="p-float-label b-custom b-ml-2 flex mt-4">
+            <p-dropdown id="projectTypeFilter" name="projectTypeFilter" [style]="{ width: '16rem' }" [showClear]="true" placeholder="Tất cả" 
+                        [options]="ProjectMedia.statusConst" optionLabel="name" optionValue="code"
+                        [(ngModel)]="filters.status" (onChange)="setPage()">
+            </p-dropdown>
+            <label class="font-normal" for="projectTypeFilter"> Trạng thái </label>
+        </span>
+    </div>
+    <div *ngFor="let media of dataMediaTypes; let indexMediaType = index" class="mt-3">
+        <div *ngIf="filters.position == null || (filters.position != null && media.code == filters.position)">
+            <h5 class="mb-2"> {{ media.name }} ({{ media?.maxSize ? media.rstProjectMedias?.length + "/" + media?.maxSize : media.rstProjectMedias?.length }}) </h5>
+        <i> {{ media?.description }} </i>
+        <div class="flex grid p-fluid col-12 md:col-12" style="flex-wrap: wrap;" cdkDropListGroup>
+            <ng-container *ngFor="let item of media.rstProjectMedias; let index = index">
+                <div class="item-wrap mt-3 mb-3" cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="{ item: item, index: index }" (cdkDropListDropped)="drop($event, indexMediaType, media)" [title]="'Giữ và kéo để sắp xếp thứ tự!'">
+                    <div cdkDrag>
+                        <label *ngIf="item.mediaType == 'IMAGE'" class="{{(item.status == ProjectMedia.ACTIVE) ? '' : 'b-img-deactive'}} cursor-pointer" (click)="editImage(item)">
+                            <p-image [id]="media.code" src="{{baseUrl}}/{{item.urlImage}}" 
+                                alt="Image" [width]="150" [height]="150" 
+                                [imageClass]="imageClass" 
+                                [imageStyle]="imageStyle">
+                            </p-image>
+                        </label> 
+                        <label *ngIf="item.mediaType == 'VIDEO'" class="{{(item.status == ProjectMedia.ACTIVE) ? '' : 'b-img-deactive'}}">
+                            <video  style="height: 230px; width: 400px;" src="{{baseUrl}}/{{ item.urlImage }}" controls></video>
+                        </label> 
+                        <!-- <label class="{{(item.status == ProjectMedia.ACTIVE) ? '' : 'b-img-deactive'}}">
+                            <p-image *ngIf="item.mediaType == 'IMAGE'" [id]="media.code" src="{{baseUrl}}/{{item.urlImage}}" 
+                                alt="Image" [width]="160" [height]="160" 
+                                [imageClass]="imageClass" 
+                                [imageStyle]="imageStyle">
+                            </p-image>
+                            <video *ngIf="item.mediaType == 'VIDEO'" style="height: 230px; width: 400px;" src="{{baseUrl}}/{{ item.urlImage }}" controls></video>
+                        </label>  -->
+                        <div class="flex mt-3" class="{{ (item.mediaType == 'VIDEO') ? 'show-video' : 'show-img' }}">
+                            <i 
+                                *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectListDetail_HinhAnh_CapNhat])"
+                                class="pi pi-pencil b-icon cursor-pointer" title="Sửa" (click)="editImage(item)">
+                            </i>
+                            <i 
+                                *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectListDetail_HinhAnh_DoiTrangThai])"
+                                class="pi pi-circle-fill b-icon cursor-pointer {{ (item.status == ProjectMedia.ACTIVE ) ? 'b-icon-active' : 'b-icon-deactive' }}" 
+                                title="{{ (item.status == ProjectMedia.ACTIVE ) ? 'Hủy kích hoạt' : 'Kích hoạt' }}" 
+                                (click)="changeStatus(item)">
+                            </i>
+                            <i 
+                                *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectListDetail_HinhAnh_Xoa])"
+                                class="pi pi-trash b-icon b-icon-delete cursor-pointer" title="Xóa" 
+                                (click)="deleteImage(item.id)">
+                            </i>
+                        </div>
+
+                    </div>
+                </div>
+            </ng-container>
+            <!--  -->
+            <div *ngIf=" (media.maxSize && media.rstProjectMedias?.length < media.maxSize) || !media.maxSize" class="item-wrap">
+                <label (click)="insertImage(media)" *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectListDetail_HinhAnh_ThemMoi])">
+                    <p-image [id]="media.code" [src]="imgBackground" 
+                        alt="Image" [width]="150" [height]="150" 
+                        [imageClass]="imageClass"
+                        [imageStyle]="imageStyle" class="cursor-pointer">
+                    </p-image>
+                </label> 
+            </div>
+
+        </div>
+        <hr>
+        </div>
+    </div>
+</div>
+

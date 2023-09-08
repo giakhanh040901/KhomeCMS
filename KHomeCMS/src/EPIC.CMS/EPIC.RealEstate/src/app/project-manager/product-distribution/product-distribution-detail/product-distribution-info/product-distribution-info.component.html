@@ -1,0 +1,127 @@
+<div class="col-12" *ngIf="!isLoading">
+    <div class="p-0">
+        <div class="flex justify-content-between mb-3">
+            <h5 class="title-info">Thông tin chung </h5>
+            <div *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateMenuPhanPhoi_ThongTinChung_CapNhat])">
+                <p-button (click)="changeEdit()"
+                    *ngIf="isGranted([PermissionRealStateConst.RealStateMenuPhanPhoi_ThongTinChung_CapNhat])"
+                    styleClass="p-button-sm custom-button" label="{{ isEdit ? 'Lưu lại' : 'Chỉnh sửa' }}"
+                    icon="pi {{ isEdit ? 'pi-save' : 'pi-pencil' }}">
+                </p-button>
+            </div>
+        </div>
+        <div class="grid detail">
+            <div class="col-12">
+                <div class="card pt-0 pb-0 mb-0">
+                    <ng-container>
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="col-12 md:col-4">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Dự án phân phối
+                                    </label>
+                                    <input [disabled]="true" type="text"  pInputText 
+                                     [(ngModel)]="distributionInfo.project.name" class="b-disabled" >
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-2">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Mã dự án
+                                    </label>
+                                    <input [disabled]="true" type="text"  pInputText 
+                                     [(ngModel)]="distributionInfo.project.code" class="b-disabled" >
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-2">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Số lượng căn phân phối
+                                    </label>
+                                    <input [disabled]="true" type="text"  pInputText  
+                                        [(ngModel)]="distributionInfo.quantity"  class="b-disabled">
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-2">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Số lượng căn đã bán
+                                    </label>
+                                    <input [disabled]="true" type="text"  pInputText 
+                                     [(ngModel)]="distributionInfo.quantitySold" class="b-disabled" >
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-2">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Số lượng căn đã cọc
+                                    </label>
+                                    <input [disabled]="true" type="text"  pInputText 
+                                    [(ngModel)]="distributionInfo.quantityDeposit" class="b-disabled">
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-4">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Đại lý phân phối
+                                    </label>
+                                    <input [disabled]="true" type="text"  pInputText 
+                                    [(ngModel)]="distributionInfo.tradingProvider.name" class="b-disabled">
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-2" >
+                                <div class="field mb-0">
+                                    <label for="startDate"> Ngày phân phối </label>
+                                    <e-calendar
+                                        [inputId]="'startDate'"
+                                        [(value)]="distributionInfo.startDate"
+                                        [disabled]="!isEdit"
+                                        >
+                                    </e-calendar>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-2" >
+                                <div class="field mb-0">
+                                    <label for="endDate"> Ngày kết thúc </label>
+                                    <e-calendar
+                                        [inputId]="'endDate'"
+                                        [(value)]="distributionInfo.endDate"
+                                        [disabled]="!isEdit"
+                                        >
+                                    </e-calendar>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-4">
+                                <div class="field mb-0">
+                                    <label htmlFor="name">Tài khoản nhận tiền
+                                    </label>
+                                    <p-multiSelect  
+                                        [disabled]="!isEdit" 
+                                        class="custom-input-disabled"  appendTo="body" placeholder="Chọn tài khoản nhận tiền"
+                                        [options]="distributionInfo?.project?.owner?.businessCustomerBanks" optionLabel="bankInfo" optionValue="businessCustomerBankAccId" 
+                                        [(ngModel)]="distributionInfo.partnerBankAccountIds">
+                                    </p-multiSelect >
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 md:col-6">
+                                <div class="field mb-0 ">
+                                    <label htmlFor=""> 
+                                        Mô tả
+                                    </label>
+                                    <input [disabled]="!isEdit" type="text"  pInputText placeholder="Nhập mô tả"
+                                        [(ngModel)]="distributionInfo.description" class="b-disabled">
+                                </div>
+                            </div>
+                            
+                           
+                         
+                        </div>
+                    </ng-container>
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,322 @@
+<app-loading-page *ngIf="submitted"></app-loading-page>
+<p-card>
+    <ng-template pTemplate="content">
+        <div class="{{ submitted ? 'b-loading' : '' }}">
+            <ng-container>
+                <h5 class="title-info mb-2">
+                    Thông tin khách hàng 
+                    {{  orderInfo.customerInfo?.activeIndex == TabView.FIRST ? 'cá nhân' : 
+                        (orderInfo.customerInfo?.activeIndex == TabView.SECOND ? 'doanh nghiệp' : '') 
+                    }}
+                </h5>
+                <hr class="mt-0" style="border-width: 2px 0 0">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="pb-0 field col-12 md:col-4">
+                        <label class="title-info">Tên khách hàng</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="(orderInfo.customerInfo?.name || orderInfo.customerInfo?.defaultIdentification?.fullname) ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-2">
+                        <label class="title-info">Số điện thoại</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo.customerInfo?.phone ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-6" *ngIf="orderInfo?.activeIndex !== TabView.FIRST">
+                        <label class="title-info">Email </label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo.customerInfo?.email ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3" *ngIf="orderInfo?.activeIndex == TabView.FIRST">
+                        <label class="title-info">Email </label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo.customerInfo?.email ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3" *ngIf="orderInfo?.activeIndex == TabView.FIRST">
+                        <label class="title-info">Số giấy tờ</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo.customerInfo?.defaultIdentification?.idNo ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    
+                    <div class="field mb-0 col-12 md:col-12" *ngIf="orderInfo?.activeIndex == TabView.FIRST">
+                        <label class="title-info">Địa chỉ liên hệ </label>
+                        <p-dropdown 
+                            class="b-disabled" emptyMessage="Không có dữ liệu"
+                            [options]="orderInfo.listAddress" optionLabel="fullAddress" optionValue="contactAddressId"
+                            [autoDisplayFirst]="false"
+                            (onChange)="changeBankAcc($event.value)"
+                            [(ngModel)]="orderInfo.contractAddressId">
+                        </p-dropdown>
+                    </div>
+                    <div class="field mb-0 col-12 md:col-12" *ngIf="orderInfo?.activeIndex == TabView.SECOND">
+                        <label class="title-info">Địa chỉ liên hệ</label>
+                        <textarea [disabled]="true" pInputText [value]="orderInfo?.customerInfo?.address ?? null" class="b-disabled" [rows]="2"></textarea>
+                    </div>
+                    <!-- <div class="pb-0 field col-12 md:col-6">
+                        <label class="title-info">Tài khoản thụ hưởng</label>
+                        <p-dropdown 
+                            class="b-disabled" emptyMessage="Không có dữ liệu" 
+                            [options]="orderInfo?.listBank" optionLabel="labelName" optionValue="bankAccId" [autoDisplayFirst]="false"
+                            [(ngModel)]="orderInfo.bankAccId">
+                        </p-dropdown>
+                    </div> -->
+                </div>
+            </ng-container>
+            <ng-container>
+                <h5 class="title-info mb-2">
+                    Thông tin dự án
+                </h5>
+                <hr class="mt-0" style="border-width: 2px 0 0">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="pb-0 field col-12 md:col-6">
+                        <label class="title-info">Dự án</label>
+                        <p-dropdown 
+                            [disabled]="true" [options]="orderInfo?.productInfo?.openSells" optionLabel="labelName" optionValue="id" class="b-disabled"
+                            [autoDisplayFirst]="false" [(ngModel)]="orderInfo?.productInfo.projectId">
+                        </p-dropdown>
+                    </div>
+               
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Mã căn</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo?.productInfo.listOfProducts[0]?.productItem?.code ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Mật độ xây dựng</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo?.productInfo.listOfProducts[0]?.buildingDensityName ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Diện tích (m2)</label> 
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo?.productInfo.listOfProducts[0]?.productItem?.priceArea ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Giá bán (VND)</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="formatCurrency(orderInfo?.productInfo.listOfProducts[0]?.productItem?.price)"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Giá trị cọc (VND)</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="formatCurrency(orderInfo?.productInfo.listOfProducts[0]?.depositPrice)"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Giá lock căn (VND)</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="formatCurrency(orderInfo?.productInfo.listOfProducts[0]?.lockPrice)"
+                            class="b-disabled" 
+                        />
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container>
+                <h5 class="title-info mb-2">
+                    Thông tin hợp đồng
+                </h5>
+                <hr class="mt-0" style="border-width: 2px 0 0">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="pb-0 field col-12 md:col-6">
+                        <label class="title-info">Chính sách phân phối</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo?.productInfo.listOfProducts[0]?.distributionPolicy?.name ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Mã chính sách</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo?.productInfo.listOfProducts[0]?.distributionPolicy?.code ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Loại hợp đồng</label>
+                        <p-dropdown class="b-disabled" appendTo="body" optionLabel="name" [disabled]="true"
+                            emptyMessage="Không có dữ liệu" optionValue="code" [options]="OrderConst.typeOfcontract"
+                            [autoDisplayFirst]="false" [(ngModel)]="orderInfo.jointOwnerInfo.typeOfcontract">
+                        </p-dropdown>
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Hình thức thanh toán</label>
+                        <p-dropdown class="b-disabled" appendTo="body" optionLabel="name" [disabled]="true"
+                        emptyMessage="Không có dữ liệu" optionValue="code" [options]="OrderConst.paymentOptions"
+                        [autoDisplayFirst]="false" [(ngModel)]="orderInfo.jointOwnerInfo.paymentOptionType">
+                    </p-dropdown>
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Thời gian thanh toán giữ chỗ</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo?.productInfo.listOfProducts[0]?.keepTime ? orderInfo?.productInfo.listOfProducts[0]?.keepTime/60 + ' phút' : null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                       
+                    </div>
+                    
+                </div>
+            </ng-container>
+            <ng-container>
+                <h5 class="title-info mb-2">
+                    Thông tin đồng sở hữu
+                </h5>
+                <hr class="mt-0" style="border-width: 2px 0 0">
+                <div class="p-fluid p-formgrid grid" *ngIf="orderInfo?.jointOwnerInfo?.jointOwners.length">
+                    <ng-container *ngFor="let jointOwner of orderInfo?.jointOwnerInfo?.jointOwners; let i= index">
+                        <div class="pb-0 field col-12 md:col-3">
+                            <!-- ( <i class="pi pi-trash b-icon-trash"
+                                    (click)="removeElement(i)" title="Xóa nguời đồng sở hữu"></i> ) -->
+                            <label class="title-info">Tên khách hàng </label>
+                            <input pInputText type="text" [(ngModel)]="jointOwner.fullname" [disabled]="true" class="b-disabled"/>
+                        </div>
+                        <div class="pb-0 field col-12 md:col-3">
+                            <label class="title-info">Số giấy tờ</label>
+                            <input pInputText type="text" [(ngModel)]="jointOwner.idNo" [disabled]="true" class="b-disabled"/>
+                        </div>
+                        <div class="pb-0 field col-12 md:col-3">
+                            <label class="title-info">Ngày sinh</label>
+                            <e-calendar
+                                [inputId]="'dateOfBirthDisplay'"
+                                [(value)]="jointOwner.dateOfBirthDisplay"
+                                [disabled]="true"
+                            >
+                            </e-calendar>
+                        </div>
+                        <div class="pb-0 field col-12 md:col-3">
+                            <label class="title-info">Nguyên quán</label>
+                            <input pInputText type="text" [(ngModel)]="jointOwner.placeOfOrigin" [disabled]="true" class="b-disabled"/>
+                        </div>
+                        <div *ngIf="jointOwner.idType != InvestorConst.ID_TYPES.PASSPORT && jointOwner?.investorId == 0"class="col-12 md:col-6">
+                            <div class="field image-left-custom">
+                                <h5>Mặt trước</h5>
+                                <!-- <app-investor-image [idInput]="'input-front'" [idImage]="'image-front'"
+                                    [(image)]="jointOwner.idFrontImageUrl" [isDisable]="isDisable">
+                                </app-investor-image> -->
+                                <p-image
+                                    [src]="AppConsts.remoteServiceBaseUrl + '/' + jointOwner.idFrontImageUrl" 
+                                    imageClass="b-w-100"
+                                    [imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+                                    [preview]="true">
+                                </p-image>
+                            </div>
+                        </div>
+                
+                        <div *ngIf="jointOwner.idType != InvestorConst.ID_TYPES.PASSPORT && jointOwner?.investorId == 0"class="col-12 md:col-6 flex flex-row justify-content-center">
+                            <div class="field">
+                                <h5>Mặt sau</h5>
+                                <!-- <app-investor-image [idInput]="'input-back'" [idImage]="'image-back'"
+                                    [(image)]="jointOwner.backImage" [isDisable]="true">
+                                </app-investor-image> -->
+                                <p-image
+                                    [src]="AppConsts.remoteServiceBaseUrl + '/' + jointOwner.idBackImageUrl" 
+                                    imageClass="b-w-100"
+                                    [imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+                                    [preview]="true">
+                                </p-image>
+                            </div>
+                        </div>
+                
+                    
+                        <div *ngIf="jointOwner.idType == InvestorConst.ID_TYPES.PASSPORT" class="flex flex-row justify-content-center" style="width: 100%">
+                            <!-- {{jointOwner.idFrontImageUrl}} -->
+                            <!-- <app-investor-image [idInput]="'input-passport'" [idImage]="'image-passport'"
+                                [(image)]="jointOwner.idFrontImageUrl" [isDisable]="true" >
+                            </app-investor-image> -->
+                            <p-image
+                                [src]="AppConsts.remoteServiceBaseUrl + '/' + jointOwner.idFrontImageUrl" 
+                                imageClass="b-w-100"
+                                [imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+                                [preview]="true">
+                            </p-image>
+                     
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+            <ng-container>
+                <h5 class="title-info mb-2">
+                    Mã giới thiệu
+                </h5>
+                <hr class="mt-0" style="border-width: 2px 0 0">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Mã giới thiệu</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo?.saleInfo?.referralCode ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+               
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Tên người giới thiệu</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo?.saleInfo?.investor?.investorIdentification.fullname ?? orderInfo?.saleInfo?.businessCustomer?.name ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Số điện thoại</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo?.saleInfo?.investor?.phone ?? orderInfo?.saleInfo?.businessCustomer?.phone ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-3">
+                        <label class="title-info">Email</label> 
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo?.saleInfo?.investor?.email ?? orderInfo?.saleInfo?.businessCustomer?.email ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-6">
+                        <label class="title-info">Phòng giao dịch quản lý</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo?.saleInfo?.departmentName ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                    <div class="pb-0 field col-12 md:col-6">
+                        <label class="title-info">Phòng giao dịch quản lý hợp đồng</label>
+                        <input 
+                            [disabled]="true" pInputText [value]="orderInfo?.saleInfo?.departmentName ?? null"
+                            class="b-disabled" 
+                        />
+                    </div>
+                   
+                </div>
+            </ng-container>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <div class="grid grid-nogutter justify-content-between">
+            <p-button label="Quay lại" (click)="prevPage()" icon="pi pi-angle-left"></p-button>
+            <p-button 
+                label="Hoàn thành" (click)="handleOrder()" [disabled]="submitted" icon="pi pi-angle-right" iconPos="right"
+                styleClass="p-button-success">
+            </p-button>
+        </div>
+    </ng-template>
+</p-card>

@@ -1,0 +1,120 @@
+<div class="col-12" style="padding-bottom: 70px">
+    <div class="card p-0">
+      <!-- <h5 class="title-info mb-2">Mẫu hợp đồng</h5> -->
+    </div>
+    <div class="p-fluid p-formgrid grid">
+      <div class="flex b-w-100">
+        <div class="field col-6">
+          <label htmlFor="policyId" class="title-info">Mẫu hợp đồng đặt cọc</label>
+          <p-dropdown
+            [options]="SampleContractConst.depositContractFormType"
+            optionLabel="name" appendTo="body"
+            optionValue="code"
+            [(ngModel)]="depositForm.depositContractFormType"
+            placeholder="Mời chọn mẫu"
+            (onChange)="getSampleContract();getAllConfig();"
+          >
+          </p-dropdown>
+        </div>
+        <div class="field col-6">
+          <label htmlFor="policyId" class="title-info">Loại hợp đồng</label>
+          <p-dropdown
+            [autoDisplayFirst]="false"
+            [options]="contractTypes"
+            optionLabel="name" appendTo="body"
+            optionValue="code"
+            [(ngModel)]="depositForm.contractType"
+            placeholder="Chọn loại hợp đồng"
+            (onChange)="getSampleContract()"
+          >
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="flex b-w-100">
+        <div class="field col-6">
+          <label htmlFor="policyId" class="title-info">Chọn hợp đồng</label>
+          <p-dropdown appendTo="body"
+            [autoDisplayFirst]="false"
+            [options]="sampleContract"
+            optionLabel="name"
+            optionValue="id"
+            [(ngModel)]="depositForm.contractTemplateTempId"
+            placeholder="Chọn hợp đồng"
+          >
+          </p-dropdown>
+        </div>
+        <div class="field col-6">
+          <label htmlFor="policyId" class="title-info">Chọn chính sách bán hàng</label>
+          <p-dropdown
+            class="p-dropdown-limit-length"
+            appendTo="body"
+            [autoDisplayFirst]="false"
+            [options]="policies"
+            optionLabel="name"
+            optionValue="id"
+            [(ngModel)]="depositForm.distributionPolicyId"
+            placeholder="Chọn chính sách"
+          >
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="flex b-w-100">
+        <div class="field col-6">
+          <label htmlFor="policyId" class="title-info">Chọn cấu trúc mã</label>
+          <p-dropdown appendTo="body"
+            [options]="configContract"
+            optionLabel="name"
+            optionValue="id"
+            [(ngModel)]="depositForm.configContractCodeId"
+          >
+          </p-dropdown>
+        </div>
+        <div class="field col-6">
+          <label htmlFor="policyId" class="title-info">Chọn loại hiển thị</label>
+          <p-dropdown appendTo="body"
+            [autoDisplayFirst]="false"
+            [options]="DistributionContractTemplateConst.displayType"
+            optionLabel="name"
+            optionValue="code"
+            [(ngModel)]="depositForm.displayType"
+            placeholder="Chọn loại hiển thị"
+          >
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="flex b-w-100">
+        <div class="field col-6">
+          <label htmlFor="policyId" class="title-info"
+            >Ngày hiệu lực <span class="required-field"> * </span></label
+          >
+          <e-calendar
+            [placeholder]="'dd-mm-yy'"
+            [inputId]="'effectiveDate'"
+            [(value)]="depositForm.effectiveDate"
+          >
+          </e-calendar>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="p-dialog-footer e-custom-dialog-footer"
+  >
+    <button
+      pButton
+      pRipple
+      label="Hủy"
+      icon="pi pi-times"
+      class="p-button-text p-confirm-dialog-reject"
+      (click)="close()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Lưu"
+      icon="pi pi-check"
+      class="p-button-text p-confirm-dialog-approve"
+      (click)="save()"
+    ></button>
+  </div>
+  

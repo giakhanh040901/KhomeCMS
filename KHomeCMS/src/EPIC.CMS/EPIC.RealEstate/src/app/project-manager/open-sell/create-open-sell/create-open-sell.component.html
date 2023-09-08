@@ -1,0 +1,99 @@
+<div class="grid p-fluid">
+    <ng-container>
+        <!-- <div class="col-12">
+            <h6 class="mb-0">Thông số chung <br></h6>
+        </div> -->
+        <div class="col-12 md:col-12">
+            <div class="field mb-0">
+                <label htmlFor="name">Chọn dự án mở bán <span class="required-field"> * </span>
+                </label>
+                <p-dropdown  
+                    class="custom-input-disabled" [autoDisplayFirst]="false" appendTo="body" placeholder="Chọn dự án"
+                    [options]="projects" optionLabel="labelName" optionValue="id" 
+                    [(ngModel)]="openSell.distributionId" (onChange)="changeBankTypes($event.value)">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="col-12 md:col-12">
+            <div class="field mb-0">
+                <label htmlFor="name">Tài khoản ngân hàng <span class="required-field"> * </span>
+                </label>
+                <p-dropdown  
+                    class="b-disabled"  appendTo="body" placeholder="Chọn loại tài khoản ngân hàng"
+                    [options]="OpenSellConst.bankTypes" optionLabel="name" optionValue="code" 
+                    [(ngModel)]="openSell.fromType" (onChange)="changeBankTypes($event.value)">
+                </p-dropdown >
+            </div>
+        </div>
+        <div class="col-12 md:col-12">
+            <div class="field mb-0">
+                <label htmlFor="name">Chọn tài khoản <span class="required-field"> * </span>
+                </label>
+                <p-multiSelect [group]="true"
+                    class="b-disabled"  appendTo="body"
+                    [options]="listBankNew" optionLabel="labelName" optionValue="bankAccountId" 
+                    [(ngModel)]="openSellBanks" > 
+                    <ng-template let-group pTemplate="group">
+                        <div class="flex align-items-center">
+                            <span>{{ group.label }}</span>
+                        </div>
+                    </ng-template>
+                </p-multiSelect >
+            </div>
+        </div>
+        <!--  -->
+        <div class="col-12 md:col-6" >
+            <div class="field mb-0">
+                <label for="startDate"> Ngày mở bán <span class="required-field"> * </span></label>
+                <e-calendar
+                    [inputId]="'startDate'"
+                    [(value)]="openSell.startDate"
+                    >
+                </e-calendar>
+            </div>
+        </div>
+        <div class="col-12 md:col-6" >
+            <div class="field mb-0">
+                <label for="endDate"> Ngày kết thúc mở bán </label>
+                <e-calendar
+                    [inputId]="'endDate'"
+                    [(value)]="openSell.endDate"
+                    >
+                </e-calendar>
+            </div>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <div class="field mb-0 upload-file-form">
+                <label htmlFor=""> 
+                    Thời gian giữ căn thanh toán cọc
+                </label>
+                <!-- <input [(ngModel)]="openSell.keepTime" type="text" name="name" pInputText id="time-input" placeholder="Nhập số phút"> -->
+                <p-inputNumber [(ngModel)]="openSell.keepTime" suffix=" phút" placeholder="Nhập số phút"></p-inputNumber>
+            </div>
+        </div>
+        <div class="col-12 md:col-6">
+            <div class="field mb-0 upload-file-form">
+                <label htmlFor=""> 
+                    Hotline liên hệ
+                </label>
+                <input type="text" name="name" pInputText id="time-input" [(ngModel)]="openSell.hotline" placeholder="Nhập hotline liên hệ">
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="field mb-0">
+                <label>Mô tả</label>
+                <input type="text" pInputText [(ngModel)]="openSell.description" placeholder="Nhập mô tả">
+            </div>
+        </div>
+
+    </ng-container>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+    <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="ref.close()"></button>
+    <button id="submit-button" pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="submitted " (click)="save()"></button>
+    <!-- || !validForm() -->
+</div>
+
+         

@@ -1,0 +1,65 @@
+<div class="grid p-fluid">
+        <!-- Thông tin đầu tư -->
+        <ng-container>
+            <div class="col-12 md:col-12">
+                <h6 class="mb-0"> 
+                    Thông tin chính sách 
+                </h6>
+            </div>
+            <ng-container>
+                <div class="col-12 md:col-12">
+                    <div class="field mb-0">
+                        <label htmlFor="name">Tên chính sách <span class="required-field"> * </span> </label>
+                        <input type="text" id="name" name="name" pInputText [(ngModel)]="policyTemplate.name" maxlength="256" placeholder="Nhập tên chính sách"/>
+                    </div>
+                </div>
+                <!-- <div class="col-12 md:col-3">
+                    <div class="field mb-0">
+                        <label htmlFor="paymentType">Loại thanh toán <span class="required-field"> * </span> </label>
+                        <p-dropdown 
+                            appendTo="body" [options]="PolicyTemplateConst.types" dataValue="code" optionValue="code" name="paymentType" optionLabel="name"
+                            [(ngModel)]="policyTemplate.paymentType" required autofocus [autoDisplayFirst]="false" placeholder="Chọn loại thanh toán">
+                        </p-dropdown>
+                    </div>
+                </div> -->
+                <!--  -->
+                <div class="col-12 md:col-6">
+                    <div class="field mb-0">
+                        <label htmlFor="depositType">
+                            Loại hình đặt cọc<span class="required-field"> * </span>
+                        </label>
+                        <p-dropdown 
+                            appendTo="body" [options]="PolicyTemplateConst.depositTypes" dataValue="code" optionValue="code" name="depositType" optionLabel="name"
+                            [(ngModel)]="policyTemplate.depositType" required autofocus [autoDisplayFirst]="false" placeholder="Chọn loại hình" (onChange)="changeDepositType()">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <!--  -->
+                <div class="col-12 md:col-6">
+                    <div class="field mb-0">
+                        <label htmlFor="depositValue">Giá trị đặt cọc ({{ policyTemplate.depositType == PolicyTemplateConst.GIA_CO_DINH ? 'VND' : '%' }})<span class="required-field"> * </span></label>
+                        <input *ngIf="policyTemplate.depositType != PolicyTemplateConst.GIA_CO_DINH" max="100"
+                        pInputText id="depositValue" type="number" [pKeyFilter]="blockText" placeholder="Nhập giá trị cọc" (input)="changeDepositValue()"
+                        [(ngModel)]="policyTemplate.depositValue" />
+                        <p-inputNumber *ngIf="policyTemplate.depositType == PolicyTemplateConst.GIA_CO_DINH " placeholder="Nhập giá trị cọc" class="b-disabled" id="depositValue" (onInput)="changeDepositValue($event.value)" [(ngModel)]="policyTemplate.depositValue" locale="de-DE"></p-inputNumber>
+
+                    </div>
+                </div>
+                <div class="col-12 md:col-12">
+                    <div class="field mb-0">
+                        <label htmlFor="description">Mô tả</label>
+                        <textarea maxlength="512" pInputTextarea [(ngModel)]="policyTemplate.description" rows="2"  placeholder="Nhập thông tin mô tả chính sách"></textarea>  
+                    </div>
+                 </div>
+            </ng-container>
+        </ng-container>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+    <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button 
+ 
+        (click)="save()" label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" pButton pRipple>
+    </button>
+</div>
+
+         

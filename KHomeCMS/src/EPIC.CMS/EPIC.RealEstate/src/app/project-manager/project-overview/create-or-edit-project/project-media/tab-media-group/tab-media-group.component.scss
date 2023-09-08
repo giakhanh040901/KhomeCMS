@@ -1,0 +1,51 @@
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    opacity: 0.4; /* Firefox */
+}
+
+.item-wrap {
+    width: 180px;
+    margin-top: 2rem;
+    border: 1px dashed #8080805c;
+    border-radius: 5px;
+    margin-right: 10px;
+    padding: 10px;
+}
+
+.headerGroup{
+    font-weight: 700;
+}
+
+.b-icon-delete{
+    color: red;
+}
+
+.b-icon-deactive{
+    color: #ccc;
+}
+
+.b-icon-active{
+    color: #3cb553;
+}
+
+.b-img-deactive {
+    opacity: 0.4;
+}
+
+.button-delete {
+    margin-top: 2.7rem;
+}
+
+.show-video {
+    width: 400px;
+    justify-content: space-around;
+}
+
+.show-img {
+    width: 160px;
+    justify-content: space-around;
+}
+
+.custom-button-edit{
+    margin-top: 2.7rem;
+}
+

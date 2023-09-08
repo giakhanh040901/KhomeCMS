@@ -1,0 +1,95 @@
+<div class="col-12 container">
+  <div class="card p-0" [style.height]="'100%'">
+    <div class="b-wr-20 wrapper-filter">
+        <input-search
+            [(keyword)]="keyword"
+            (_onChange)="searchIcon($event)">
+        </input-search>
+    </div>
+    <div class="flex col-12" [style.height]="'100%'">
+      <div class="col-2">
+        <div class="header">
+          <span>Chủ đề</span>
+        </div>
+        <div class="tab">
+          <div class="tab-item">
+            <span>Tất cả</span>
+          </div>
+          <div class="tab-item">
+            <span>Xe máy</span>
+          </div>
+          <div class="tab-item">
+            <span>Ô tô</span>
+          </div>
+          <div class="tab-item">
+            <span>Tiện ích dịch vụ</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-10">
+        <div class="header">
+          <span>Icon</span>
+        </div>
+        <div class="content"  [style.height]="'calc(100% - 47px)'">
+          <div [style.height]="'calc(100% - 60px)'" [style.overflow]="'auto'">
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+            <select-icon-element></select-icon-element>
+          </div>
+          <div>
+            <p-paginator
+              [rows]="page.pageSize"
+              [totalRecords]="page.totalItems"
+              [rowsPerPageOptions]="page.perPageOptions"
+              currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng"
+              showCurrentPageReport="true"
+              (onPageChange)="setPage($event)"
+            >
+            </p-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+  <button
+    pButton
+    pRipple
+    label="Hủy"
+    icon="pi pi-times"
+    class="p-button-text p-confirm-dialog-reject"
+    (click)="close($event)"
+  ></button>
+  <button
+    pButton
+    pRipple
+    label="Lưu"
+    icon="pi pi-check"
+    class="p-button-text p-confirm-dialog-approve"
+    (click)="save($event)"
+  ></button>
+</div>

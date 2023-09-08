@@ -1,0 +1,67 @@
+<div class="grid p-fluid">
+	
+    <ng-container>
+        <div class="col-12 md:col-12">
+	<!--  grid formgrid custom-fixed-->
+			<div id="block-image"> 
+				<div *ngIf="!((investorEkyc | keyvalue).length > 0)" class="col-12">
+					<div class="field col-3">
+						<label htmlFor="bondPrimaryId">Loại giấy tờ</label>
+						<p-dropdown [disabled]="true" optionLabel="name" optionValue="code" [autoDisplayFirst]="true"
+							[options]="InvestorConst.IdTypes" [(ngModel)]="model.idType" appendTo="body">
+						</p-dropdown>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+
+        <div *ngIf="!isPassport()" class="col-12 md:col-6">
+            <div class="field image-left-custom">
+                <h5>Mặt trước</h5>
+                <!-- <app-investor-image [idInput]="'input-front'" [idImage]="'image-front'"
+                    [(image)]="model.frontImage" [isDisable]="isDisable">
+                </app-investor-image> -->
+				<p-image
+					[src]="AppConsts.remoteServiceBaseUrl + '/' + model.idFrontImageUrl" 
+					imageClass="b-w-100"
+					[imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+					[preview]="true">
+				</p-image>
+            </div>
+        </div>
+
+        <div *ngIf="!isPassport()" class="col-12 md:col-6 flex flex-row justify-content-center">
+            <div class="field">
+                <h5>Mặt sau</h5>
+                <!-- <app-investor-image [idInput]="'input-back'" [idImage]="'image-back'"
+                    [(image)]="model.backImage" [isDisable]="isDisable">
+                </app-investor-image> -->
+				<p-image
+					[src]="AppConsts.remoteServiceBaseUrl + '/' + model.idBackImageUrl" 
+					imageClass="b-w-100"
+					[imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+					[preview]="true">
+				</p-image>
+            </div>
+        </div>
+
+    
+		<div *ngIf="isPassport()" class="flex flex-row justify-content-center" style="width: 100%">
+            <!-- <app-investor-image [idInput]="'input-passport'" [idImage]="'image-passport'"
+                [(image)]="model.passportImage" [isDisable]="isDisable" >
+            </app-investor-image> -->
+			<p-image
+				[src]="AppConsts.remoteServiceBaseUrl + '/' + model.idFrontImageUrl" 
+				imageClass="b-w-100"
+				[imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+				[preview]="true">
+			</p-image>
+        </div>
+    </ng-container> 
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+    <p-progressBar *ngIf="isSend" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+    <button pButton pRipple label="Hoàn thành" icon="pi pi-times" class="p-button-text"
+        (click)="close()"></button>
+</div>

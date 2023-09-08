@@ -1,0 +1,64 @@
+.tooltip {
+  position: fixed;
+  border: 1px solid #B7BBC7;
+  border-radius: 8px;
+  background-color: #ffffff;
+  padding: 4px 8px;
+  z-index: 999999;
+  &::before {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+
+  div.view {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: end;
+  }
+
+  div.name {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  div.description {
+    display: flex;
+    div.description-item {
+      margin-right: 8px;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 20px;
+      display: flex;
+      align-items: center;  
+      img {
+        margin-right: 2px;
+      }
+    }
+  }
+
+  div.price {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 4px;
+  }
+
+  div.distribution-item {
+    margin-bottom: 4px;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  div.status {
+    div.status-card {
+      width: fit-content;
+      padding: 5px 10px;
+      border-radius: 8px;
+    }
+  }
+}

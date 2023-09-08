@@ -1,0 +1,96 @@
+<app-loading-page *ngIf="isLoadingPage"></app-loading-page>
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12">
+        <div class="card b-list">
+            <div class="p-fluid p-formgrid grid b-header">
+                <div class="col-12 md:col-7 b-title">
+                    <h4 style="display:inline"> Thu tiền ngân hàng </h4>
+                </div>
+                <div class="col-12 md:col-5 b-action">
+                  
+                </div>
+            </div>
+            <p-table 
+                #collectMoneyBankTable [value]="rows" [columns]="_selectedColumns"
+                [loading]="isLoading" [rowHover]="true" [showCurrentPageReport]="true" [paginator]="false"
+                responsiveLayout="scroll" dataKey="id"
+                [resizableColumns]="true" columnResizeMode="expand" [tableStyle]="{'min-width': minWidthTable, 'width': '100%'}"
+                [scrollable]="true" [scrollHeight]="getTableHeight()"  styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <div class="b-wr-20 wrapper-filter">
+                                <input-search
+                                    [placeholder]="'Nhập mã hợp đồng/mã giao dịch'"
+                                    [(keyword)]="keyword"
+                                    (_onChange)="setPage($event)">
+                                </input-search>
+                            </div>
+                            <span class="p-float-label b-custom">
+                                <p-dropdown 
+                                    [style]="{'width':'170px'}" [options]="statusSearch" optionLabel="name"
+                                    optionValue="code" placeholder="Tất cả" [(ngModel)]="status" class="ml-3"
+                                    (onChange)="changeStatus($event.value)" [showClear]="true" [autoDisplayFirst]="true">
+                                </p-dropdown>
+                                <label class="p-top-label pl-3" style="font-weight: 400;">Trạng thái</label>
+                            </span>
+
+                            <span class="p-float-label b-custom ml-2">
+                                <e-calendar
+                                    [placeholder]="'dd-mm-yy'"
+                                    [inputId]="'queryDate'"
+                                    [(value)]="queryDate"
+                                    (_onChange)="changeQueryDate()"
+                                    (_onClear)="changeQueryDate()"
+                                    >
+                                </e-calendar>
+                                <label class="p-top-label" style=" font-weight: 400;">Ngày truy vấn</label>
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="max-width: 5rem; min-width: 5rem;" pFrozenColumn alignFrozen="left" class="b-border-frozen-left"> #ID </th>
+                        <th pResizableColumn *ngFor="let col of columns" [ngStyle]="{'max-width': !col.isResize ? col?.width : '', 'min-width': col?.width}" [ngClass]="col.class">
+                            {{ col.header }}
+                        </th> 
+                        <th style="min-width: 7rem; max-width: 7rem;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right justify-content-left">Trạng thái </th>
+                        <th style="max-width: 3rem; min-width: 3rem;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-table-actions justify-content-center">
+                            <i class="pi pi-cog" (click)="setColumn(cols, _selectedColumns)"></i>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+                    <tr>
+                        <td style="max-width: 5rem; min-width: 5rem;" pFrozenColumn alignFrozen="left" class="b-border-frozen-left"> {{ row.id }} </td>
+                        <td *ngFor="let col of columns" [ngStyle]="{'max-width': !col.isResize ? col?.width : '', 'min-width': col.width}" [ngClass]=" col.class">
+                            <div *ngIf="!fieldCheckBoxs.includes(col.field)" [ngClass]="col.cutText" [title]="row[col.field]">
+                                {{ row[col.field]}}
+                            </div>
+                            <div *ngIf="fieldCheckBoxs.includes(col.field)">
+                                <p-checkbox [(ngModel)]="row[col.field]" [binary]="true" inputId="binary" [readonly]="true"></p-checkbox>
+                            </div>
+                        </td>
+                        <td style="min-width: 7rem; max-width: 7rem;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right justify-content-left">
+                            <p-tag 
+                                styleClass="p-tag-{{ CollectMoneyBankConst.getStatusSeverity(row.status, row.isClose) }}"
+                                severity="{{ CollectMoneyBankConst.getStatusSeverity(row.status, row.isCLose) }}"
+                                value="{{ CollectMoneyBankConst.getStatusName(row.status, row.isClose) }}">
+                            </p-tag>
+                        </td>
+                        <td style="max-width: 3rem; min-width: 3rem;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-table-actions justify-content-center"></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator 
+                [rows]="page.pageSize" 
+                [totalRecords]="page.totalItems" 
+                [rowsPerPageOptions]="page.perPageOptions" 
+                currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng" 
+                showCurrentPageReport="true"
+                (onPageChange)="setPage($event)">
+            </p-paginator>
+        </div>
+    </div>
+</div>

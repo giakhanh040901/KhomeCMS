@@ -1,0 +1,27 @@
+div.container {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #F9F9F9;
+}
+
+div.content {
+  div {
+    text-align: center;
+    line-height: 150%;
+  }
+}
+
+div.number {
+  font-weight: 700;
+  font-size: 24px;
+}
+
+div.title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1D1D1D;
+}

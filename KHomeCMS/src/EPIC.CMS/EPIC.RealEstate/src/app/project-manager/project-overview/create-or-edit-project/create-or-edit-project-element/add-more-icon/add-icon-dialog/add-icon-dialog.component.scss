@@ -1,0 +1,27 @@
+div.container {
+    padding-bottom: 70px;
+    height: 100%;
+}
+
+.text-end {
+    text-align: end;
+}
+
+div.header {
+    border-bottom: 1px solid #E5E5E5;
+    padding: 1rem;
+    text-align: center;
+}
+
+div.tab {
+    div.tab-item {
+        padding: 1rem;
+    }
+}
+
+div.content {
+    padding: 1rem;
+    select-icon-element {
+        display: inline-block;
+    }
+}

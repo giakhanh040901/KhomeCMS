@@ -1,0 +1,35 @@
+<app-loading-page *ngIf="isLoadingPage"></app-loading-page>
+<div class="col-12" style="padding-bottom: 70px">
+    <div class="card p-0">
+        <div *ngFor="let item of dataSource; index as i">
+            <div class="flex" style="width: 100%;">
+                <div class="field mb-0" style="padding: 0.5rem; width: 70px;">
+                    <label class="title-info">Nổi bật</label>
+                    <p-checkbox class="b-check-box" [(ngModel)]="item.isHighlight" binary="true" inputId="binary" (onChange)="onChangeCheckbox($event, item)"></p-checkbox>
+                </div>
+                <div class="field mb-0" style="width: 100%;">
+                    <add-more-icon 
+                    [index]="i" [type]="'otherUtiliti'" [(utilitiName)]="item.name" [utilitiTypes]="utilitiTypes"
+                    [(utilitiType)]="item.type" [utilitiGroups]="utilitiGroups" [(utilitiGroup)]="item.group"
+                    [(iconName)]="item.iconName" [(path)]="item.path" [showBtnRemove]="!isEdit" (updateIcon)="updateIcon($event)"
+                    (_onRemoveInfor)="removeItem($event)">
+                </add-more-icon>
+                </div>
+            </div>
+        </div>
+        <p-button 
+            *ngIf="!isEdit" styleClass="p-button custom-button mr-3 ml-2 mt-2" label="Thêm mới" icon="pi pi-plus"
+            (click)="addMore($event)">
+        </p-button>
+    </div>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+    <button 
+        pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject"
+        (click)="close($event)">
+    </button>
+    <button 
+        pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve"
+        (click)="save($event)">
+    </button>
+</div>

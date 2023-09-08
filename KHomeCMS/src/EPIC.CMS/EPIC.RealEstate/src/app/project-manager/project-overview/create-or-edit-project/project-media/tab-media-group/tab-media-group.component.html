@@ -1,0 +1,112 @@
+<div class="card b-page-detail {{ isLoadingPage ? 'b-loading' : '' }}">
+    <div class="flex flex-row flex-wrap mb-2">
+        <span class="p-float-label b-custom flex mt-4">
+            <p-dropdown id="projectTypeFilter" name="projectTypeFilter" [style]="{ width: '16rem' }" [showClear]="true" placeholder="Tất cả" 
+                        [options]="ProjectMedia.statusConst" optionLabel="name" optionValue="code"
+                        [(ngModel)]="filters.status" (onChange)="setPage()">
+            </p-dropdown>
+            <label class="font-normal" for="projectTypeFilter"> Trạng thái </label>
+        </span>
+    </div>
+    <div class="mt-3">
+        <h5 class="mb-2">Quản lý nhóm hình ảnh</h5>
+        <i>Hình ảnh về các căn hộ mẫu, nhóm các tiện ích và thông tin nổi bật của dự án</i>
+    </div>
+    <div>
+
+    </div>
+    <ng-container>
+        <ng-container *ngFor="let group of dataMediaDetail; let i = index">
+            <div class="flex grid p-fluid col-12 md:col-12">
+                <div class="col-12 md:col-5 pl-0">
+                    <div class="field mb-0">
+                        <label htmlFor="key" class="headerGroup mb-0">Tên nhóm {{ i + 1}}  </label>
+                        <label htmlFor="key" class="ml-2 mb-0">
+                            (<i class="pi pi-trash b-icon b-icon-delete cursor-pointer" title="Xóa nhóm hình ảnh" (click)="deleleGroup(group.id)"></i>)
+                        </label>
+                        <label style="width: 100%;" class="mb-0"></label>
+                        <input 
+                            type="text" id="groupTitle" name="groupTitle" pInputText [disabled]="!group.isEdit" class="b-disabled" 
+                            style="width: 20rem;"
+                            [(ngModel)]="group.groupTitle" maxlength="256" required placeholder="Nhập tên nhóm hình ảnh"
+                        />
+                        <!-- <div class="col-12 md:col-2 custom-button-edit"> -->
+                        <p-button
+                            *ngIf="!group.isEdit"
+                            styleClass="p-button custom-button ml-3"
+                            label="Sửa tên"
+                            icon="pi pi-pencil"
+                            (click)="editName(group.id)">
+                        </p-button>
+                        <p-button
+                            *ngIf="group.isEdit"
+                            styleClass="p-button custom-button ml-3"
+                            label="Lưu lại"
+                            icon="pi pi-save"
+                            (click)="saveName(group)">
+                        </p-button>
+                            <!-- <button *ngIf="!group.isEdit" pButton pRipple type="button" icon="pi pi-pencil" title="Sửa tên nhóm hình ảnh" (click)="editName(group.id)" class="p-button-rounded p-button-text"></button>
+                            <button *ngIf="group.isEdit" pButton pRipple type="button" icon="pi pi-check" title="Lưu" (click)="saveName(group)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                            <button *ngIf="group.isEdit"pButton pRipple type="button" icon="pi pi-times" title="Hủy" (click)="cancelName(group.id)" class="p-button-rounded p-button-text p-button-danger"></button> -->
+                        <!-- </div> -->
+                    </div>
+                </div>
+      
+
+                <div class="flex grid p-fluid col-12 md:col-12 pt-0 pb-0" style="flex-wrap: wrap;" cdkDropListGroup>
+                    <div *ngFor="let item of group.rstProjectMediaDetail; let indexItem = index" class="item-wrap">
+                        <div class="" cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="{ item: item, index: indexItem }" (cdkDropListDropped)="drop($event, indexMediaType, group)" [title]="'Giữ và kéo để sắp xếp thứ tự!'">
+                            <div cdkDrag>
+                                <label class="{{(item.status == ProjectMedia.ACTIVE) ? '' : 'b-img-deactive'}} cursor-pointer" (click)="editImage(item)">
+                                    <p-image [id]="i" src="{{baseUrl}}/{{item.urlImage}}"
+                                        alt="Image" [width]="160" [height]="160" 
+                                        [imageClass]="imageClass" 
+                                        [imageStyle]="imageStyle">
+                                    </p-image>
+                                </label> 
+                                <div class="flex mt-2" style="width: 160px;; justify-content: space-around;">
+                                    <i 
+                                        *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_NhomHinhAnh_CapNhat])"
+                                        class="pi pi-pencil b-icon cursor-pointer" title="Sửa" 
+                                        (click)="editImage(item)">
+                                    </i>
+                                    <i 
+                                        *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_NhomHinhAnh_DoiTrangThai])"
+                                        class="pi pi-circle-fill b-icon cursor-pointer {{ (item.status == ProjectMedia.ACTIVE ) ? 'b-icon-active' : 'b-icon-deactive' }}" 
+                                        title="{{ (item.status == ProjectMedia.ACTIVE ) ? 'Hủy kích hoạt' : 'Kích hoạt' }}" 
+                                        (click)="changeStatus(item)">
+                                    </i>
+                                    <i 
+                                        *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_NhomHinhAnh_Xoa])"
+                                        class="pi pi-trash b-icon b-icon-delete cursor-pointer" title="Xóa" 
+                                        (click)="deleteImage(item.id)">
+                                    </i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item-wrap">
+                        <label (click)="addMoreImage(group)">
+                            <p-image [id]="i" [src]="imgBackground" 
+                                alt="Image" [width]="160" [height]="160" 
+                                [imageClass]="imageClass"
+                                [imageStyle]="imageStyle" class="cursor-pointer">
+                            </p-image>
+                        </label> 
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </ng-container>
+
+
+        <div class="col-12 md:col-3 pl-0">
+            <button 
+                *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_NhomHinhAnh_ThemMoi])"                    
+                pButton pRipple label="Thêm giá trị" icon="pi pi-plus"
+                class="p-button-success mr-2" (click)="insertImage()">
+            </button>
+        </div>
+    </ng-container>
+</div>

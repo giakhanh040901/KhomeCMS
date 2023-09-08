@@ -1,0 +1,364 @@
+<div class="col-12">
+    <p-confirmDialog [style]="{ width: '400px' }" [baseZIndex]="10000"></p-confirmDialog>
+    <div class="flex justify-content-between flex-wrap card-container purple-container">
+        <h6 class="title-info mb-0 ml-0">Thông tin chung dự án</h6>
+        <div *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_ThongTinChung_CapNhat])">
+            <p-button 
+                *ngIf="!isEdit" styleClass="p-button-sm custom-button" label="Chỉnh sửa" icon="pi pi-pencil"
+                (click)="isEdit = true">
+            </p-button>
+            <p-button 
+                *ngIf="isEdit" styleClass="p-button-sm custom-button" label="Lưu lại" icon="pi pi-save"
+                (click)="save($event)">
+            </p-button>
+        </div>
+    </div>
+    <div class="p-fluid p-formgrid grid">
+        <div class="flex b-w-100">
+            <div class="field mb-0 col-3">
+                <label class="title-info">
+                    Chủ đầu tư <span class="required-field"> * </span>
+                </label>
+                <p-dropdown 
+                    (onChange)="changeData($event, 'chudautu')" [autoDisplayFirst]="false" class="b-disabled"
+                    [options]="listOwner" optionLabel="name" optionValue="code" [(ngModel)]="overviewProject.ownerId"
+                    placeholder="Chọn chủ đầu tư" [disabled]="!isEdit">
+                </p-dropdown>
+            </div>
+            <div class="field mb-0 col-3">
+                <label class="title-info">
+                    Mã dự án <span class="required-field"> * </span>
+                </label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.code" class="custom-input b-disabled" type="text"
+                    placeholder="Nhập mã dự án" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-6">
+                <label class="title-info">
+                    Tên dự án <span class="required-field"> * </span>
+                </label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.name" class="custom-input b-disabled" type="text"
+                    placeholder="Nhập tên dự án" [disabled]="!isEdit" 
+                />
+            </div>
+        </div>
+        <div class="flex b-w-100">
+            <div class="field mb-0 col-3">
+                <label class="title-info">
+                    Tổng thầu xây dựng <span class="required-field"> * </span>
+                </label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.contractorName" class="custom-input b-disabled"
+                    type="text" placeholder="Nhập tên tổng thầu xây dựng" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-3">
+                <label class="title-info">Liên kết giới thiệu</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.contractorLink" class="custom-input b-disabled"
+                    type="text" placeholder="Nhập liên kết website" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-6">
+                <label class="title-info">Mô tả thông tin</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.contractorDescription" class="custom-input b-disabled"
+                    type="text" placeholder="Nhập mô tả ngắn về tổng thầu xây dựng" [disabled]="!isEdit" 
+                />
+            </div>
+        </div>
+        <div class="flex b-w-100">
+            <div class="field mb-0 col-3">
+                <label class="title-info"> Đơn vị vận hành </label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.operatingUnit" class="custom-input b-disabled"
+                    type="text" placeholder="Nhập tên đơn vị vận hành" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-3">
+                <label class="title-info">Liên kết giới thiệu</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.operatingUnitLink" class="custom-input b-disabled"
+                    type="text" placeholder="Nhập liên kết website" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-6">
+                <label class="title-info">Mô tả thông tin</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.operatingUnitDescription" class="custom-input b-disabled"
+                    type="text" placeholder="Nhập mô tả ngắn về đơn vị vận hành" [disabled]="!isEdit" 
+                />
+            </div>
+        </div>
+        <div class="flex b-w-100">
+            <div class="field mb-0 col-3">
+                <label class="title-info"> Loại hình dự án </label>
+                <p-dropdown 
+                    (onChange)="changeData($event, 'projectType')" [autoDisplayFirst]="false" class="b-disabled"
+                    [options]="listProjectType" optionLabel="name" optionValue="code"
+                    [(ngModel)]="overviewProject.projectType" placeholder="Chọn loại hình dự án" [disabled]="!isEdit">
+                </p-dropdown>
+            </div>
+            <div class="field mb-0 col-3">
+                <label class="title-info">Ngân hàng đảm bảo</label>
+                <p-dropdown 
+                    (onChange)="changeData($event, 'guaranteeBank')" [autoDisplayFirst]="false" [filter]="true" filterBy="name"
+                    class="b-disabled" [options]="listBank" optionLabel="name" optionValue="code"
+                    [(ngModel)]="overviewProject.guaranteeBank" placeholder="Chọn ngân hàng" [disabled]="!isEdit">
+                </p-dropdown>
+            </div>
+            <div class="field mb-0 col-3">
+                <label class="title-info"> Sản phẩm dự án </label>
+                <p-multiSelect 
+                    [options]="listProductType" optionLabel="value" class="b-disabled" optionValue="id"
+                    [(ngModel)]="overviewProject.productTypes" (onChange)="changeData($event, 'productTypes')"
+                    placeholder="Chọn loại sản phẩm của dự án" [disabled]="!isEdit">
+                </p-multiSelect>
+            </div>
+            <div class="field mb-0 col-3">
+                <label class="title-info">Loại hình phân phối </label>
+                <p-multiSelect 
+                    [options]="listDistributionType" class="b-disabled" optionLabel="name" optionValue="code"
+                    [(ngModel)]="overviewProject.distributionTypes" (onChange)="changeData($event, 'distributionTypes')"
+                    placeholder="Chọn loại hình phân phối dự án" [disabled]="!isEdit">
+                </p-multiSelect>
+            </div>
+           
+        </div>
+        <div class="flex b-w-100">
+            <div class="field mb-0 col-3">
+                <label class="title-info">Website dự án</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.website" class="custom-input b-disabled" type="text"
+                    placeholder="Nhập liên kết website" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-3">
+                <label class="title-info">Hotline dự án</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.phone" class="custom-input b-disabled" type="text"
+                    placeholder="Nhập số điện thoại liên hệ" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-6">
+                <label class="title-info">Facebook dự án</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.facebookLink" class="custom-input b-disabled" type="text"
+                    placeholder="Nhập liên kết Facebook" [disabled]="!isEdit" 
+                />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-2 mb-2">
+        <h6 class="title-info mb-2">Thông số dự án</h6>
+    </div>
+    <div class="p-fluid p-formgrid grid">
+        <div class="flex b-w-100">
+            <div class="field mb-0 col-2">
+                <label class="title-info">Trạng thái dự án</label>
+                <p-dropdown 
+                    (onChange)="changeData($event, 'projectStatus')" [autoDisplayFirst]="false"
+                    class="b-disabled" [options]="listProjectStatus" optionLabel="name" optionValue="code"
+                    [(ngModel)]="overviewProject.projectStatus" placeholder="Chọn tiến độ dự án" [disabled]="!isEdit">
+                </p-dropdown>
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">Diện tích đất</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.landArea" class="custom-input b-disabled" type="text"
+                    placeholder="Nhập diện tích đất" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">Diện tích xây dựng</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.constructionArea" class="custom-input b-disabled"
+                    type="text" placeholder="Nhập diện tích xây dựng" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">Mật độ xây dựng (%)</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.buildingDensity" class="custom-input b-disabled"
+                    type="number" placeholder="Nhập mật độ xây dựng" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">Thửa đất số</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.landPlotNo" class="custom-input b-disabled" type="text"
+                    placeholder="Nhập số thửa đất" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">Bản đồ số</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.mapSheetNo" class="custom-input b-disabled" type="text"
+                    placeholder="Nhập số bản đồ" [disabled]="!isEdit" 
+                />
+            </div>
+        </div>
+        <div class="flex b-w-100">
+            <div class="field mb-0 col-2">
+                <label class="title-info">Ngày khởi công</label>
+                <e-calendar
+                    [inputId]="'startDate'"
+                    [(value)]="overviewProject.startDate"
+                    [disabled]="!isEdit"
+                    >
+                </e-calendar>
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">Dự kiến bàn giao</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.expectedHandoverTime" class="custom-input b-disabled"
+                    type="text" placeholder="Nhập thời gian" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">Tổng mức đầu tư (VND)</label>
+                <p-inputNumber 
+                    [(ngModel)]="overviewProject.totalInvestment" [disabled]="!isEdit" class="b-disabled"
+                    locale="de-DE" placeholder="Nhập tổng mức " mode="decimal">
+                </p-inputNumber>
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">Giá dự kiến (VND/m2)</label>
+                <p-inputNumber 
+                    [(ngModel)]="overviewProject.expectedSellingPrice" [disabled]="!isEdit" class="b-disabled"
+                    locale="de-DE" placeholder="Giá dự kiến" mode="decimal">
+                </p-inputNumber>
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">Giá bán tối thiểu (VND)</label>
+                <p-inputNumber 
+                    [(ngModel)]="overviewProject.minSellingPrice" [disabled]="!isEdit" class="b-disabled"
+                    locale="de-DE" placeholder="Nhập giá tối thiểu" mode="decimal">
+                </p-inputNumber>
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info">Giá bán tối đa (VND)</label>
+                <p-inputNumber 
+                    [(ngModel)]="overviewProject.maxSellingPrice" [disabled]="!isEdit" class="b-disabled"
+                    locale="de-DE" placeholder="Nhập giá tối đa" mode="decimal">
+                </p-inputNumber>
+            </div>
+        </div>
+        <div class="flex b-w-100">
+            <div class="field mb-0 col-2">
+                <label class="title-info">Số lượng căn/ Sản phẩm</label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.numberOfUnit" class="custom-input b-disabled"
+                    type="number" placeholder="Nhập số" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info"> Tỉnh/ Thành phố </label>
+                <p-dropdown 
+                    (onChange)="changeData($event, 'provinceCode')" [autoDisplayFirst]="false"
+                    class="b-disabled" [options]="listProvince" optionLabel="name" optionValue="code"
+                    [(ngModel)]="overviewProject.provinceCode" placeholder="Chọn địa chỉ"
+                    [disabled]="!isEdit" [filter]="true" filterBy="name">
+                </p-dropdown>
+            </div>
+            <div class="field mb-0 col-4">
+                <label class="title-info"> Địa chỉ dự án </label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.address" class="custom-input b-disabled" type="text"
+                    placeholder="Nhập tên ngắn gọn địa chỉ dự án" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info"> Kinh độ </label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.latitude" class="custom-input b-disabled" type="text"
+                    placeholder="Nhập kinh độ" [disabled]="!isEdit" 
+                />
+            </div>
+            <div class="field mb-0 col-2">
+                <label class="title-info"> Vĩ độ </label>
+                <input 
+                    pInputText [(ngModel)]="overviewProject.longitude" class="custom-input b-disabled" type="text"
+                    placeholder="Nhập vĩ độ" [disabled]="!isEdit" 
+                />
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-2 mb-2 mt-3">
+        <h6 class="title-info mb-2">Thông tin thêm</h6>
+    </div>
+    <div class="p-fluid p-formgrid grid" style="min-height: 0px;">
+        <ng-container
+            *ngFor="let infor of overviewProject.projectExtends; let i = index"
+        >
+        <!-- <ng-container *ngFor="let infor of overviewProject.moreInfo; let i = index"> -->
+            <div class="flex b-w-100">
+                <div class="field mb-0 col-3">
+                    <label class="title-info"> Tiêu đề thông tin {{i+1}} <span class="required-field"> * </span> </label>
+                    <input 
+                        pInputText [(ngModel)]="infor.title" class="custom-input b-disabled" type="text"
+                        placeholder="Nhập tiêu đề " [disabled]="!isEdit" 
+                    />
+                </div>
+                <div class="field mb-0 col-3">
+                    <label class="title-info"> Nội dung thông tin <span class="required-field"> * </span></label>
+                    <input 
+                        pInputText [(ngModel)]="infor.description" class="custom-input b-disabled" type="text"
+                        placeholder="Nhập nội dung" [disabled]="!isEdit" 
+                    />
+                </div>
+                <div class="field mb-0 col-3">
+                    <label class="title-info"> Icon </label>
+                    <input 
+                        pInputText [(ngModel)]="infor.iconName" class="custom-input b-disabled" type="text"
+                        placeholder="Link Icon" [disabled]="true" 
+                    />
+                </div>
+                <div class="field col flex align-items-end" style="margin-top: 1.75rem;">
+                    <p-image src="{{infor?.path ?? defaultIcon}}" 
+                        alt="Image" [width]="30" [height]="30" 
+                        [imageStyle]="imageStyle">
+                    </p-image>
+                    <p-button 
+                        styleClass="p-button custom-button mr-3" label="Chọn Icon" (click)="changeIcon(infor)" [disabled]="!isEdit" >
+                    </p-button>
+                    <p-button 
+                        styleClass="p-button-danger" label="Xoá" (click)="deleteIcon(i)" [disabled]="!isEdit">
+                    </p-button>
+                </div>
+            </div>
+
+        </ng-container>
+    </div>
+    <div class="mt-1">
+        <p-button 
+            styleClass="p-button custom-button" label="+ Thêm thông tin" (click)="insertIcon()" [disabled]="!isEdit">
+        </p-button>
+    </div>
+    <!-- <div class="p-fluid p-formgrid grid">
+    <ng-container
+      *ngFor="let infor of overviewProject.thongtinkhac; let i = index"
+    >
+      <cre-overview-project-more-infor
+        [index]="i + 1"
+        [label]="infor.tieude"
+        [content]="infor.noidung"
+        [linkIcon]="infor.icon"
+      ></cre-overview-project-more-infor>
+    </ng-container>
+    <div class="px-2">
+      <p-button
+        styleClass="p-button custom-button"
+        label="Thêm giá trị"
+        icon="pi pi-plus"
+        (click)="clickAddMoreInfor($event)"
+      >
+      </p-button>
+    </div>
+  </div> -->
+</div>

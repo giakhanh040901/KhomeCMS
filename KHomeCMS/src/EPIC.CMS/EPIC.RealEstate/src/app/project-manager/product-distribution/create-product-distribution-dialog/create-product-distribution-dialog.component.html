@@ -1,0 +1,71 @@
+<div class="col-12" style="padding-bottom: 70px">
+  <div class="p-fluid p-formgrid grid">
+    <div class="flex b-w-100">
+      <div class="field col-12 mb-0">
+        <label class="title-info"> Chọn đơn vị phân phối <span class="required-field"> * </span></label>
+        <p-dropdown 
+          [autoDisplayFirst]="false" appendTo="body" 
+          [options]="tradingProviders" optionLabel="displlayName" optionValue="tradingProviderId"
+          [(ngModel)]="distribution.tradingProviderId" placeholder="Chọn đơn vị phân phối">
+        </p-dropdown>
+      </div>
+    </div>
+    <div class="flex b-w-100">
+      <div class="field col-12 mb-0">
+        <label class="title-info"> Chọn dự án <span class="required-field"> * </span></label>
+        <p-dropdown 
+          [autoDisplayFirst]="false" appendTo="body"
+          [options]="projects" optionLabel="name" optionValue="id"
+          [(ngModel)]="distribution.projectId" placeholder="Chọn dự án" 
+          (onChange)="changeProject(distribution.projectId)">
+        </p-dropdown>
+      </div>
+    </div>
+    <div class="flex b-w-100">
+      <div class="field col-12 mb-0">
+        <label class="title-info"> Tài khoản nhận tiền <span class="required-field"> * </span></label>
+        <p-multiSelect   
+          class="custom-input-disabled"  appendTo="body" placeholder="Chọn tài khoản"
+          [options]="project?.owner?.businessCustomerBanks" optionLabel="label" optionValue="businessCustomerBankAccId" 
+          [(ngModel)]="distribution.partnerBankAccountIds">
+      </p-multiSelect >
+      </div>
+    </div>
+    <div class="flex b-w-100">
+      <div class="field col-6">
+        <label class="title-info">Ngày phân phối <span class="required-field"> * </span></label>
+        <e-calendar
+          [placeholder]="'Nhập ngày'"
+          [inputId]="'startDate'"
+          [(value)]="distribution.startDate"
+          >
+        </e-calendar>
+      </div>
+      <div class="field col-6">
+        <label class="title-info">Ngày kết thúc</label>
+        <e-calendar
+          [placeholder]="'Nhập ngày'"
+          [inputId]="'endDate'"
+          [(value)]="distribution.endDate"
+          >
+        </e-calendar>
+      </div>
+    </div>
+    <div class="flex b-w-100">
+      <div class="field col-12 mb-0">
+        <label class="title-info"> Mô tả</label>
+        <input type="text" name="name" pInputText id="time-input" [(ngModel)]="distribution.description" placeholder="Nhập mô tả">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+  <button 
+    pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject"
+    (click)="ref.close()">
+  </button>
+  <button 
+    pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve"
+    [disabled]="submitted" (click)="save()">
+  </button>
+</div>

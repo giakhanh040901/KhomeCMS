@@ -1,0 +1,100 @@
+<app-loading-page *ngIf="isLoading"></app-loading-page>
+<div class="grid p-fluid">
+    <p-confirmDialog [style]="{ width: '400px' }" [baseZIndex]="10000" ></p-confirmDialog>
+    <ng-container>
+        <div class="col-12 md:col-4">
+            <div class="field mb-0">
+            <label> Chọn loại hình<span class="required-field"> * </span></label>
+            <p-dropdown
+                optionLabel="name" optionValue="code" appendTo="body" [autoDisplayFirst]="false" [options]="OpenSellFileConst.types"
+                [(ngModel)]="openSellFile.openSellFileType" placeholder="Chọn loại chính">
+            </p-dropdown>
+            </div>
+        </div>
+        <div class="col-12 md:col-5">
+            <div class="field mb-0">
+                <label for="validTime"> Thời gian áp dụng</label>
+                <e-calendar
+                    [inputId]="'validTime'"
+                    [(value)]="openSellFile.validTime">
+                </e-calendar>
+            </div>
+        </div>
+
+      <ng-container *ngFor="let file of openSellFile.rstOpenSellFiles; let i = index">
+
+        <div class="col-12 md:col-4">
+            <div class="field mb-0">
+                <label htmlFor="key">
+                    Tên file <span class="required-field"> * </span>
+                </label>
+                <input 
+                    type="text" id="name" name="name" pInputText 
+                    [(ngModel)]="file.name" maxlength="256" required
+                    placeholder="Nhập tên file"
+                />
+            </div>
+        </div>
+        <div class="col-12 md:col-5">
+            <div class="field mb-0">
+                <label htmlFor="value">
+                    Tệp tin
+                    <span class="required-field"> * </span>
+                </label>
+                <input 
+                    [disabled]="true" class="custom-input-disabled"
+                    type="text" id="name" name="name" pInputText 
+                    [(ngModel)]="file.url" maxlength="256" 
+                    placeholder="Tệp tin"
+                />
+            </div>
+        </div>
+
+        <div class="col-12 md:col-3 flex">
+            <div class="field mb-0 upload-file-form">
+                <label htmlFor=""> </label>
+                <p-fileUpload 
+                    name="demo[]" accept=".pdf" [customUpload]="true" class="custom-file-upload w-100"
+                    (uploadHandler)="myUploader($event, i)"
+                    [auto]="true" chooseIcon="pi pi-cloud-upload"
+                    chooseLabel="Tải lên">
+                </p-fileUpload>
+            </div>
+            <div class="field mb-0 button-delete ">
+                <label htmlFor=""> </label>
+                <button
+                    pButton pRipple label="Xóa" class="p-button-danger"
+                    (click)="deleteFile(i)">
+                </button>
+            </div>
+        </div>
+    </ng-container>
+
+    <div class="col-12 md:col-3">
+        <button                     
+            pButton pRipple label="Thêm file" icon="pi pi-plus"
+            class="p-button-success mr-2" (click)="addvalue()">
+        </button>
+    </div>
+ 
+
+    </ng-container>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+  <button
+    pButton
+    pRipple
+    label="Hủy"
+    icon="pi pi-times"
+    class="p-button-text p-confirm-dialog-reject"
+    (click)="close($event)"
+  ></button>
+  <button
+    pButton
+    pRipple
+    label="Lưu"
+    icon="pi pi-check"
+    class="p-button-text p-confirm-dialog-approve"
+    (click)="save()"
+  ></button>
+</div>

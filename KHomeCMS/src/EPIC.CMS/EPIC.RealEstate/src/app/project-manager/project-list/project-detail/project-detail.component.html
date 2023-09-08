@@ -1,0 +1,198 @@
+<app-loading-page *ngIf="isLoadingPage"></app-loading-page>
+
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12">
+        <div class="card b-list">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <h4 style="display: inline" class=""> Bảng hàng dự án</h4>
+                    </div>
+                </div>
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <button *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateMenuProjectListDetail_ThemMoi])" 
+                        pButton pRipple label="Thêm mới" icon="pi pi-plus" class="p-button-success mr-4 custom-button-height" 
+                        styleClass="p-button custom-button" (click)="createProduct()">
+                    </button>
+                    <p-fileUpload
+                        *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateMenuProjectListDetail_UploadFile])"    
+                        #fubauto mode="basic" name="demo[]" accept=".xlsx,.xls,.xlsm,.xlt" [customUpload]="true"
+                        chooseIcon="pi pi-arrow-up"
+                        (uploadHandler)="myUploader($event)"
+                        chooseLabel="Upload file"
+                        [auto]="true">
+                    </p-fileUpload>
+            
+                    <button
+                        *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateMenuProjectListDetail_TaiFileMau])" 
+                        pButton pRipple label="Tải file mẫu" icon="pi pi-arrow-down" class="p-button-success ml-4 custom-button-height"
+                        (click)="importTemplate()" styleClass="p-button custom-button">
+                    </button>
+                </div>
+            </div>
+            <!-- </div> -->
+            <!-- Bộ lọc -->
+            <div class="flex flex-row flex-wrap b-filter-wrapper">
+                <div class="b-w-20">
+                    <h6 class="font-normal" for="classifyType"> Tìm kiếm </h6>
+                    <input-search
+                        [(keyword)]="fieldFilters.keyword"
+                        (_onChange)="setPage()">
+                    </input-search>
+                </div>
+                <!-- <div class="b-ml-2 b-w-20">
+                    <h6 class="font-normal" for="classifyType"> Sản phẩm dự án </h6>
+                    <p-dropdown 
+                        id="classifyType" name="classifyType" [styleClass]="'b-w-100'" appendTo="body"
+                        [showClear]="true" placeholder="Tất cả" [options]="projects" optionLabel="name"
+                        optionValue="code" [(ngModel)]="fieldFilters.projectId" (onChange)="changeFilter($event.value)">
+                    </p-dropdown>
+                </div> -->
+                <div class="b-ml-2 b-w-15">
+                    <h6 class="font-normal" for="classifyType"> Mật độ xây dựng </h6>
+                    <p-dropdown id="classifyType" name="classifyType" [styleClass]="'b-w-100'" appendTo="body"
+                        [showClear]="true" placeholder="Tất cả" [options]="buildingDensitys" optionLabel="name"
+                        optionValue="id" [(ngModel)]="fieldFilters.buildingDensityId"
+                        (onChange)="changeFilter($event.value)">
+                    </p-dropdown>
+                </div>
+                <div class="b-ml-2 b-w-15">
+                    <h6 class="font-normal" for="classifyType"> Phân loại sản phẩm </h6>
+                    <p-dropdown id="classifyType" name="classifyType" [styleClass]="'b-w-100'" appendTo="body"
+                        [showClear]="true" placeholder="Tất cả" [options]="ProductConst.classifyTypes"
+                        optionLabel="name" optionValue="code" [(ngModel)]="fieldFilters.classifyType"
+                        (onChange)="changeFilter($event.value)">
+                    </p-dropdown>
+                </div>
+                <div class="b-ml-2 b-w-15">
+                    <h6 class="font-normal" for="status"> Trạng thái </h6>
+                    <p-dropdown id="status" name="status" [styleClass]="'b-w-100'" appendTo="body" [showClear]="true"
+                        placeholder="Tất cả" [options]="ProductConst.statuses" optionLabel="name" optionValue="code"
+                        [(ngModel)]="fieldFilters.status" (onChange)="changeFilter($event.value)">
+                    </p-dropdown>
+                </div>
+            </div>
+            <!--  -->
+            <div class="mt-4">
+                <project-list-detail [lastestProduct]="lastestProduct" [dataSource]="rows" [apiSetPage]="apiSetPage" [functionMapDataSetPage]="functionMapDataSetPage" [listCard]="listCard" [service]="productService" [(dataView)]="dataView"
+                    [listAction]="listAction" (_onClickCard)="handleClickCard($event)" [listSortField]="listSortField">
+                    <ng-container *ngIf="dataView['grid']" dataViewGrid>
+                        <div class="flex align-items-center ml-2">
+                            <button type="button" class="p-button p-button-icon-only p-highlight"
+                                (click)="handleSort($event, 'order')" style="border-radius: 4px">
+                                <i [ngClass]="classIconSort"></i>
+                            </button>
+                            <p-dropdown class="ml-2" [style]="{ width: '10rem' }" [options]="listSortField"
+                                optionLabel="name" optionValue="code" [(ngModel)]="selectedSort.field"
+                                (onChange)="handleSort($event, 'field')">
+                            </p-dropdown>
+                        </div>
+                    </ng-container>
+                    <ng-container dataTable>
+                        <p-table [value]="rows" [columns]="selectedColumns" [loading]="isLoading" [rowHover]="true"
+                            [showCurrentPageReport]="true" [paginator]="false" responsiveLayout="scroll" dataKey="code"
+                            [resizableColumns]="false" [scrollable]="true" (onPageChange)="setPage($event)"
+                            [scrollHeight]="getTableHeight(50)" styleClass="custom-table" sortMode="multiple"
+                            (onSort)="onSort($event)" [customSort]="true"> 
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th pSortableColumn="Id" style="min-width: 8rem; max-width: 8rem" pFrozenColumn
+                                        alignFrozen="left">
+                                        #ID <p-sortIcon field="Id"></p-sortIcon>
+                                    </th>
+                                    <ng-container *ngFor="let col of columns">
+                                        <th *ngIf="col.fieldSort" pSortableColumn="{{col.fieldSort}}"
+                                            [ngStyle]="{'max-width': !col?.isResize ? col?.width : '', 'min-width': col?.width}"
+                                            [ngClass]="col.class">
+                                            {{ col.header }}
+                                            <p-sortIcon *ngIf="col.fieldSort" field="{{col.fieldSort}}"></p-sortIcon>
+                                        </th>
+                                        <th *ngIf="!col.fieldSort"
+                                            [ngStyle]="{'max-width': !col?.isResize ? col?.width : '', 'min-width': col?.width}"
+                                            [ngClass]="col.class">
+                                            {{ col.header }}
+                                            <p-sortIcon *ngIf="col.fieldSort" field="{{col.fieldSort}}"></p-sortIcon>
+                                        </th>
+                                    </ng-container>
+                                    <th class="b-col-status b-border-frozen-right" pFrozenColumn alignFrozen="right"
+                                        [frozen]="true">
+                                        Trạng thái
+                                    </th>
+                                    <th class="b-col-actions b-table-actions" pFrozenColumn alignFrozen="right"
+                                        [frozen]="true">
+                                        <i class="pi pi-cog" (click)="setColumn(headerColumns, selectedColumns)"></i>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+                                <tr>
+                                    <td style="min-width: 8rem; max-width: 8rem" pFrozenColumn alignFrozen="left"
+                                        [frozen]="true">
+                                        {{ row.id }}
+                                    </td>
+                                    <td *ngFor="let col of columns"
+                                        [ngStyle]="{'max-width': !col?.isResize ? col?.width : '', 'min-width': col?.width}"
+                                        [ngClass]="col.class">
+                                        <div *ngIf="col?.field === 'isLock'">
+                                            <p-checkbox [(ngModel)]="row._isLock" [binary]="true" inputId="binary"
+                                                [readonly]="true"></p-checkbox>
+                                        </div>
+                                        <div *ngIf="col?.field !== 'isLock'" [ngClass]="col?.cutText">
+                                            {{ row[col?.field]}}
+                                        </div>
+                                    </td>
+                                    <td class="b-col-status b-border-frozen-right" pFrozenColumn alignFrozen="right"
+                                        [frozen]="true">
+                                        <p-tag *ngIf="!row._isLock"
+                                            styleClass="p-tag-{{ ProductConst.getStatus(row?.status, 'severity') }}"
+                                            severity="{{ ProductConst.getStatus(row?.status, 'severity') }}"
+                                            value="{{ ProductConst.getStatus(row.status) }}">
+                                        </p-tag>
+                                        <p-tag *ngIf="row._isLock" styleClass="p-tag-secondary" severity="secondary"
+                                            value="Khóa căn">
+                                        </p-tag>
+                                    </td>
+                                    <td class="b-col-actions b-table-actions" pFrozenColumn alignFrozen="right"
+                                        [frozen]="true">
+                                        <div class="flex">
+                                            <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+                                            <p-menu #menu [popup]="true" class="button-actions"
+                                                [model]="listAction[rowIndex]" appendTo="body">
+                                            </p-menu>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="7">Không có d ữ liệu.</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td colspan="7">Đang tải dữ liệu ...</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-container>
+                    <ng-container paginatorGrid>
+                        <p-paginator 
+                            class="pin-paginator"
+                            [rows]="page.pageSize" [totalRecords]="page.totalItems"
+                            [rowsPerPageOptions]="page.perPageOptions" currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng"
+                            showCurrentPageReport="true" (onPageChange)="setPage($event)">
+                        </p-paginator>
+                    </ng-container>
+                    <ng-container paginatorList>
+                        <p-paginator 
+                            class="pin-paginator"
+                            [rows]="page.pageSize" [totalRecords]="page.totalItems"
+                            [rowsPerPageOptions]="page.perPageOptions" currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng"
+                            showCurrentPageReport="true" (onPageChange)="setPage($event)">
+                        </p-paginator>
+                    </ng-container>
+                </project-list-detail>
+            </div>
+        </div>
+    </div>
+</div>

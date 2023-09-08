@@ -1,0 +1,272 @@
+<div class="col-12">
+    <div class="card p-0">
+        <div class="utiliti-item">
+            <div class="flex justify-content-between mb-3">
+                <h5 class="title-info">Tiện ích từ hệ thống</h5>
+                <p-button
+                    *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_TienIchHeThong_QuanLy])" 
+                    styleClass="p-button custom-button" label="Chọn tiện ích" icon="pi pi-plus"
+                    (click)="clickInfo($event)">
+                </p-button>
+            </div>
+            <p-table 
+                [value]="dataSourceFromSystem" [loading]="isLoading" [rowHover]="true"
+                [showCurrentPageReport]="true" [paginator]="false" (onPageChange)="setPage($event)"
+                responsiveLayout="scroll" dataKey="id" [resizableColumns]="false" [scrollable]="true"
+                [scrollHeight]="'300px'" styleClass="custom-table">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <div class="b-wr-20 wrapper-filter">
+                                <input-search
+                                    [(keyword)]="filter.name"
+                                    (_onChange)="setPage()">
+                                </input-search>
+                            </div>
+                            <span class="p-float-label b-custom b-ml-2">
+                                <p-dropdown 
+                                    [style]="{ width: '16rem' }" [showClear]="true" placeholder="Tất cả" id="group"
+                                    [options]="ProjectOverviewConst.utilitiProjectType" optionLabel="value" optionValue="id"
+                                    [(ngModel)]="filter.type" (onChange)="changeFilterType($event.value)">
+                                </p-dropdown>
+                                <label class="font-normal">Loại tiện ích</label>
+                            </span>
+                            <span class="p-float-label b-custom b-ml-2">
+                                <p-dropdown 
+                                    [style]="{ width: '16rem' }" [showClear]="true" placeholder="Tất cả" id="group"
+                                    [options]="utilitiProjectGroupFilter" optionLabel="name" optionValue="code"
+                                    [(ngModel)]="filter.group" (onChange)="changeFilter($event.value)">
+                                </p-dropdown>
+                                <label class="font-normal">Nhóm tiện ích</label>
+                            </span>
+                            <span class="p-float-label b-custom b-ml-2">
+                                <p-dropdown 
+                                    [style]="{ width: '16rem' }" [showClear]="true" placeholder="Tất cả" id="hightLight"
+                                    [options]="hightLightFilter" optionLabel="name" optionValue="code"
+                                    [(ngModel)]="filter.hightLight" (onChange)="changeFilter($event.value)">
+                                </p-dropdown>
+                                <label class="font-normal">Tiện ích</label>
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th class="b-col-id" pFrozenColumn alignFrozen="left">
+                            #ID
+                        </th>
+                        <th>Tiện ích</th>
+                        <th style="min-width: 15rem">Nhóm tiện ích</th>
+                        <th style="min-width: 15rem">Loại tiện ích</th>
+                        <th style="max-width: 10rem; min-width: 10rem; justify-content: center">Nổi bật</th>
+                        <!-- <th class="b-fw-7 justify-content-center">Thao tác</th> -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+                    <tr>
+                        <td class="b-col-id" pFrozenColumn alignFrozen="left"
+                            [frozen]="true">
+                            {{ row.id }}
+                        </td>
+                        <td>{{ row.name }}</td>
+                        <td style="min-width: 15rem">{{ row.groupName }}</td>
+                        <td style="min-width: 15rem">{{ row.typeName }}</td>
+                        <td style="max-width: 10rem; min-width: 10rem; justify-content: center">
+                            <p-checkbox 
+                                [(ngModel)]="row.isHighlight" [binary]="true" inputId="binary" styleClass="b-checkbox-hightlight"
+                                [readonly]="true">
+                            </p-checkbox>
+                        </td>
+                        <!-- <td class="b-fw-7 justify-content-center"> 
+                            <i (click)="deleteUtiliti(row.id)" class="pi pi-trash r-icon"></i>
+                        </td> -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr class="b-wrapper-empty-data">
+                        <td colspan="7">
+                            <div class="text-center">
+                                <p class="b-wrapper-info b-empty-data"> 
+                                    Không có dữ liệu
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7">Đang tải dữ liệu ...</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator 
+                [rows]="pageFromSystem.pageSize" [totalRecords]="pageFromSystem.totalItems"
+                [rowsPerPageOptions]="pageFromSystem.perPageOptions" currentPageReportTemplate="Tất cả {{ pageFromSystem.totalItems }} dòng" showCurrentPageReport="true" 
+                (onPageChange)="setPage($event)">
+            </p-paginator>
+        </div>
+        <!--  -->
+        <div class="utiliti-item" *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_TienIchKhac])">
+            <div class="flex justify-content-between mb-3">
+                <h5 class="title-info">Tiện ích khác</h5>
+                <p-button
+                    *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_TienIchKhac_ThemMoi])" 
+                    styleClass="p-button custom-button" label="Thêm mới" icon="pi pi-plus"
+                    (click)="createOther($event)">
+                </p-button>
+            </div>
+            <p-table 
+                [value]="dataSourceOther" [loading]="isLoading" [rowHover]="true"
+                [showCurrentPageReport]="true" [paginator]="false" (onPageChange)="setPageOther($event)"
+                responsiveLayout="scroll" dataKey="id" [resizableColumns]="false" [scrollable]="true"
+                [scrollHeight]="'300px'" styleClass="custom-table">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th class="b-col-id" pFrozenColumn alignFrozen="left">
+                            #ID
+                        </th>
+                        <th>Tiện ích</th>
+                        <th style="min-width: 15rem">Nhóm tiện ích</th>
+                        <th style="min-width: 15rem">Loại tiện ích</th>
+                        <th style="max-width: 6rem; min-width: 6rem; justify-content: center;">Nổi bật</th>
+                        <th style="max-width: 8rem; min-width: 8rem">Trạng thái</th>
+                        <th style="max-width: 3rem; min-width: 3rem; justify-content: center;" class="b-col-actions" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-table-actions"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+                    <tr>
+                        <td class="b-col-id" pFrozenColumn alignFrozen="left"
+                            [frozen]="true">
+                            {{ row.id }}
+                        </td>
+                        <td>{{ row.name }}</td>
+                        <td style="min-width: 15rem">
+                            {{ row.typeName }}
+                        </td>
+                        <td style="min-width: 15rem">
+                            {{ row.groupName }}
+                        </td>
+        
+                        <td style="max-width: 6rem; min-width: 6rem; justify-content: center;">
+                            <p-checkbox [(ngModel)]="row.isHighlight" [binary]="true" inputId="binary"
+                                [readonly]="true"></p-checkbox>
+                        </td>
+                        <td style="min-width: 8rem; max-width: 8rem; justify-content: left;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right">
+                            <p-tag styleClass="p-tag-{{ getStatusSeverity(row?.status) }}"
+                                severity="{{ getStatusSeverity(row?.status || '') }}"
+                                value="{{ getStatusName(row?.status || '') }}">
+                            </p-tag>
+                        </td>
+                        <td style="max-width: 3rem; min-width: 3rem; justify-content: center;" class="b-col-actions" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-table-actions">
+                            <div class="flex">
+                                <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+                                <p-menu #menu [popup]="true" class="button-actions"
+                                    [model]="listActionOther[rowIndex]" appendTo="body"></p-menu>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr class="b-wrapper-empty-data">
+                        <td colspan="7">
+                            <div class="text-center">
+                                <p class="b-wrapper-info b-empty-data"> 
+                                    Không có dữ liệu
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7">Đang tải dữ liệu ...</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator 
+                [rows]="pageOther.pageSize" [totalRecords]="pageOther.totalItems"
+                [rowsPerPageOptions]="pageOther.perPageOptions"
+                currentPageReportTemplate="Tất cả {{ pageOther.totalItems }} dòng" showCurrentPageReport="true"
+                (onPageChange)="setPageOther($event)">
+            </p-paginator>
+        </div>
+        <!--  -->
+        <!-- <div class="utiliti-item" *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_TienIchMinhHoa])">
+            <div class="flex justify-content-between mb-3">
+                <h5 class="title-info">Ảnh minh họa</h5>
+                <p-button
+                    *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_TienIchMinhHoa_ThemMoi])"
+                    styleClass="p-button custom-button" label="Thêm mới" icon="pi pi-plus"
+                    (click)="createImage($event)">
+                </p-button>
+            </div>
+            <p-table [value]="dataSourceImage" [loading]="isLoading" [rowHover]="true"
+                [showCurrentPageReport]="true" [paginator]="false" (onPageChange)="setPageImage($event)"
+                responsiveLayout="scroll" dataKey="id" [resizableColumns]="false" [scrollable]="true"
+                [scrollHeight]="'300px'" styleClass="custom-table">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th class="b-col-id" pFrozenColumn alignFrozen="left">
+                            #ID
+                        </th>
+                        <th>Tên hình ảnh</th>
+                        <th style="min-width: 15rem; max-width: 15rem">Loại tiện ích</th>
+                        <th>Đường dẫn</th>
+                        <th style="min-width: 15rem; max-width: 15rem">Trạng thái</th>
+                        <th class="col-b-actions" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-table-actions"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+                    <tr>
+                        <td class="b-col-id" pFrozenColumn alignFrozen="left"
+                            [frozen]="true">
+                            {{ row.id }}
+                        </td>
+                        <td>{{ row.name }}</td>
+                        <td style="min-width: 15rem; max-width: 15rem">
+                            {{ row.typeName }}
+                        </td>
+                        <td>{{ row.url }}</td>
+                        <td style="min-width: 15rem; max-width: 15rem; justify-content: left;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right">
+                            <p-tag styleClass="p-tag-{{ getStatusSeverity(row?.status || '') }}"
+                                severity="{{ getStatusSeverity(row?.status || '') }}"
+                                value="{{ getStatusName(row.status || '') }}">
+                            </p-tag>
+                        </td>
+                        <td class="col-b-actions" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-table-actions">
+                            <div class="flex">
+                                <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+                                <p-menu     
+                                    #menu [popup]="true" class="button-actions"
+                                    [model]="listActionImage[rowIndex]" appendTo="body">
+                                </p-menu>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr class="b-wrapper-empty-data">
+                        <td colspan="7">
+                            <div class="text-center">
+                                <p class="b-wrapper-info b-empty-data"> 
+                                    Không có dữ liệu
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7">Đang tải dữ liệu ...</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator 
+                [rows]="pageImage.pageSize" [totalRecords]="pageImage.totalItems"
+                [rowsPerPageOptions]="pageImage.perPageOptions"
+                currentPageReportTemplate="Tất cả {{ pageImage.totalItems }} dòng" showCurrentPageReport="true"
+                (onPageChange)="setPageImage($event)">
+            </p-paginator>
+        </div> -->
+    </div>
+</div>

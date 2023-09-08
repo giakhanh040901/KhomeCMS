@@ -1,0 +1,125 @@
+<div class="grid p-fluid">
+        <ng-container>
+            <div class="col-12 md:col-12 pb-0">
+                <h6 class="mb-0"> 
+                    Thông tin chính sách 
+                </h6>
+            </div>
+            <ng-container>
+                <div class="col-12 md:col-3">
+                    <div class="field mb-0">
+                        <label htmlFor="code">Mã chính sách <span class="required-field"> * </span> </label>
+                        <input [disabled]="isView" class="b-disabled" type="text" id="code" name="code" pInputText [(ngModel)]="sellingPolicy.code" maxlength="256" placeholder="Nhập mã chính sách"/>
+                    </div>
+                </div>
+                <div class="col-12 md:col-6">
+                    <div class="field mb-0">
+                        <label htmlFor="name">Tên chính sách <span class="required-field"> * </span> </label>
+                        <input [disabled]="isView" class="b-disabled" type="text" id="name" name="name" pInputText [(ngModel)]="sellingPolicy.name" maxlength="256" placeholder="Nhập tên chính sách"/>
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="field mb-0">
+                        <label htmlFor="conversionValue">
+                            Giá trị quy ra tiền (VND)
+                        </label>
+                        <p-inputNumber [disabled]="isView" class="b-disabled" id="classify" [(ngModel)]="sellingPolicy.conversionValue"locale="de-DE" placeholder="Nhập giá trị quy ra tiền"></p-inputNumber>
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="field mb-0">
+                        <label htmlFor="source">Áp dụng loại hình đặt cọc <span class="required-field"> * </span> </label>
+                        <p-dropdown [disabled]="isView"
+                            appendTo="body" [options]="SellingPolicyConst.types" dataValue="code" optionValue="code" name="type" optionLabel="name"
+                            [(ngModel)]="sellingPolicy.source" required autofocus class="b-disabled"
+                            >
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="field mb-0">
+                        <label htmlFor="sellingPolicyType">Loại hình áp dụng <span class="required-field"> * </span> </label>
+                        <p-dropdown 
+                            appendTo="body" class="b-disabled" [disabled]="isView"
+                            [options]="SellingPolicyConst.sellingPolicyType" optionValue="code" name="type" optionLabel="name"
+                            [(ngModel)]="sellingPolicy.sellingPolicyType">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="field mb-0">
+                        <label htmlFor="fromValue">
+                            Từ (VND) <span class="required-field"> * </span>
+                        </label>
+                        <p-inputNumber [disabled]="isView || (sellingPolicy.sellingPolicyType == SellingPolicyConst.AP_DUNG_TAT_CA_CAC_CAN)" class="b-disabled" id="classify" [(ngModel)]="sellingPolicy.fromValue"locale="de-DE" placeholder="Nhập giá trị"></p-inputNumber>
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="field mb-0">
+                        <label htmlFor="toValue">
+                            Đến (VND) <span class="required-field"> * </span>
+                        </label>
+                        <p-inputNumber [disabled]="isView || (sellingPolicy.sellingPolicyType == SellingPolicyConst.AP_DUNG_TAT_CA_CAC_CAN)" class="b-disabled" id="classify" [(ngModel)]="sellingPolicy.toValue"locale="de-DE" placeholder="Nhập giá trị"></p-inputNumber>
+                    </div>
+                </div>
+                <div class="col-12 md:col-12">
+                    <div class="field mb-0">
+                        <label htmlFor="description">Mô tả chính sách <span class="required-field"> * </span></label>
+                        <textarea [disabled]="isView" class="b-disabled" maxlength="50" pInputTextarea [(ngModel)]="sellingPolicy.description" rows="2"  placeholder="Nhập nội dung mô tả"></textarea>  
+                    </div>
+                 </div>
+  
+                
+            </ng-container>
+        </ng-container>
+        <ng-container>
+            <div class="col-12 md:col-12 pb-0">
+                <h6 class="mb-0"> Thông tin khác </h6>
+            </div>
+            <div class="col-12 md:col-3">
+                <div class="field mb-0">
+                    <label htmlFor="name">Tên file </label>
+                    <input [disabled]="isView" class="b-disabled" type="text" id="name" name="name" pInputText [(ngModel)]="sellingPolicy.fileName" maxlength="256" placeholder="Nhập tên file"/>
+                </div>
+            </div>
+            <div class="col-12 md:col-{{isView ? 9 : 5}}">
+                <div class="field mb-0">
+                    <label htmlFor="name">Link </label>
+                    <input [disabled]="true" class="b-disabled" type="text" id="name" name="name" pInputText [(ngModel)]="sellingPolicy.fileUrl" maxlength="256" placeholder="Link file"/>
+                </div>
+            </div>
+            <div class="col-12 md:col-2" *ngIf="!isView">
+                <div class="field mb-0 upload-file-form">
+                    <!-- <div class="button-fileUpload"> </div> -->
+                    <label htmlFor=""> </label>
+                    <p-fileUpload 
+                        [disabled]="isView" class="b-disabled"
+                        name="demo[]" accept=".pdf,.doc,.docx" [customUpload]="true" class="custom-file-upload b-w-100"
+                        chooseIcon="pi pi-cloud-upload" 
+                        (uploadHandler)="myUploader($event)"
+                        [auto]="true"
+                        chooseLabel="Tải lên file">
+                    </p-fileUpload>
+                </div>
+            </div>
+            <div class="col-12 md:col-2"  *ngIf="!isView">
+                <div class="field mb-0 button-delete ">
+                    <label htmlFor=""> </label>
+                    <button
+                        pButton pRipple label="Xóa thông tin" class="p-button-danger"
+                        (click)="deleteFile()">
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+    <button *ngIf="isView" pButton pRipple label="Hoàn thành" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button *ngIf="!isView" pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button 
+        *ngIf="!isView"
+        (click)="save()" label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" pButton pRipple>
+    </button>
+</div>
+
+         

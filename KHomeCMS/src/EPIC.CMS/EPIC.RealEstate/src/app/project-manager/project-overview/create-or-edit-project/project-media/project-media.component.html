@@ -1,0 +1,16 @@
+<div class="col-12 pt-0">
+  <p-tabView styleClass="custom-tabview" [(activeIndex)]="activeIndex" (onChange)="changeTab($event)">
+    <p-tabPanel [header]="'media'" *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_HinhAnh])">
+      <ng-template pTemplate="header">
+        <span> Hình ảnh </span>
+      </ng-template>
+      <app-tab-media [projectId]="projectId"></app-tab-media>
+    </p-tabPanel>
+    <p-tabPanel [header]="'mediaGroup'" *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_NhomHinhAnh])">
+      <ng-template pTemplate="header">
+        <span> Nhóm hình ảnh </span>
+      </ng-template>
+      <app-tab-media-group [projectId]="projectId"></app-tab-media-group>
+    </p-tabPanel>
+  </p-tabView>
+</div>

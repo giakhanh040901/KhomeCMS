@@ -1,0 +1,30 @@
+$border: 1px solid #e5e5e5;
+
+div.container {
+  div.header {
+    border: $border;
+
+    div.header-left, div.header-right {
+    } 
+
+    div.header-left {
+      border-right: $border;
+
+      div.header-left-top {
+        display: flex;
+        padding-bottom: 1rem;
+        card-define-color {
+          display: inline-block;
+        }
+      }
+
+      div.header-left-bottom {
+        border-top: $border;
+        margin: 0 -1rem;
+        padding: 1rem 1rem 0 1rem;
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+}

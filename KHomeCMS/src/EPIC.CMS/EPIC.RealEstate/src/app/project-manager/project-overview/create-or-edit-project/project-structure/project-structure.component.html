@@ -1,0 +1,79 @@
+<div *ngIf="isLoadingPage"></div>
+<div class="node-container" *ngIf="!isLoadingPage">
+    <ng-container class="node-container">
+        <div class="flex flex-row-reverse flex-wrap mb-2">
+            <p-button label="+" styleClass="p-button-sm" (click)="zoom('zoomOut')"></p-button>
+            <!--  -->
+            <p-button 
+                styleClass="p-button-sm ml-1 mr-1" 
+                [label]="zoomValue == 1 ? 'Zoom' : 'Đặt lại'" 
+                (click)="zoom('resetZoom')" 
+                [pTooltip]="zoomValue == 1 ? 'Thu phóng màn hình' : 'Đặt lại màn hình mặc định'" tooltipPosition="bottom">
+            </p-button>
+            <!--  -->
+            <p-button label="-" styleClass="p-button-sm" (click)="zoom('zoomIn')"></p-button>
+            <div class="flex align-content-center flex-wrap mr-3" *ngIf="zoomValue != 1"> {{ showZoomValue(zoomValue) + '%' }} </div>
+        </div>
+        <div class="node-div" *ngIf="!isLoadingPage" [style]="{zoom: zoomValue}">
+            <!-- layout="horizontal" department-tree company-->
+            <p-organizationChart [value]="dataTree" [preserveSpace]="false" class="company" styleClass="b-org-chart" (onNodeSelect)="showNode($event.originalEvent, $event.node)">
+                <ng-template let-node pTemplate="default">
+                    <div class="node-manager node-0" [ngClass]="!node?.data?.name ? 'nodeParent' : (node?.data?.name ? 'child' : '')">
+                        <!-- IMAGE -->
+                        <div *ngIf="!node?.data?.name" >
+                            <div class="field mb-3" >
+                                <label *ngIf="!node?.data?.name" id="myCheck" style="font-weight: 600; font-size: 14px; line-height: 0px;">
+                                    {{tree.projectName}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="wrapper-text-node">
+                            <div class="p-fluid p-formgrid grid" style="text-align: start;"  *ngIf="node?.data?.name">
+                                <div class="field mb-0 col-12 " *ngIf="node?.data?.name">
+                                    <label  class="title-info" for="">Tên đơn vị</label>
+                                    <input 
+                                        *ngIf="node?.data?.name" pInputText ngClass="b-disabled"
+                                        [value]="node?.data?.name ?? node?.label" class="custom-input" type="text"
+                                        [disabled]="true" 
+                                    />
+                                </div>
+                                <div class="field mb-0 col-12"  *ngIf="node?.data?.code">
+                                    <label  class="title-info" for="">Mã đơn vị</label>
+                                    <input 
+                                        *ngIf="node?.data?.code" pInputText ngClass="b-disabled"
+                                        [value]="node?.data?.code ?? node?.label" class="custom-input" type="text"
+                                        [disabled]="true" 
+                                    />
+                                </div>
+                            </div>
+                            <ng-container >
+                                <div>
+                                    <!-- Icon Thêm mới -->
+                                    <!-- && (node?.data?.buildingDensityType != ProjectStructureConst.NODE_2) -->
+                                    <ng-container *ngIf="this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_CauTruc_Them])">
+                                        <i 
+                                            class="pi pi-plus-circle b-icon" style="cursor:pointer;" 
+                                            (click)="createOrUpdate(node?.data, ProjectStructureConst.CREATE)">
+                                        </i>
+                                    </ng-container>
+                                    <!-- Icon Sửa -->
+                                    <i 
+                                        *ngIf="node?.data?.level && this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_CauTruc_Sua])" 
+                                        class="pi pi-pencil b-icon" style="cursor:pointer; margin: 1rem;" 
+                                        (click)="createOrUpdate(node?.data, ProjectStructureConst.UPDATE)">
+                                    </i>
+                                    <!-- Icon xóa -->
+                                    <i 
+                                        *ngIf="node?.data?.level && this.isGranted([this.PermissionRealStateConst.RealStateProjectOverview_CauTruc_Xoa])" 
+                                        class="pi pi-trash r-icon" 
+                                        (click)="delete(node?.data)">
+                                    </i>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-organizationChart>
+        </div>
+    </ng-container>
+</div>

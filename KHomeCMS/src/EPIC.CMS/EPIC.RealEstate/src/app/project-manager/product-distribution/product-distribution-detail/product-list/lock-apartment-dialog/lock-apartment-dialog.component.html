@@ -1,0 +1,70 @@
+<div class="col-12" style="padding-bottom: 70px">
+  <div class="p-fluid p-formgrid grid">
+    <div class="flex b-w-100">
+      <div class="field mb-0 col-6">
+        <label class="title-info">Chọn lý do khóa căn <span class="required-field"> * </span></label>
+        <p-dropdown
+          [autoDisplayFirst]="false"
+          [options]="listReason"
+          optionLabel="name"
+          optionValue="code"
+          [(ngModel)]="lockApartment.lockingReason"
+          placeholder="Chọn lý do khóa căn"
+        >
+        </p-dropdown>
+      </div>
+    </div>
+    <div class="flex b-w-100">
+      <div class="field mb-0 col-12">
+        <label class="title-info">Nhập nội dung khóa căn <span class="required-field"> * </span></label>
+        <input
+          pInputText
+          [(ngModel)]="lockApartment.summary"
+          class="custom-input"
+          type="text"
+          placeholder="Nhập nội dung khóa căn"
+        />
+      </div>
+    </div>
+    <div class="flex b-w-100">
+      <div class="field mb-0 col-6">
+        <label class="title-info">Người tạo yêu cầu</label>
+        <input
+          pInputText
+          [(ngModel)]="lockApartment.createUser"
+          class="custom-input b-disabled"
+          type="text"
+          [disabled]="true"
+        />
+      </div>
+      <div class="field mb-0 col-6">
+        <label class="title-info">Ngày tạo yêu cầu</label>
+        <input
+          pInputText
+          [(ngModel)]="lockApartment.createDate"
+          class="custom-input b-disabled"
+          type="text"
+          [disabled]="true"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="p-dialog-footer e-custom-dialog-footer">
+  <button
+    pButton
+    pRipple
+    label="Hủy"
+    icon="pi pi-times"
+    class="p-button-text p-confirm-dialog-reject"
+    (click)="close($event)"
+  ></button>
+  <button
+    pButton
+    pRipple
+    label="Lưu"
+    icon="pi pi-check"
+    class="p-button-text p-confirm-dialog-approve"
+    (click)="save($event)"
+  ></button>
+</div>

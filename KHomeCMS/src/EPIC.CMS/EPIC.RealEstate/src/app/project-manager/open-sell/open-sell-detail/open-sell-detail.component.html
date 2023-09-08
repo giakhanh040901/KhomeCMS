@@ -1,0 +1,72 @@
+<div class="card b-page-detail">
+    <div class="p-fluid p-formgrid grid b-header">
+        <div class="card col-12 md:col-12 b-actions">
+            <div class="flex justify-content-between card-container purple-container">
+                <h5 class="title-info mb-0 ml-0"> Danh sách </h5>
+                <div class="flex-wrap">
+                    <p-button 
+                        *ngIf="isGranted([PermissionRealStateConst.RealStateMoBan_ThongTinChung_TrinhDuyet]) && (openSellInfo?.status == OpenSellConst.KHOI_TAO)" 
+                        styleClass="p-button custom-button" label="Trình duyệt mở bán" icon="pi pi-sort-amount-up"
+                        (click)="requestApprove()">
+                    </p-button>
+                    <p-button 
+                        *ngIf="isGranted([PermissionRealStateConst.RealStateMoBan_ThongTinChung_PheDuyet]) && (openSellInfo?.status == OpenSellConst.CHO_DUYET)" 
+                        styleClass="p-button custom-button" label="Phê duyệt mở bán" icon="pi pi-check-circle"
+                        (click)="approve()">
+                    </p-button>
+                    <p-button
+                        styleClass="p-button custom-button b-button-back"
+                        [routerLink]="routerBackLink" label="Quay lại"
+                        icon="pi pi-chevron-left">
+                    </p-button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-tabView styleClass="custom-tabview" [(activeIndex)]="activeIndex" (onChange)="changeTab($event)">
+        <!-- pause tạm -->
+        <p-tabPanel [header]="'generalInfor'" *ngIf="isGranted([PermissionRealStateConst.RealStateMoBan_ThongTinChung])">
+            <ng-template pTemplate="header">
+                <span> Thông tin chung </span>
+            </ng-template>
+            <app-open-sell-general-information 
+                *ngIf="tabViewActive['generalInfor']"
+                [openSellInfo]="openSellInfo" [openSellId]="openSellId"
+                [(rows)]="products" (getOpenSellProduct)="products=$event">
+            </app-open-sell-general-information>
+        </p-tabPanel>
+        <!--  -->
+        <p-tabPanel [header]="'productList'" *ngIf="isGranted([PermissionRealStateConst.RealStateMoBan_DSSP])">
+            <ng-template pTemplate="header">
+                <span> Danh sách sản phẩm </span>
+            </ng-template>
+            <app-open-sell-product 
+                *ngIf="tabViewActive['productList']" 
+                [openSellInfo]="openSellInfo" [openSellId]="openSellId"
+                [(rows)]="products" (getOpenSellProduct)="products=$event">
+            </app-open-sell-product>
+        </p-tabPanel>
+        <!--  -->
+        <p-tabPanel [header]="'policy'" *ngIf="isGranted([PermissionRealStateConst.RealStateMoBan_ChinhSach])">
+            <ng-template pTemplate="header">
+                <span> Chính sách ưu đãi đại lý</span>
+            </ng-template>
+            <app-open-sell-policy *ngIf="tabViewActive['policy']" [openSellId]="openSellId"></app-open-sell-policy>
+        </p-tabPanel>
+        <!--  -->
+        <p-tabPanel [header]="'contract'" *ngIf="isGranted([PermissionRealStateConst.RealStateMoBan_MauBieu])">
+            <ng-template pTemplate="header">
+                <span> Mẫu biểu đặt cọc </span>
+            </ng-template>
+            <app-open-sell-contract *ngIf="tabViewActive['contract']" [openSellId]="openSellId"></app-open-sell-contract>
+        </p-tabPanel>
+        <!--  -->
+        <p-tabPanel [header]="'file'" *ngIf="isGranted([PermissionRealStateConst.RealStateMoBan_HoSo])">
+            <ng-template pTemplate="header">
+                <span> Hồ sơ dự án </span>
+            </ng-template>
+            <app-open-sell-file *ngIf="tabViewActive['file']" [openSellId]="openSellId"></app-open-sell-file>
+        </p-tabPanel>
+    </p-tabView>
+</div>
+

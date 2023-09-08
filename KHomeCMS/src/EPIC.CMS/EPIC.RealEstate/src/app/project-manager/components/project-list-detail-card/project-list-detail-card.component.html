@@ -1,0 +1,68 @@
+<ng-container *ngIf="!isCardFull">
+  <div
+    #itemDiv
+    [class]="'item-wrapper items-element'"
+    (click)="handleClickCard($event)"
+  >
+    <div
+      class="item-product mr-4 mb-4"
+      productDetailTooltip
+      [dataSource]="dataSource"
+      [hide]="dataSource.hide"
+    >
+      <div
+        class="product-grid-item-top"
+        [style.background]="dataSource.backgroundTopColor"
+      >
+        <div class="flex justify-content-between flex-wrap">
+          <div
+            class="price {{
+              dataSource.isLock === YesNoConst.YES ? 'item-lock' : ''
+            }}"
+          >
+            <b> {{ dataSource.priceText }} </b>
+          </div>
+          <div *ngIf="showRedBook">
+            <p-image
+              src="assets/layout/images/house-fill.svg"
+              alt="Image"
+            ></p-image>
+          </div>
+        </div>
+      </div>
+      <div class="product-grid-item-content">
+        <h5
+          class="text-left mb-0 px-3 {{
+            dataSource.isLock === YesNoConst.YES ? 'item-lock' : ''
+          }}"
+          [style.color]="dataSource.titleColor"
+        >
+          {{ dataSource.code }}
+        </h5>
+      </div>
+    </div>
+  </div>
+  <p-contextMenu
+    [target]="itemDiv"
+    [model]="listAction[dataSourceIndex]"
+    (onHide)="dataSource.hide = false"
+    (onShow)="dataSource.hide = true"
+  ></p-contextMenu>
+</ng-container>
+<ng-container *ngIf="isCardFull">
+  <div
+    class="p-2 flex align-items-start justify-content-between"
+    [style.background]="dataSource.backgroundTopColor"
+    [style.borderRadius.px]="4"
+    [style.width.px]="100"
+    productDetailTooltip
+    [dataSource]="dataSource"
+  >
+    <span [style.color]="'#fff'">{{ code }}</span
+    ><p-image
+      *ngIf="showRedBook"
+      src="assets/layout/images/house-fill.svg"
+      alt="Image"
+    ></p-image>
+  </div>
+</ng-container>

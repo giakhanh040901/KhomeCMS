@@ -1,0 +1,13 @@
+<div class="card pb-4">
+  <div class="container">
+    <img [attr.src]="src" [attr.alt]="alt" width="180" height="180" />
+    <label class="block">{{ label }}</label>
+    <p-checkbox
+      class="check-box"
+      [(ngModel)]="selected"
+      [binary]="true"
+      inputId="binary"
+      (onChange)="onChangeSelected($event)"
+    ></p-checkbox>
+  </div>
+</div>
