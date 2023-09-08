@@ -4461,7 +4461,7 @@ export class ProjectOverviewConst {
     public static getNameProductTypes(types: number[]) {
         if (types.length == 1){
             let type = this.productTypes.find(item => item.id == types[0]);
-            return type.value ?? "";
+            return type ? type.value : "";
         } else {
             let result = [];
             types.forEach(value => {

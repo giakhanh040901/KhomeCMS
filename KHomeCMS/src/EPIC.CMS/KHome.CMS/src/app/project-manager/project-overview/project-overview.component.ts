@@ -241,26 +241,26 @@ export class ProjectOverviewComponent extends CrudComponentBase {
 				this.page.totalItems = res.data.totalItems;
 				if (res.data?.items) {
 					this.rows = res.data.items
-					// this.rows = res.data.items.map(
-					// 	(item: any) =>
-					// 		({
-					// 			id: item.id,
-					// 			code: item.code,
-					// 			name: item.name,
-					// 			productType: item?.productTypes
-					// 				? ProjectOverviewConst.getNameProductTypes(
-					// 						item?.productTypes
-					// 					)
-					// 				: "",
-					// 			ownerName: item.ownerName,
-					// 			createdDate:
-					// 				item.createdDate && item.createdDate.length
-					// 					? this.formatDate(item.createdDate)
-					// 					: "",
-					// 			createdBy: item.createdBy,
-					// 			status: item.status,
-					// 		} as ProjectOverviewModel)
-					// );
+					this.rows = res.data.items.map(
+						(item: any) =>
+							({
+								id: item.id,
+								code: item.code,
+								name: item.name,
+								productType: item?.productTypes
+									? ProjectOverviewConst.getNameProductTypes(
+											item?.productTypes
+										)
+									: "",
+								ownerName: item.ownerName,
+								createdDate:
+									item.createdDate && item.createdDate.length
+										? this.formatDate(item.createdDate)
+										: "",
+								createdBy: item.createdBy,
+								status: item.status,
+							} as ProjectOverviewModel)
+					);
 				}
 				if (this.rows?.length) {
 					this.genListAction(this.rows);
