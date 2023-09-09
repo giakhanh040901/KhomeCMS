@@ -248,9 +248,7 @@ export class ProjectOverviewComponent extends CrudComponentBase {
 								code: item.code,
 								name: item.name,
 								productType: item?.productTypes
-									? ProjectOverviewConst.getNameProductTypes(
-											item?.productTypes
-										)
+									? ProjectOverviewConst.getNameProductTypes(item?.productTypes)
 									: "",
 								ownerName: item.ownerName,
 								createdDate:

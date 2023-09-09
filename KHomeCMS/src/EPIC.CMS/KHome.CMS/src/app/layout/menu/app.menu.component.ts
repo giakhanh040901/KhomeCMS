@@ -96,7 +96,7 @@ export class AppMenuComponent extends AppComponentBase {
 					{ label: 'Tổng quan dự án', icon: '', routerLink: ['/project-manager/project-overview'], isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuProjectOverview) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type)) },
 					{ label: 'Bảng hàng dự án', icon: '', routerLink: ['/project-manager/project-list'], isShow: ( this.isPermission(PermissionRealStateConst.RealStateMenuProjectList) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type)) },
                     { label: 'Phân phối sản phẩm', icon: '', routerLink: ['/project-manager/product-distribution'], isShow: ( this.isPermission(PermissionRealStateConst.RealStateMenuPhanPhoi) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type)) },
-                    { label: 'Mở bán', icon: '', routerLink: ['/project-manager/open-sell'], isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuMoBan) && UserTypes.TYPE_TRADING_PROVIDERS.includes(this.userLogin.user_type)) },
+                    { label: 'Mở bán', icon: '', routerLink: ['/project-manager/open-sell'], isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuMoBan)) },
                 ]
             }, 
             {
