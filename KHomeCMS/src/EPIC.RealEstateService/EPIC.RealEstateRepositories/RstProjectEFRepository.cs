@@ -87,14 +87,14 @@ namespace EPIC.RealEstateRepositories
         /// <summary>
         /// Lấy ra danh sách dự án mà đại lý được phân phối
         /// </summary>
-        public List<RstProject> ProjectGetByTrading(int tradingProviderId)
+        public List<RstProject> ProjectGetByTrading(int partnerId)
         {
-            _logger.LogInformation($"{nameof(RstProjectEFRepository)}-> {nameof(ProjectGetByTrading)}: tradingProviderId = {tradingProviderId}");
+            _logger.LogInformation($"{nameof(RstProjectEFRepository)}-> {nameof(ProjectGetByTrading)}: tradingProviderId = {partnerId}");
             var result = (from project in _dbSet
                           join distribution in _epicSchemaDbContext.RstDistributions on project.Id equals distribution.ProjectId
                           where project.Deleted == YesNo.NO && distribution.Deleted == YesNo.NO
                           && distribution.Status == RstDistributionStatus.DANG_BAN //&& project.Status == RstDistributionStatus.DANG_BAN 
-                          && distribution.TradingProviderId == tradingProviderId
+                          && distribution.PartnerId == partnerId
                           select project).ToList();
             return result.Distinct().ToList();
         }

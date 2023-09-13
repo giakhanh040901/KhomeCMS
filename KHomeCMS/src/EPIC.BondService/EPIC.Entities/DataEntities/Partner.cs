@@ -96,6 +96,8 @@ namespace EPIC.Entities.DataEntities
         [ColumnSnackCase(nameof(DateModified), TypeName = "DATE")]
         public DateTime? DateModified { get; set; }
 
+        [ColumnSnackCase(nameof(BusinessCustomerId))]
+        public int BusinessCustomerId { get; set; }
         #region audit
         [ColumnSnackCase(nameof(CreatedDate), TypeName = "DATE")]
         public DateTime? CreatedDate { get; set; }

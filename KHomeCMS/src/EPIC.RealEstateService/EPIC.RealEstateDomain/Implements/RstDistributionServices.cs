@@ -582,9 +582,9 @@ namespace EPIC.RealEstateDomain.Implements
 
         public List<RstDistributionByTradingDto> GetAllByTrading()
         {
-            int tradingProviderId = CommonUtils.GetCurrentTradingProviderId(_httpContext);
+            int tradingProviderId = CommonUtils.GetCurrentPartnerId(_httpContext);
             _logger.LogInformation($"{nameof(GetAllByTrading)}: tradingProviderId = {tradingProviderId}");
-            var distributionProductItemQuery = _dbContext.RstDistributions.Where(e => e.TradingProviderId == tradingProviderId && e.Deleted == YesNo.NO)
+            var distributionProductItemQuery = _dbContext.RstDistributions.Where(e => e.PartnerId == tradingProviderId && e.Deleted == YesNo.NO)
                 .Select(distribution => new RstDistributionByTradingDto
                 {
                     Id = distribution.Id,

@@ -416,7 +416,7 @@ export class OpenSellComponent extends CrudComponentBase {
 
         this.page.keyword = this.keyword;
         this.isLoading = true;
-        forkJoin([this._openSellService.findAll(this.page, this.fieldFilters, this.sortData), this._projectListService.getAllProjectByTrading(), this._ownerService.getByTrading()]).subscribe(([res, resProject, resOwner]) => {
+        forkJoin([this._openSellService.findAll(this.page, this.fieldFilters, this.sortData), this._projectListService.getAllProjectByTrading(), this._ownerService.getByPartner()]).subscribe(([res, resProject, resOwner]) => {
             this.isLoading = false;
             if (this.handleResponseInterceptor(res, '')) {
 

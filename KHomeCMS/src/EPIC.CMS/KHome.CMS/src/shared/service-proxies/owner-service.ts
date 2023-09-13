@@ -64,6 +64,10 @@ export class OwnerServiceProxy extends ServiceProxyBase {
         return this.requestGet('/api/real-estate/owner/get-all-by-trading');
     }
 
+    getByPartner(){
+        return this.requestGet('/api/real-estate/owner/get-all-by-partner');
+    }
+
     getAllOwner(page: Page, status:any): Observable<any> {
         let url_ = "/api/real-estate/owner/find-all?";
         url_ += this.convertParamUrl("keyword", page.keyword);

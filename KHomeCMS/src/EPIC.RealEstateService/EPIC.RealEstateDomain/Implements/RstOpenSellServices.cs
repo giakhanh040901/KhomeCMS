@@ -61,6 +61,7 @@ namespace EPIC.RealEstateDomain.Implements
         private readonly RstHistoryUpdateEFRepository _rstHistoryUpdateEFRepository;
         private readonly SaleEFRepository _saleEFRepository;
         private readonly RstOrderEFRepository _rstOrderEFRepository;
+        private readonly PartnerEFRepository _partnerEFRepository;
 
         public RstOpenSellServices(EpicSchemaDbContext dbContext,
                  DatabaseOptions databaseOptions,
@@ -96,6 +97,7 @@ namespace EPIC.RealEstateDomain.Implements
             _rstHistoryUpdateEFRepository = new RstHistoryUpdateEFRepository(dbContext, logger);
             _saleEFRepository = new SaleEFRepository(dbContext, logger);
             _rstOrderEFRepository = new RstOrderEFRepository(dbContext, logger);
+            _partnerEFRepository = new PartnerEFRepository(dbContext, logger);
         }
 
         #region Mở bán
@@ -104,21 +106,21 @@ namespace EPIC.RealEstateDomain.Implements
         /// </summary>
         public RstOpenSell Add(CreateRstOpenSellDto input)
         {
-            var tradingProviderId = CommonUtils.GetCurrentTradingProviderId(_httpContext);
+            var partnerId = CommonUtils.GetCurrentPartnerId(_httpContext);
             var username = CommonUtils.GetCurrentUsername(_httpContext);
-            _logger.LogInformation($"{nameof(Add)}: input = {JsonSerializer.Serialize(input)},  tradingProviderId = {tradingProviderId}, username = {username}");
+            _logger.LogInformation($"{nameof(Add)}: input = {JsonSerializer.Serialize(input)},  tradingProviderId = {partnerId}, username = {username}");
             var inputInsert = _mapper.Map<RstOpenSell>(input);
             var projectFind = _rstProjectEFRepository.FindById(input.ProjectId).ThrowIfNull(_dbContext, ErrorCode.RstProjectNotFound);
             var rstDistribution = _rstDistributionEFRepository.FindById(input.DistributionId).ThrowIfNull(_dbContext, ErrorCode.RstDistributionNotFound);
 
             // Kiểm tra xem dự án được phân phối cho đại lý hay chưa
-            if (!_rstProjectEFRepository.ProjectGetByTrading(tradingProviderId).Select(p => p.Id).Contains(input.ProjectId))
-            {
-                _rstProjectEFRepository.ThrowException(ErrorCode.RstProjectNotYetDistributionForTrading);
-            }
+            //if (!_rstProjectEFRepository.ProjectGetByTrading(partnerId).Select(p => p.Id).Contains(input.ProjectId))
+            //{
+            //    _rstProjectEFRepository.ThrowException(ErrorCode.RstProjectNotYetDistributionForTrading);
+            //}
             var transaction = _dbContext.Database.BeginTransaction();
 
-            inputInsert.TradingProviderId = tradingProviderId;
+            inputInsert.TradingProviderId = partnerId;
             inputInsert.CreatedBy = username;
             var result = _rstOpenSellEFRepository.Add(inputInsert);
 
@@ -131,7 +133,7 @@ namespace EPIC.RealEstateDomain.Implements
                     var checkBankTrading = (from tradingProvider in _dbContext.TradingProviders
                                             join businessCustomerBank in _dbContext.BusinessCustomerBanks on tradingProvider.BusinessCustomerId equals businessCustomerBank.BusinessCustomerId
                                             where tradingProvider.Deleted == YesNo.NO && businessCustomerBank.Deleted == YesNo.NO
-                                            && tradingProvider.TradingProviderId == tradingProviderId && businessCustomerBank.BusinessCustomerBankAccId == item.TradingBankAccountId
+                                            && tradingProvider.TradingProviderId == partnerId && businessCustomerBank.BusinessCustomerBankAccId == item.TradingBankAccountId
                                             select businessCustomerBank).FirstOrDefault().ThrowIfNull(_dbContext, ErrorCode.RstOpenSellBankTradingNotFound, item.TradingBankAccountId);
                 }
                 if (item.PartnerBankAccountId != null)
@@ -274,7 +276,7 @@ namespace EPIC.RealEstateDomain.Implements
             _logger.LogInformation($"{nameof(FindAll)}: input = {JsonSerializer.Serialize(input)}");
 
             var usertype = CommonUtils.GetCurrentUserType(_httpContext);
-            int? tradingProviderId = CommonUtils.GetCurrentTradingProviderId(_httpContext);
+            int? tradingProviderId = CommonUtils.GetCurrentPartnerId(_httpContext);
             List<RstOpenSellDto> result = new();
             var openSellQuery = _rstOpenSellEFRepository.FindAll(input, tradingProviderId);
 
@@ -785,9 +787,9 @@ namespace EPIC.RealEstateDomain.Implements
         public List<BankAccountDtoForOpenSell> BankAccountCanDistributionOpenSell(int projectId, int? bankType)
         {
             List<BankAccountDtoForOpenSell> result = new();
-            var tradingProviderId = CommonUtils.GetCurrentTradingProviderId(_httpContext);
+            var partnerId = CommonUtils.GetCurrentPartnerId(_httpContext);
 
-            var tradingProviderFind = _tradingProviderEFRepository.FindById(tradingProviderId).ThrowIfNull(_dbContext, ErrorCode.TradingProviderNotFound);
+            var tradingProviderFind = _partnerEFRepository.Entity.FirstOrDefault(t => t.PartnerId == partnerId && t.Deleted == YesNo.NO).ThrowIfNull(_dbContext, ErrorCode.CorePartnerNotFound);
             var tradingBankAccount = _businessCustomerEFRepository.GetListBankByBusinessCustomerId(tradingProviderFind.BusinessCustomerId);
             foreach (var bankAccount in tradingBankAccount)
             {
@@ -801,7 +803,7 @@ namespace EPIC.RealEstateDomain.Implements
             var distributionBanks = from project in _dbContext.RstProjects
                                     join distribution in _dbContext.RstDistributions on project.Id equals distribution.ProjectId
                                     join distributionBank in _dbContext.RstDistributionBanks on distribution.Id equals distributionBank.DistributionId
-                                    where distribution.TradingProviderId == tradingProviderId && distribution.ProjectId == projectId
+                                    where distribution.PartnerId == partnerId && distribution.ProjectId == projectId
                                     && project.Deleted == YesNo.NO && distribution.Deleted == YesNo.NO && distributionBank.Deleted == YesNo.NO
                                     select distributionBank;
             foreach (var item in distributionBanks)
