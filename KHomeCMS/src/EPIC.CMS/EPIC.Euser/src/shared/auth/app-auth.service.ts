@@ -33,8 +33,8 @@ export class AppAuthService {
     logout(reload?: boolean): void {
         this._tokenService.clearAllCookie();
         if (reload !== false) {
-            // location.href = AppConsts.appBaseUrl + '/account/login';
-            location.href = AppConsts.baseUrlHome;
+            location.href = AppConsts.appBaseUrl + '/account/login';
+            // location.href = AppConsts.baseUrlHome;
         }
     }
 

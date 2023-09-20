@@ -42,6 +42,7 @@ export class TabProductMediaComponent extends CrudComponentBase implements OnIni
 
 	ngOnInit(): void {
 		this.baseUrl = AppConsts.remoteServiceBaseUrl ?? this.baseUrl;
+		console.log('baseUrl!!!', this.baseUrl)
 		this.dataMediaTypes = ProjectMedia.productTypes.map(type => {
 		const item = {
 			name: type.name,

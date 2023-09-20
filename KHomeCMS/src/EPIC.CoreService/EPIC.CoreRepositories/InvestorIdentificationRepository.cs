@@ -15,9 +15,9 @@ namespace EPIC.CoreRepositories
     {
         private OracleHelper _oracleHelper;
         private ILogger _logger;
-        private static string GET_BY_INVESTOR_PROC = "PKG_INVESTOR_IDENTIFICATION.PROC_INVESTOR_ID_GET";
-        private static string GET_BY_ID_PROC = "PKG_INVESTOR_IDENTIFICATION.PROC_ID_GET";
-        private static string GET_LIST_BY_INVESTOR_PROC = "PKG_INVESTOR_IDENTIFICATION.PROC_LIST_INVESTOR_ID_GET";
+        private static string GET_BY_INVESTOR_PROC = "EPIC.PKG_INVESTOR_IDENTIFICATION.PROC_INVESTOR_ID_GET";
+        private static string GET_BY_ID_PROC = "EPIC.PKG_INVESTOR_IDENTIFICATION.PROC_ID_GET";
+        private static string GET_LIST_BY_INVESTOR_PROC = "EPIC.PKG_INVESTOR_IDENTIFICATION.PROC_LIST_INVESTOR_ID_GET";
 
 
         public InvestorIdentificationRepository(string connectionString, ILogger logger)

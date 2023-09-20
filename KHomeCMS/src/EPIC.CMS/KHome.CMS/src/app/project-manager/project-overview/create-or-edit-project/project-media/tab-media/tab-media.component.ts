@@ -247,8 +247,13 @@ export class TabMediaComponent extends CrudComponentBase implements OnInit {
 				if (type.code == item.location) {
 					type.rstProjectMedias.push(item);
 				}
+				// type.rstProjectMedias.map(item => {
+				// 	item.urlImage = this.baseUrl+'/'+item.urlImage
+				// })
 			});
 		});
+		console.log('this.dataMediaTypes ', this.dataMediaTypes);
+		
 	}
 
 	setPage(pageInfo?: any) {

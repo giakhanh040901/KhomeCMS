@@ -326,7 +326,7 @@ namespace EPIC.IdentityDomain.Implements
                     {
                         _tradingProviderPermissionEFRepository.Entity.Add(new TradingProviderPermission
                         {
-                            Id = (int)_tradingProviderPermissionEFRepository.NextKey(),
+                            Id = (int)_tradingProviderPermissionEFRepository.NextKey(TradingProviderPermission.SEQ),
                             TradingProviderId = input.TradingProviderId,
                             PermissionKey = permissionWeb,
                             PermissionType = permissionValue.PermissionType,
@@ -386,7 +386,7 @@ namespace EPIC.IdentityDomain.Implements
                     {
                         _tradingProviderPermissionEFRepository.Entity.Add(new TradingProviderPermission
                         {
-                            Id = (int)_tradingProviderPermissionEFRepository.NextKey(),
+                            Id = (int)_tradingProviderPermissionEFRepository.NextKey(TradingProviderPermission.SEQ),
                             TradingProviderId = tradingProviderId,
                             PermissionKey = permissionKey,
                             PermissionType = permissionValue.PermissionType,

@@ -11,6 +11,8 @@ namespace EPIC.IdentityEntities.DataEntities
     [Table("USERS_TRADING_PROVIDER", Schema = DbSchemas.EPIC)]
     public class UsersTradingProvider : IFullAudited
     {
+        public static string SEQ { get; } = $"{DbSchemas.EPIC}.SEQ_USERS_TRADING_PROVIDER";
+
         [Key]
         [ColumnSnackCase(nameof(Id))]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

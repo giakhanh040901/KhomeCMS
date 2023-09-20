@@ -193,7 +193,7 @@ namespace EPIC.RealEstateDomain.Implements
                 // Kiểm tra và cập nhật trạng thái hợp đồng nếu đủ số tiền cọc
                 if (sumOrderPaymentApprove + orderPayment.PaymentAmount >= orderQuery.DepositMoney)
                 {
-                    orderQuery.Status = RstOrderStatus.CHO_DUYET_HOP_DONG_COC;
+                    orderQuery.Status = RstOrderStatus.DA_COC;
                     isLockPrice = true;
                 }
                 else
@@ -226,7 +226,7 @@ namespace EPIC.RealEstateDomain.Implements
                 // Tính tổng số tiền xem đã đủ số tiền cọc chưa
                 if (orderPayment.Status == OrderPaymentStatus.DA_THANH_TOAN && sumOrderPaymentApprove - orderPayment.PaymentAmount >= orderQuery.DepositMoney)
                 {
-                    orderQuery.Status = RstOrderStatus.CHO_DUYET_HOP_DONG_COC;
+                    orderQuery.Status = RstOrderStatus.DA_COC;
                     //isFullPayment = true;
                 }
                 else

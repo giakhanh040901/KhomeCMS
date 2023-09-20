@@ -672,7 +672,7 @@ namespace EPIC.IdentityDomain.Implements
                     {
                         _usersTradingProviderEFRepository.Entity.Add(new UsersTradingProvider
                         {
-                            Id = (int)_usersTradingProviderEFRepository.NextKey(),
+                            Id = (int)_usersTradingProviderEFRepository.NextKey(UsersTradingProvider.SEQ),
                             UserId = CommonUtils.GetCurrentUserId(_httpContext),
                             TradingProviderId = model.TradingProviderId,
                             CreatedBy = CommonUtils.GetCurrentUsername(_httpContext)

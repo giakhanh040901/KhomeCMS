@@ -32,7 +32,7 @@ namespace EPIC.IdentityRepositories
         public Users Add(Users input)
         {
             _logger.LogInformation($"{nameof(UsersEFRepository)}->{nameof(Add)}: investorId = {JsonSerializer.Serialize(input)}");
-            input.UserId = (int)NextKey();
+            input.UserId = (int)NextKey(Users.SEQ);
             input.Status = Status.ACTIVE;
             input.IsDeleted = YesNo.NO;
             input.IsFirstTime = YesNo.NO;

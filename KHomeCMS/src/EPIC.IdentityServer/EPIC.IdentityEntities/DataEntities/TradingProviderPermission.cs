@@ -13,6 +13,7 @@ namespace EPIC.IdentityEntities.DataEntities
     [Table("P_TRADING_PROVIDER_PERMISSION", Schema = DbSchemas.EPIC)]
     public class TradingProviderPermission
     {
+        public static string SEQ { get; } = $"{DbSchemas.EPIC}.SEQ_P_TRADING_PERMISSION";
         [Key]
         [ColumnSnackCase(nameof(Id))]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

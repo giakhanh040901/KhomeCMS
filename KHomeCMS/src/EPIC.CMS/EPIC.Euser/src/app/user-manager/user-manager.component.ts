@@ -255,6 +255,8 @@ export class UserManagerComponent extends CrudComponentBase {
     //
     ref.onClose.subscribe(res=> {
       if(res) {
+        console.log('login', res);
+        
         this.setPage();
       }
     });

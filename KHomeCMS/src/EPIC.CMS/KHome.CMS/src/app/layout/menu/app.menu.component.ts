@@ -51,29 +51,29 @@ export class AppMenuComponent extends AppComponentBase {
                     { label: 'Chủ đầu tư', icon: '', routerLink:['/setting/owner'], isShow: ( this.isPermission(PermissionRealStateConst.RealStateMenuChuDT) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type) )},
                     { label: 'Đại lý', icon: '', routerLink: ['/setting/trading-provider'], isShow: this.isPermission(PermissionRealStateConst.RealStateMenuDaiLy) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type)},
                     { label: 'Chính sách bán hàng', icon: '', routerLink: ['/setting/distribution-policy-temp'], isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuCSPhanPhoi) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type))},
-                    {   
-                        label: 'Cấu trúc mã HĐ giao dịch', icon: '', 
-                        routerLink: [this.routerLinkCheck], 
-                        isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuCTMaHDGiaoDich) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type)) 
-                    },
-                    {   
-                        label: 'Cấu trúc mã HĐ cọc', icon: '', 
-                        routerLink: [this.routerLinkCheck], 
-                        isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuCTMaHDCoc) && UserTypes.TYPE_TRADING_PROVIDERS.includes(this.userLogin.user_type))
-                    },
-                    {   
-                        label: 'Mẫu hợp đồng CĐT', icon: '', 
-                        routerLink: ['/setting/sample-contract'], 
-                        isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuMauHDCDT) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type)) 
-                    },
-                    { 
-                        label: 'Mẫu hợp đồng đại lý', icon: '', 
-                        routerLink: ['/setting/sample-contract'], 
-                        isShow:( this.isPermission(PermissionRealStateConst.RealStateMenuMauHDDL) && UserTypes.TYPE_TRADING_PROVIDERS.includes(this.userLogin.user_type))
-                    },
+                    // {   
+                    //     label: 'Cấu trúc mã HĐ giao dịch', icon: '', 
+                    //     routerLink: [this.routerLinkCheck], 
+                    //     isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuCTMaHDGiaoDich) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type)) 
+                    // },
+                    // {   
+                    //     label: 'Cấu trúc mã HĐ cọc', icon: '', 
+                    //     routerLink: [this.routerLinkCheck], 
+                    //     isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuCTMaHDCoc) && UserTypes.TYPE_TRADING_PROVIDERS.includes(this.userLogin.user_type))
+                    // },
+                    // {   
+                    //     label: 'Mẫu hợp đồng CĐT', icon: '', 
+                    //     routerLink: ['/setting/sample-contract'], 
+                    //     isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuMauHDCDT) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type)) 
+                    // },
+                    // { 
+                    //     label: 'Mẫu hợp đồng đại lý', icon: '', 
+                    //     routerLink: ['/setting/sample-contract'], 
+                    //     isShow:( this.isPermission(PermissionRealStateConst.RealStateMenuMauHDDL) && UserTypes.TYPE_TRADING_PROVIDERS.includes(this.userLogin.user_type))
+                    // },
                     
                     { label: 'Chính sách ưu đãi đại lý', icon: '', routerLink: ['/setting/selling-policy-temp'], isShow:( this.isPermission(PermissionRealStateConst.RealStateMenuCSBanHang) && UserTypes.TYPE_TRADING_PROVIDERS.includes(this.userLogin.user_type) )},
-                    { label: 'Thông báo hệ thống', icon: '', routerLink: ['/setting/system-notification-template'], isShow: (this.isPermission(PermissionRealStateConst.RealStateThongBaoHeThong) && UserTypes.TYPE_TRADING_PROVIDERS.includes(this.userLogin.user_type)) },
+                    // { label: 'Thông báo hệ thống', icon: '', routerLink: ['/setting/system-notification-template'], isShow: (this.isPermission(PermissionRealStateConst.RealStateThongBaoHeThong) && UserTypes.TYPE_TRADING_PROVIDERS.includes(this.userLogin.user_type)) },
                     // {label: 'Cấu hình ngày nghỉ lễ', icon: '', routerLink: ['/setting/calendar'], isShow: this.isPermission(PermissionRealStateConst.RealStateMenuCauHinhNNL)},
                     // {label: 'Tổng thầu', icon: '', routerLink: ['/setting/general-contractor'], isShow: this.isPermission(PermissionRealStateConst.RealStateMenuTongThau)},
                     // {label: 'Hình ảnh', icon: '', routerLink: ['/setting/media'], isShow:( this.isPermission(PermissionRealStateConst.RealStateMenuHinhAnh) && UserTypes.TYPE_TRADING.includes(this.userLogin.user_type) )},
@@ -96,14 +96,14 @@ export class AppMenuComponent extends AppComponentBase {
 					{ label: 'Tổng quan dự án', icon: '', routerLink: ['/project-manager/project-overview'], isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuProjectOverview) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type)) },
 					{ label: 'Bảng hàng dự án', icon: '', routerLink: ['/project-manager/project-list'], isShow: ( this.isPermission(PermissionRealStateConst.RealStateMenuProjectList) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type)) },
                     { label: 'Phân phối sản phẩm', icon: '', routerLink: ['/project-manager/product-distribution'], isShow: ( this.isPermission(PermissionRealStateConst.RealStateMenuPhanPhoi) && UserTypes.TYPE_PARTNERS.includes(this.userLogin.user_type)) },
-                    { label: 'Mở bán', icon: '', routerLink: ['/project-manager/open-sell'], isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuMoBan)) },
+                    { label: 'Mở bán', icon: '', routerLink: ['/project-manager/open-sell'], isShow: (this.isPermission(PermissionRealStateConst.RealStateMenuMoBan) && UserTypes.TYPE_TRADING_PROVIDERS.includes(this.userLogin.user_type)) },
                 ]
             }, 
             {
-                label: 'Quản lý giao dịch cọc', icon: 'pi pi-book', routerLink: ['/trading-contract'], isShow: this.isPermission(PermissionRealStateConst.RealStateMenuQLGiaoDichCoc),
+                label: 'Quản lý giao dịch', icon: 'pi pi-book', routerLink: ['/trading-contract'], isShow: this.isPermission(PermissionRealStateConst.RealStateMenuQLGiaoDichCoc),
                 items: [
                     { label: 'Sổ lệnh', icon: '', routerLink: ['/trading-contract/order'], isShow: this.isPermission(PermissionRealStateConst.RealStateMenuSoLenh) },    
-                    { label: 'Xử lý đặt cọc', icon: '', routerLink: ['/trading-contract/contract-processing'], isShow: this.isPermission(PermissionRealStateConst.RealStateGDC_XLDC) },    
+                    // { label: 'Xử lý đặt cọc', icon: '', routerLink: ['/trading-contract/contract-processing'], isShow: this.isPermission(PermissionRealStateConst.RealStateGDC_XLDC) },    
                     { label: 'Hợp đồng đặt cọc', icon: '', routerLink: ['/trading-contract/contract-active'], isShow: this.isPermission(PermissionRealStateConst.RealStateGDC_HDDC) },    
                 ]
             },
