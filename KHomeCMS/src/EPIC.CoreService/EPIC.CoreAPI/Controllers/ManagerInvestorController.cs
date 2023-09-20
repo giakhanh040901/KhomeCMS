@@ -526,7 +526,7 @@ namespace EPIC.CoreAPI.Controllers
                 var plainPassword = _managerInvestorServices.ResetUserPassword(dto);
 
                 int? tradingProviderId = null;
-                await _sendEmailServices.SendEmailResetPasswordSuccess(null, plainPassword, dto.InvestorId, tradingProviderId);
+                //await _sendEmailServices.SendEmailResetPasswordSuccess(null, plainPassword, dto.InvestorId, tradingProviderId);
                 return new APIResponse(Utils.StatusCode.Success, null, 200, "Success");
             }
             catch (Exception ex)

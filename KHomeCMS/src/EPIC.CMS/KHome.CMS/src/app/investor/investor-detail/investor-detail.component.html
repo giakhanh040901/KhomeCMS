@@ -507,13 +507,13 @@
 			</ng-template>
 			<app-investor-bank [investorDetail]="investor" *ngIf="tabViewActive.taiKhoanNganHang"></app-investor-bank>
 		</p-tabPanel>
-		<p-tabPanel [header]="'taiKhoanChungKhoan'" *ngIf="(isGranted([PermissionCoreConst.CoreDuyetKHCN_TKCK]) && isTemp == InvestorConst.TEMP.YES) || (isGranted([PermissionCoreConst.CoreKHCN_TKCK]) && isTemp == InvestorConst.TEMP.NO)">
+		<!-- <p-tabPanel [header]="'taiKhoanChungKhoan'" *ngIf="(isGranted([PermissionCoreConst.CoreDuyetKHCN_TKCK]) && isTemp == InvestorConst.TEMP.YES) || (isGranted([PermissionCoreConst.CoreKHCN_TKCK]) && isTemp == InvestorConst.TEMP.NO)">
 			<ng-template pTemplate="header">
 				<i class="pi pi-credit-card mr-2"></i>
 				<span  pTooltip="Tài khoản chứng khoán">TK chứng khoán</span>
 			</ng-template>
 			<app-investor-stock [investorDetail]="investor" *ngIf="tabViewActive.taiKhoanChungKhoan"></app-investor-stock>
-		</p-tabPanel>
+		</p-tabPanel> -->
 		<!-- QUẢN LÝ TÀI KHOẢN -->
 		<p-tabPanel [header]="'quanLyTaiKhoan'" *ngIf="(isGranted([PermissionCoreConst.CoreKHCN_Account]) && isTemp == InvestorConst.TEMP.NO)">
 			<ng-template pTemplate="header">

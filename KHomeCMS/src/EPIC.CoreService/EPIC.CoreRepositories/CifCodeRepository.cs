@@ -15,8 +15,8 @@ namespace EPIC.CoreRepositories
     {
         private readonly OracleHelper _oracleHelper;
         private readonly ILogger _logger;
-        private const string GET_BY_CIF_CODE_PROC = "PKG_CIF_CODE.PROC_CIF_CODE_GET";
-        private const string GET_BY_CUSTOMER_ID = "PKG_CIF_CODE.PROC_CIF_CODE_GET_BY_CUS_ID";
+        private const string GET_BY_CIF_CODE_PROC = "EPIC.PKG_CIF_CODE.PROC_CIF_CODE_GET";
+        private const string GET_BY_CUSTOMER_ID = "EPIC.PKG_CIF_CODE.PROC_CIF_CODE_GET_BY_CUS_ID";
         
         public CifCodeRepository(string connectionString, ILogger logger)
         {

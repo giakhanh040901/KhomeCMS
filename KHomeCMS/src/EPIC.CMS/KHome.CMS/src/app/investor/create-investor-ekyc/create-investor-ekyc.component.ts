@@ -86,7 +86,7 @@ export class CreateInvestorEkycComponent extends ModalDialogBase {
 		if(this.investorIdVerified) {
 			return "Xác minh thông tin";
 		} else {
-			return "Thêm mới khác hàng";
+			return "Thêm mới khách hàng";
 		}
 	}
 
